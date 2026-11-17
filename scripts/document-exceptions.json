@@ -1,0 +1,24 @@
+{
+  "RW": {
+    "AL": [{
+      "sourcePhrase": "residence permit of Schengen, UK, US",
+      "issuers": ["US", "GB", "X-SCH"],
+      "types": ["permit"],
+      "valid": true,
+      "result": {
+        "options": ["free"],
+        "condition": "The source exempts holders of a qualifying valid residence permit. Confirm this exception with Albanian immigration."
+      }
+    }, {
+      "sourcePhrase": "valid multiple-entry Schengen, UK or US visa has been previously used once",
+      "issuers": ["US", "GB", "X-SCH"],
+      "types": ["visa"],
+      "valid": true,
+      "confirm": "Is this a multiple-entry visa that has already been used in its issuing country or area?",
+      "result": {
+        "options": ["free"],
+        "condition": "The source requires a valid multiple-entry visa that has been used previously. Confirm this exception with Albanian immigration."
+      }
+    }]
+  }
+}

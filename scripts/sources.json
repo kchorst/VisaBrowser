@@ -1,0 +1,1520 @@
+{
+  "sources": {
+    "AD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Andorran_citizens",
+      "titles": [
+        "Visa requirements for Andorran citizens"
+      ]
+    },
+    "AE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Emirati_citizens",
+      "titles": [
+        "Visa requirements for Emirati citizens"
+      ]
+    },
+    "AF": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Afghan_citizens",
+      "titles": [
+        "Visa requirements for Afghan citizens"
+      ]
+    },
+    "AG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Antigua_and_Barbuda_citizens",
+      "titles": [
+        "Visa requirements for Antigua and Barbuda citizens"
+      ]
+    },
+    "AL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Albanian_citizens",
+      "titles": [
+        "Visa requirements for Albanian citizens"
+      ]
+    },
+    "AM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Armenian_citizens",
+      "titles": [
+        "Visa requirements for Armenian citizens"
+      ]
+    },
+    "AO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Angolan_citizens",
+      "titles": [
+        "Visa requirements for Angolan citizens"
+      ]
+    },
+    "AR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Argentine_citizens",
+      "titles": [
+        "Visa requirements for Argentine citizens"
+      ]
+    },
+    "AT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Austrian_citizens",
+      "titles": [
+        "Visa requirements for Austrian citizens"
+      ]
+    },
+    "AU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Australian_citizens",
+      "titles": [
+        "Visa requirements for Australian citizens"
+      ]
+    },
+    "AZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Azerbaijani_citizens",
+      "titles": [
+        "Visa requirements for Azerbaijani citizens"
+      ]
+    },
+    "BA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bosnia_and_Herzegovina_citizens",
+      "titles": [
+        "Visa requirements for Bosnia and Herzegovina citizens"
+      ]
+    },
+    "BB": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Barbadian_citizens",
+      "titles": [
+        "Visa requirements for Barbadian citizens"
+      ]
+    },
+    "BD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bangladeshi_citizens",
+      "titles": [
+        "Visa requirements for Bangladeshi citizens"
+      ]
+    },
+    "BE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Belgian_citizens",
+      "titles": [
+        "Visa requirements for Belgian citizens"
+      ]
+    },
+    "BF": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Burkinabe_citizens",
+      "titles": [
+        "Visa requirements for Burkinabe citizens"
+      ]
+    },
+    "BG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bulgarian_citizens",
+      "titles": [
+        "Visa requirements for Bulgarian citizens"
+      ]
+    },
+    "BH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bahraini_citizens",
+      "titles": [
+        "Visa requirements for Bahraini citizens"
+      ]
+    },
+    "BI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Burundian_citizens",
+      "titles": [
+        "Visa requirements for Burundian citizens"
+      ]
+    },
+    "BJ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Beninese_citizens",
+      "titles": [
+        "Visa requirements for Beninese citizens"
+      ]
+    },
+    "BN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bruneian_citizens",
+      "titles": [
+        "Visa requirements for Bruneian citizens"
+      ]
+    },
+    "BNO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Nationals_(Overseas)",
+      "titles": [
+        "Visa requirements for British Nationals (Overseas)"
+      ]
+    },
+    "BO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bolivian_citizens",
+      "titles": [
+        "Visa requirements for Bolivian citizens"
+      ]
+    },
+    "BOC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_citizens",
+      "titles": [
+        "Visa requirements for British Overseas citizens"
+      ]
+    },
+    "BOTC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_citizens",
+      "titles": [
+        "Visa requirements for British Overseas Territories citizens"
+      ]
+    },
+    "BR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Brazilian_citizens",
+      "titles": [
+        "Visa requirements for Brazilian citizens"
+      ]
+    },
+    "BS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bahamian_citizens",
+      "titles": [
+        "Visa requirements for Bahamian citizens"
+      ]
+    },
+    "BT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Bhutanese_citizens",
+      "titles": [
+        "Visa requirements for Bhutanese citizens"
+      ]
+    },
+    "BW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Botswana_citizens",
+      "titles": [
+        "Visa requirements for Botswana citizens"
+      ]
+    },
+    "BY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Belarusian_citizens",
+      "titles": [
+        "Visa requirements for Belarusian citizens"
+      ]
+    },
+    "BZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Belizean_citizens",
+      "titles": [
+        "Visa requirements for Belizean citizens"
+      ]
+    },
+    "CA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Canadian_citizens",
+      "titles": [
+        "Visa requirements for Canadian citizens"
+      ]
+    },
+    "CD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Democratic_Republic_of_the_Congo_citizens",
+      "titles": [
+        "Visa requirements for Democratic Republic of the Congo citizens"
+      ]
+    },
+    "CF": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Central_African_Republic_citizens",
+      "titles": [
+        "Visa requirements for Central African Republic citizens",
+        "Visa requirements for Central African citizens"
+      ]
+    },
+    "CG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Republic_of_the_Congo_citizens",
+      "titles": [
+        "Visa requirements for Republic of the Congo citizens"
+      ]
+    },
+    "CH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Swiss_citizens",
+      "titles": [
+        "Visa requirements for Swiss citizens"
+      ]
+    },
+    "CI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ivorian_citizens",
+      "titles": [
+        "Visa requirements for Ivorian citizens"
+      ]
+    },
+    "CL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Chilean_citizens",
+      "titles": [
+        "Visa requirements for Chilean citizens"
+      ]
+    },
+    "CM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Cameroonian_citizens",
+      "titles": [
+        "Visa requirements for Cameroonian citizens"
+      ]
+    },
+    "CN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Chinese_citizens",
+      "titles": [
+        "Visa requirements for Chinese citizens"
+      ]
+    },
+    "CO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Colombian_citizens",
+      "titles": [
+        "Visa requirements for Colombian citizens"
+      ]
+    },
+    "CR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Costa_Rican_citizens",
+      "titles": [
+        "Visa requirements for Costa Rican citizens"
+      ]
+    },
+    "CU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Cuban_citizens",
+      "titles": [
+        "Visa requirements for Cuban citizens"
+      ]
+    },
+    "CV": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Cape_Verdean_citizens",
+      "titles": [
+        "Visa requirements for Cape Verdean citizens"
+      ]
+    },
+    "CY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Cypriot_citizens",
+      "titles": [
+        "Visa requirements for Cypriot citizens"
+      ]
+    },
+    "CZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Czech_citizens",
+      "titles": [
+        "Visa requirements for Czech citizens"
+      ]
+    },
+    "DE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_German_citizens",
+      "titles": [
+        "Visa requirements for German citizens"
+      ]
+    },
+    "DJ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Djiboutian_citizens",
+      "titles": [
+        "Visa requirements for Djiboutian citizens"
+      ]
+    },
+    "DK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Danish_citizens",
+      "titles": [
+        "Visa requirements for Danish citizens"
+      ]
+    },
+    "DM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Dominica_citizens",
+      "titles": [
+        "Visa requirements for Dominica citizens"
+      ]
+    },
+    "DO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Dominican_Republic_citizens",
+      "titles": [
+        "Visa requirements for Dominican Republic citizens"
+      ]
+    },
+    "DZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Algerian_citizens",
+      "titles": [
+        "Visa requirements for Algerian citizens"
+      ]
+    },
+    "EC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ecuadorian_citizens",
+      "titles": [
+        "Visa requirements for Ecuadorian citizens"
+      ]
+    },
+    "EE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Estonian_citizens",
+      "titles": [
+        "Visa requirements for Estonian citizens"
+      ]
+    },
+    "EG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Egyptian_citizens",
+      "titles": [
+        "Visa requirements for Egyptian citizens"
+      ]
+    },
+    "ER": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Eritrean_citizens",
+      "titles": [
+        "Visa requirements for Eritrean citizens"
+      ]
+    },
+    "ES": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Spanish_citizens",
+      "titles": [
+        "Visa requirements for Spanish citizens"
+      ]
+    },
+    "ET": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ethiopian_citizens",
+      "titles": [
+        "Visa requirements for Ethiopian citizens"
+      ]
+    },
+    "FI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Finnish_citizens",
+      "titles": [
+        "Visa requirements for Finnish citizens"
+      ]
+    },
+    "FJ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Fijian_citizens",
+      "titles": [
+        "Visa requirements for Fijian citizens"
+      ]
+    },
+    "FM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Micronesian_citizens",
+      "titles": [
+        "Visa requirements for Micronesian citizens"
+      ]
+    },
+    "FR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_French_citizens",
+      "titles": [
+        "Visa requirements for French citizens"
+      ]
+    },
+    "GA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Gabonese_citizens",
+      "titles": [
+        "Visa requirements for Gabonese citizens"
+      ]
+    },
+    "GB": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_citizens",
+      "titles": [
+        "Visa requirements for British citizens"
+      ]
+    },
+    "GD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Grenadian_citizens",
+      "titles": [
+        "Visa requirements for Grenadian citizens"
+      ]
+    },
+    "GE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Georgian_citizens",
+      "titles": [
+        "Visa requirements for Georgian citizens"
+      ]
+    },
+    "GH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ghanaian_citizens",
+      "titles": [
+        "Visa requirements for Ghanaian citizens"
+      ]
+    },
+    "GM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Gambian_citizens",
+      "titles": [
+        "Visa requirements for Gambian citizens"
+      ]
+    },
+    "GN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Guinean_citizens",
+      "titles": [
+        "Visa requirements for Guinean citizens"
+      ]
+    },
+    "GQ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Equatorial_Guinean_citizens",
+      "titles": [
+        "Visa requirements for Equatorial Guinean citizens"
+      ]
+    },
+    "GR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Greek_citizens",
+      "titles": [
+        "Visa requirements for Greek citizens"
+      ]
+    },
+    "GT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Guatemalan_citizens",
+      "titles": [
+        "Visa requirements for Guatemalan citizens"
+      ]
+    },
+    "GW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Guinea-Bissauan_citizens",
+      "titles": [
+        "Visa requirements for Guinea-Bissauan citizens"
+      ]
+    },
+    "GY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Guyanese_citizens",
+      "titles": [
+        "Visa requirements for Guyanese citizens"
+      ]
+    },
+    "HK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Chinese_citizens_of_Hong_Kong",
+      "titles": [
+        "Visa requirements for Chinese citizens of Hong Kong"
+      ]
+    },
+    "HN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Honduran_citizens",
+      "titles": [
+        "Visa requirements for Honduran citizens"
+      ]
+    },
+    "HR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Croatian_citizens",
+      "titles": [
+        "Visa requirements for Croatian citizens"
+      ]
+    },
+    "HT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Haitian_citizens",
+      "titles": [
+        "Visa requirements for Haitian citizens"
+      ]
+    },
+    "HU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Hungarian_citizens",
+      "titles": [
+        "Visa requirements for Hungarian citizens"
+      ]
+    },
+    "ID": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Indonesian_citizens",
+      "titles": [
+        "Visa requirements for Indonesian citizens"
+      ]
+    },
+    "IE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Irish_citizens",
+      "titles": [
+        "Visa requirements for Irish citizens"
+      ]
+    },
+    "IL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Israeli_citizens",
+      "titles": [
+        "Visa requirements for Israeli citizens"
+      ]
+    },
+    "IN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Indian_citizens",
+      "titles": [
+        "Visa requirements for Indian citizens"
+      ]
+    },
+    "IQ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Iraqi_citizens",
+      "titles": [
+        "Visa requirements for Iraqi citizens"
+      ]
+    },
+    "IR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Iranian_citizens",
+      "titles": [
+        "Visa requirements for Iranian citizens"
+      ]
+    },
+    "IS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Icelandic_citizens",
+      "titles": [
+        "Visa requirements for Icelandic citizens"
+      ]
+    },
+    "IT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Italian_citizens",
+      "titles": [
+        "Visa requirements for Italian citizens"
+      ]
+    },
+    "JM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Jamaican_citizens",
+      "titles": [
+        "Visa requirements for Jamaican citizens"
+      ]
+    },
+    "JO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Jordanian_citizens",
+      "titles": [
+        "Visa requirements for Jordanian citizens"
+      ]
+    },
+    "JP": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Japanese_citizens",
+      "titles": [
+        "Visa requirements for Japanese citizens"
+      ]
+    },
+    "KE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kenyan_citizens",
+      "titles": [
+        "Visa requirements for Kenyan citizens"
+      ]
+    },
+    "KG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kyrgyzstani_citizens",
+      "titles": [
+        "Visa requirements for Kyrgyzstani citizens"
+      ]
+    },
+    "KH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Cambodian_citizens",
+      "titles": [
+        "Visa requirements for Cambodian citizens"
+      ]
+    },
+    "KI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kiribati_citizens",
+      "titles": [
+        "Visa requirements for Kiribati citizens"
+      ]
+    },
+    "KM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Comorian_citizens",
+      "titles": [
+        "Visa requirements for Comorian citizens"
+      ]
+    },
+    "KN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Saint_Kitts_and_Nevis_citizens",
+      "titles": [
+        "Visa requirements for Saint Kitts and Nevis citizens"
+      ]
+    },
+    "KP": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_North_Korean_citizens",
+      "titles": [
+        "Visa requirements for North Korean citizens"
+      ]
+    },
+    "KR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_South_Korean_citizens",
+      "titles": [
+        "Visa requirements for South Korean citizens"
+      ]
+    },
+    "KW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kuwaiti_citizens",
+      "titles": [
+        "Visa requirements for Kuwaiti citizens"
+      ]
+    },
+    "KZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kazakhstani_citizens",
+      "titles": [
+        "Visa requirements for Kazakhstani citizens"
+      ]
+    },
+    "LA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Laotian_citizens",
+      "titles": [
+        "Visa requirements for Laotian citizens"
+      ]
+    },
+    "LB": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Lebanese_citizens",
+      "titles": [
+        "Visa requirements for Lebanese citizens"
+      ]
+    },
+    "LC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Saint_Lucian_citizens",
+      "titles": [
+        "Visa requirements for Saint Lucian citizens"
+      ]
+    },
+    "LI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Liechtenstein_citizens",
+      "titles": [
+        "Visa requirements for Liechtenstein citizens"
+      ]
+    },
+    "LK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Sri_Lankan_citizens",
+      "titles": [
+        "Visa requirements for Sri Lankan citizens"
+      ]
+    },
+    "LR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Liberian_citizens",
+      "titles": [
+        "Visa requirements for Liberian citizens"
+      ]
+    },
+    "LS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Lesotho_citizens",
+      "titles": [
+        "Visa requirements for Lesotho citizens"
+      ]
+    },
+    "LT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Lithuanian_citizens",
+      "titles": [
+        "Visa requirements for Lithuanian citizens"
+      ]
+    },
+    "LU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Luxembourgish_citizens",
+      "titles": [
+        "Visa requirements for Luxembourgish citizens"
+      ]
+    },
+    "LV": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Latvian_citizens",
+      "titles": [
+        "Visa requirements for Latvian citizens"
+      ]
+    },
+    "LY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Libyan_citizens",
+      "titles": [
+        "Visa requirements for Libyan citizens"
+      ]
+    },
+    "MA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Moroccan_citizens",
+      "titles": [
+        "Visa requirements for Moroccan citizens"
+      ]
+    },
+    "MC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Monégasque_citizens",
+      "titles": [
+        "Visa requirements for Monégasque citizens"
+      ]
+    },
+    "MD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Moldovan_citizens",
+      "titles": [
+        "Visa requirements for Moldovan citizens"
+      ]
+    },
+    "ME": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Montenegrin_citizens",
+      "titles": [
+        "Visa requirements for Montenegrin citizens"
+      ]
+    },
+    "MG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Malagasy_citizens",
+      "titles": [
+        "Visa requirements for Malagasy citizens"
+      ]
+    },
+    "MH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Marshall_Islands_citizens",
+      "titles": [
+        "Visa requirements for Marshall Islands citizens"
+      ]
+    },
+    "MK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_citizens_of_North_Macedonia",
+      "titles": [
+        "Visa requirements for citizens of North Macedonia"
+      ]
+    },
+    "ML": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Malian_citizens",
+      "titles": [
+        "Visa requirements for Malian citizens"
+      ]
+    },
+    "MM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Myanmar_citizens",
+      "titles": [
+        "Visa requirements for Myanmar citizens"
+      ]
+    },
+    "MN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Mongolian_citizens",
+      "titles": [
+        "Visa requirements for Mongolian citizens"
+      ]
+    },
+    "MO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Chinese_citizens_of_Macau",
+      "titles": [
+        "Visa requirements for Chinese citizens of Macau"
+      ]
+    },
+    "MR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Mauritanian_citizens",
+      "titles": [
+        "Visa requirements for Mauritanian citizens"
+      ]
+    },
+    "MT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Maltese_citizens",
+      "titles": [
+        "Visa requirements for Maltese citizens"
+      ]
+    },
+    "MU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Mauritian_citizens",
+      "titles": [
+        "Visa requirements for Mauritian citizens"
+      ]
+    },
+    "MV": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Maldivian_citizens",
+      "titles": [
+        "Visa requirements for Maldivian citizens"
+      ]
+    },
+    "MW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Malawian_citizens",
+      "titles": [
+        "Visa requirements for Malawian citizens"
+      ]
+    },
+    "MX": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Mexican_citizens",
+      "titles": [
+        "Visa requirements for Mexican citizens"
+      ]
+    },
+    "MY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Malaysian_citizens",
+      "titles": [
+        "Visa requirements for Malaysian citizens"
+      ]
+    },
+    "MZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Mozambican_citizens",
+      "titles": [
+        "Visa requirements for Mozambican citizens"
+      ]
+    },
+    "NA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Namibian_citizens",
+      "titles": [
+        "Visa requirements for Namibian citizens"
+      ]
+    },
+    "NE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Nigerien_citizens",
+      "titles": [
+        "Visa requirements for Nigerien citizens"
+      ]
+    },
+    "NG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Nigerian_citizens",
+      "titles": [
+        "Visa requirements for Nigerian citizens"
+      ]
+    },
+    "NI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Nicaraguan_citizens",
+      "titles": [
+        "Visa requirements for Nicaraguan citizens"
+      ]
+    },
+    "NL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Dutch_citizens",
+      "titles": [
+        "Visa requirements for Dutch citizens"
+      ]
+    },
+    "NO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Norwegian_citizens",
+      "titles": [
+        "Visa requirements for Norwegian citizens"
+      ]
+    },
+    "NP": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Nepalese_citizens",
+      "titles": [
+        "Visa requirements for Nepalese citizens"
+      ]
+    },
+    "NR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Nauruan_citizens",
+      "titles": [
+        "Visa requirements for Nauruan citizens"
+      ]
+    },
+    "NZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_New_Zealand_citizens",
+      "titles": [
+        "Visa requirements for New Zealand citizens"
+      ]
+    },
+    "OM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Omani_citizens",
+      "titles": [
+        "Visa requirements for Omani citizens"
+      ]
+    },
+    "PA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Panamanian_citizens",
+      "titles": [
+        "Visa requirements for Panamanian citizens"
+      ]
+    },
+    "PE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Peruvian_citizens",
+      "titles": [
+        "Visa requirements for Peruvian citizens"
+      ]
+    },
+    "PG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Papua_New_Guinean_citizens",
+      "titles": [
+        "Visa requirements for Papua New Guinean citizens"
+      ]
+    },
+    "PH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Philippine_citizens",
+      "titles": [
+        "Visa requirements for Philippine citizens"
+      ]
+    },
+    "PK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Pakistani_citizens",
+      "titles": [
+        "Visa requirements for Pakistani citizens"
+      ]
+    },
+    "PL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Polish_citizens",
+      "titles": [
+        "Visa requirements for Polish citizens"
+      ]
+    },
+    "PS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Palestinian_citizens",
+      "titles": [
+        "Visa requirements for Palestinian citizens"
+      ]
+    },
+    "PT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Portuguese_citizens",
+      "titles": [
+        "Visa requirements for Portuguese citizens"
+      ]
+    },
+    "PW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Palauan_citizens",
+      "titles": [
+        "Visa requirements for Palauan citizens"
+      ]
+    },
+    "PY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Paraguayan_citizens",
+      "titles": [
+        "Visa requirements for Paraguayan citizens"
+      ]
+    },
+    "QA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Qatari_citizens",
+      "titles": [
+        "Visa requirements for Qatari citizens"
+      ]
+    },
+    "RO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Romanian_citizens",
+      "titles": [
+        "Visa requirements for Romanian citizens"
+      ]
+    },
+    "RS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Serbian_citizens",
+      "titles": [
+        "Visa requirements for Serbian citizens"
+      ]
+    },
+    "RU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Russian_citizens",
+      "titles": [
+        "Visa requirements for Russian citizens"
+      ]
+    },
+    "RW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Rwandan_citizens",
+      "titles": [
+        "Visa requirements for Rwandan citizens"
+      ]
+    },
+    "SA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Saudi_citizens",
+      "titles": [
+        "Visa requirements for Saudi citizens"
+      ]
+    },
+    "SB": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Solomon_Islands_citizens",
+      "titles": [
+        "Visa requirements for Solomon Islands citizens"
+      ]
+    },
+    "SC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Seychellois_citizens",
+      "titles": [
+        "Visa requirements for Seychellois citizens"
+      ]
+    },
+    "SD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Sudanese_citizens",
+      "titles": [
+        "Visa requirements for Sudanese citizens"
+      ]
+    },
+    "SE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Swedish_citizens",
+      "titles": [
+        "Visa requirements for Swedish citizens"
+      ]
+    },
+    "SG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Singaporean_citizens",
+      "titles": [
+        "Visa requirements for Singaporean citizens",
+        "Visa requirements for Singapore citizens"
+      ]
+    },
+    "SI": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Slovenian_citizens",
+      "titles": [
+        "Visa requirements for Slovenian citizens"
+      ]
+    },
+    "SK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Slovak_citizens",
+      "titles": [
+        "Visa requirements for Slovak citizens"
+      ]
+    },
+    "SL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Sierra_Leonean_citizens",
+      "titles": [
+        "Visa requirements for Sierra Leonean citizens"
+      ]
+    },
+    "SM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Sammarinese_citizens",
+      "titles": [
+        "Visa requirements for Sammarinese citizens"
+      ]
+    },
+    "SN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Senegalese_citizens",
+      "titles": [
+        "Visa requirements for Senegalese citizens"
+      ]
+    },
+    "SO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Somali_citizens",
+      "titles": [
+        "Visa requirements for Somali citizens"
+      ]
+    },
+    "SR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Surinamese_citizens",
+      "titles": [
+        "Visa requirements for Surinamese citizens"
+      ]
+    },
+    "SS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_South_Sudanese_citizens",
+      "titles": [
+        "Visa requirements for South Sudanese citizens"
+      ]
+    },
+    "ST": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Santomean_citizens",
+      "titles": [
+        "Visa requirements for Santomean citizens"
+      ]
+    },
+    "SV": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_El_Salvador_citizens",
+      "titles": [
+        "Visa requirements for El Salvador citizens",
+        "Visa requirements for Salvadoran citizens"
+      ]
+    },
+    "SY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Syrian_citizens",
+      "titles": [
+        "Visa requirements for Syrian citizens"
+      ]
+    },
+    "SZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Swazi_citizens",
+      "titles": [
+        "Visa requirements for Swazi citizens"
+      ]
+    },
+    "TD": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Chadian_citizens",
+      "titles": [
+        "Visa requirements for Chadian citizens"
+      ]
+    },
+    "TG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Togolese_citizens",
+      "titles": [
+        "Visa requirements for Togolese citizens"
+      ]
+    },
+    "TH": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Thai_citizens",
+      "titles": [
+        "Visa requirements for Thai citizens"
+      ]
+    },
+    "TJ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Tajikistani_citizens",
+      "titles": [
+        "Visa requirements for Tajikistani citizens"
+      ]
+    },
+    "TL": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_East_Timorese_citizens",
+      "titles": [
+        "Visa requirements for East Timorese citizens"
+      ]
+    },
+    "TM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Turkmen_citizens",
+      "titles": [
+        "Visa requirements for Turkmen citizens",
+        "Visa requirements for Turkmenistani citizens"
+      ]
+    },
+    "TN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Tunisian_citizens",
+      "titles": [
+        "Visa requirements for Tunisian citizens"
+      ]
+    },
+    "TO": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Tongan_citizens",
+      "titles": [
+        "Visa requirements for Tongan citizens"
+      ]
+    },
+    "TR": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Turkish_citizens",
+      "titles": [
+        "Visa requirements for Turkish citizens"
+      ]
+    },
+    "TT": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Trinidad_and_Tobago_citizens",
+      "titles": [
+        "Visa requirements for Trinidad and Tobago citizens"
+      ]
+    },
+    "TV": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Tuvaluan_citizens",
+      "titles": [
+        "Visa requirements for Tuvaluan citizens"
+      ]
+    },
+    "TW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Taiwanese_citizens",
+      "titles": [
+        "Visa requirements for Taiwanese citizens"
+      ]
+    },
+    "TZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Tanzanian_citizens",
+      "titles": [
+        "Visa requirements for Tanzanian citizens"
+      ]
+    },
+    "UA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ukrainian_citizens",
+      "titles": [
+        "Visa requirements for Ukrainian citizens"
+      ]
+    },
+    "UG": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Ugandan_citizens",
+      "titles": [
+        "Visa requirements for Ugandan citizens"
+      ]
+    },
+    "US": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_United_States_citizens",
+      "titles": [
+        "Visa requirements for United States citizens"
+      ]
+    },
+    "UY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Uruguayan_citizens",
+      "titles": [
+        "Visa requirements for Uruguayan citizens"
+      ]
+    },
+    "UZ": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Uzbekistani_citizens",
+      "titles": [
+        "Visa requirements for Uzbekistani citizens",
+        "Visa requirements for Uzbekistan citizens"
+      ]
+    },
+    "VA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Vatican_citizens",
+      "titles": [
+        "Visa requirements for Vatican citizens"
+      ]
+    },
+    "VC": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Saint_Vincent_and_the_Grenadines_citizens",
+      "titles": [
+        "Visa requirements for Saint Vincent and the Grenadines citizens"
+      ]
+    },
+    "VE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Venezuelan_citizens",
+      "titles": [
+        "Visa requirements for Venezuelan citizens"
+      ]
+    },
+    "VN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Vietnamese_citizens",
+      "titles": [
+        "Visa requirements for Vietnamese citizens"
+      ]
+    },
+    "VU": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Vanuatuan_citizens",
+      "titles": [
+        "Visa requirements for Vanuatuan citizens",
+        "Visa requirements for Vanuatu citizens"
+      ]
+    },
+    "WS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Samoan_citizens",
+      "titles": [
+        "Visa requirements for Samoan citizens"
+      ]
+    },
+    "X-ABK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Abkhaz_citizens",
+      "titles": [
+        "Visa requirements for Abkhaz citizens",
+        "Visa requirements for Abkhazian citizens"
+      ]
+    },
+    "X-NCY": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Northern_Cypriot_citizens",
+      "titles": [
+        "Visa requirements for Northern Cypriot citizens"
+      ]
+    },
+    "X-SOM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Somaliland_citizens",
+      "titles": [
+        "Visa requirements for Somaliland citizens",
+        "Somaliland passport"
+      ]
+    },
+    "X-SOS": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_South_Ossetian_citizens",
+      "titles": [
+        "Visa requirements for South Ossetian citizens",
+        "Visa requirements for South Ossetian citizens"
+      ]
+    },
+    "X-TRN": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Transnistrian_citizens",
+      "titles": [
+        "Visa requirements for Transnistrian citizens"
+      ]
+    },
+    "XK": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Kosovar_citizens",
+      "titles": [
+        "Visa requirements for Kosovar citizens"
+      ]
+    },
+    "YE": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Yemeni_citizens",
+      "titles": [
+        "Visa requirements for Yemeni citizens"
+      ]
+    },
+    "ZA": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_South_African_citizens",
+      "titles": [
+        "Visa requirements for South African citizens"
+      ]
+    },
+    "ZM": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Zambian_citizens",
+      "titles": [
+        "Visa requirements for Zambian citizens"
+      ]
+    },
+    "ZW": {
+      "url": "https://en.wikipedia.org/wiki/Visa_requirements_for_Zimbabwean_citizens",
+      "titles": [
+        "Visa requirements for Zimbabwean citizens"
+      ]
+    }
+  },
+  "otherCandidates": [
+    {
+      "label": "Saint Helena",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Saint_Helena"
+    },
+    {
+      "label": "Anguillan",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Anguilla"
+    },
+    {
+      "label": "Bermudian",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Bermuda"
+    },
+    {
+      "label": "British Virgin Islands",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_British_Virgin_Islands"
+    },
+    {
+      "label": "Caymanian",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Cayman_Islands"
+    },
+    {
+      "label": "Greenlandic",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_Greenlandic_citizens"
+    },
+    {
+      "label": "Montserratian",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Montserrat"
+    },
+    {
+      "label": "Turks and Caicos Islands",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Turks_and_Caicos_Islands"
+    },
+    {
+      "label": "Faroese",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_Faroese_citizens"
+    },
+    {
+      "label": "Greenlandic",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_Greenlandic_citizens"
+    },
+    {
+      "label": "Non-citizens",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_Estonian_non-citizens"
+    },
+    {
+      "label": "EU",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_European_Union_citizens"
+    },
+    {
+      "label": "Non-citizens",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_Latvian_non-citizens"
+    },
+    {
+      "label": "Pitcairn Islands",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_British_Overseas_Territories_Citizens_of_Pitcairn_Islands"
+    },
+    {
+      "label": "Crew members",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_crew_members"
+    },
+    {
+      "label": "Sovereign Military Order of Malta",
+      "source": "https://en.wikipedia.org/wiki/Visa_requirements_for_holders_of_passports_issued_by_the_Sovereign_Military_Order_of_Malta"
+    }
+  ],
+  "primaryDestinations": [
+    "AD",
+    "AE",
+    "AF",
+    "AG",
+    "AL",
+    "AM",
+    "AO",
+    "AR",
+    "AT",
+    "AU",
+    "AZ",
+    "BA",
+    "BB",
+    "BD",
+    "BE",
+    "BF",
+    "BG",
+    "BH",
+    "BI",
+    "BJ",
+    "BN",
+    "BO",
+    "BR",
+    "BS",
+    "BT",
+    "BW",
+    "BY",
+    "BZ",
+    "CA",
+    "CD",
+    "CF",
+    "CG",
+    "CH",
+    "CI",
+    "CL",
+    "CM",
+    "CN",
+    "CO",
+    "CR",
+    "CU",
+    "CV",
+    "CY",
+    "CZ",
+    "DE",
+    "DJ",
+    "DK",
+    "DM",
+    "DO",
+    "DZ",
+    "EC",
+    "EE",
+    "EG",
+    "ER",
+    "ES",
+    "ET",
+    "FI",
+    "FJ",
+    "FM",
+    "FR",
+    "GA",
+    "GB",
+    "GD",
+    "GE",
+    "GH",
+    "GM",
+    "GN",
+    "GQ",
+    "GR",
+    "GT",
+    "GW",
+    "GY",
+    "HN",
+    "HR",
+    "HT",
+    "HU",
+    "ID",
+    "IE",
+    "IL",
+    "IN",
+    "IQ",
+    "IR",
+    "IS",
+    "IT",
+    "JM",
+    "JO",
+    "JP",
+    "KE",
+    "KG",
+    "KH",
+    "KI",
+    "KM",
+    "KN",
+    "KP",
+    "KR",
+    "KW",
+    "KZ",
+    "LA",
+    "LB",
+    "LC",
+    "LI",
+    "LK",
+    "LR",
+    "LS",
+    "LT",
+    "LU",
+    "LV",
+    "LY",
+    "MA",
+    "MC",
+    "MD",
+    "ME",
+    "MG",
+    "MH",
+    "MK",
+    "ML",
+    "MM",
+    "MN",
+    "MR",
+    "MT",
+    "MU",
+    "MV",
+    "MW",
+    "MX",
+    "MY",
+    "MZ",
+    "NA",
+    "NE",
+    "NG",
+    "NI",
+    "NL",
+    "NO",
+    "NP",
+    "NR",
+    "NZ",
+    "OM",
+    "PA",
+    "PE",
+    "PG",
+    "PH",
+    "PK",
+    "PL",
+    "PS",
+    "PT",
+    "PW",
+    "PY",
+    "QA",
+    "RO",
+    "RS",
+    "RU",
+    "RW",
+    "SA",
+    "SB",
+    "SC",
+    "SD",
+    "SE",
+    "SG",
+    "SI",
+    "SK",
+    "SL",
+    "SM",
+    "SN",
+    "SO",
+    "SR",
+    "SS",
+    "ST",
+    "SV",
+    "SY",
+    "SZ",
+    "TD",
+    "TG",
+    "TH",
+    "TJ",
+    "TL",
+    "TM",
+    "TN",
+    "TO",
+    "TR",
+    "TT",
+    "TV",
+    "TW",
+    "TZ",
+    "UA",
+    "UG",
+    "US",
+    "UY",
+    "UZ",
+    "VA",
+    "VC",
+    "VE",
+    "VN",
+    "VU",
+    "WS",
+    "XK",
+    "YE",
+    "ZA",
+    "ZM",
+    "ZW"
+  ]
+}
