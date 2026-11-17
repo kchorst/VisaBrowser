@@ -1,8 +1,26 @@
 # VisaBrowser v0.3.0
 
-VisaBrowser compares tourist entry requirements for a group of travelers. Use **Countries** to search and filter a destination or **Multi-search** to check a list at once.
+**[Open VisaBrowser on your phone](https://kchorst.github.io/VisaBrowser/)**
+
+VisaBrowser compares tourist entry requirements for travelers with different passports. It runs in your mobile or desktop browser.
+
+## Get started
+
+1. Open **Passengers** and add the people traveling.
+2. Use **Countries** to search and filter destinations or **Multi-search** to check a list at once.
+3. Open a destination for each traveler's visa result, entry conditions, and source links. Use **Save destination** to keep the comparison in your browser.
+
+Select **Save offline** to make the visa data available on this device when you’re offline. When **Update available** appears, select it to refresh that copy. See the [User Guide](USER_GUIDE.md) for more detail.
+
+## Visa data and updates
+
+The date shown in VisaBrowser identifies the data snapshot. Open **Wikipedia source** on a result to see when that passport's source last refreshed. Reviewed exceptions can supplement the Wikipedia table. Check official immigration guidance before traveling.
+
+Once scheduled refreshes are enabled, GitHub Actions attempts to refresh the mapped Wikipedia sources on Tuesdays at **10:23 UTC**. The app uses the published snapshot when you search. If a passport's source fails to refresh, VisaBrowser keeps the previous usable rules and shows **Update delayed**. A source older than 14 days can cause an otherwise favorable result to show **Pending verification**.
 
 ## Run locally on Windows
+
+For a self-hosted copy, open [GitHub Releases](https://github.com/kchorst/VisaBrowser/releases/latest) and download **VisaBrowser-Windows.zip** when available.
 
 1. Download the ZIP and choose **Extract All**. Open the extracted `VisaBrowser` folder.
 2. Double-click **Start-VisaBrowser.bat**. It requires Python 3.9 or later and opens [http://localhost:8000](http://localhost:8000) in your default browser.
@@ -18,26 +36,14 @@ If Windows does not recognize `py`, use `python scripts/local.py`. To serve only
 
 Keep using the same browser profile and address, including the port, to retain passenger profiles and saved comparisons across ZIP upgrades. Browser data for the hosted site is separate.
 
-## Download updates
+To refresh the local visa data, run **Update-Visa-Data.bat** or `py -3 scripts/local.py --update`, then restart **Start-VisaBrowser.bat**. A successful refresh updates the visa-data date. An interrupted download leaves the previous dataset available. To update the app version, download a newer release, close the old VisaBrowser tabs, stop its server, and start the new copy.
 
-- **App release.** Use [Download latest](https://github.com/kchorst/VisaBrowser/releases/latest) and choose **VisaBrowser-Windows.zip**. Extract it to a new folder, close the older VisaBrowser tabs and stop its local server, then start the new copy. The header shows the version packaged with that release. Downloading a copy does not change its version.
-- **Local visa data.** In your existing folder, double-click **Update-Visa-Data.bat**, or run `py -3 scripts/local.py --update`. Restart with **Start-VisaBrowser.bat** afterward. A successful update changes the visa-data date while keeping the app version. An interrupted download leaves the previous dataset available. This updater uses the published GitHub Pages data after the site is deployed.
-- **Browser offline copy.** Use **Save offline** in the app. **Update available** refreshes that browser’s copy of the visa dataset served by the current site. On the local app, update the local files first. See the [User Guide](USER_GUIDE.md) for details.
+## Maintainer setup
 
-## Wikipedia source refresh
-
-The ZIP includes a dated snapshot adapted from mapped Wikipedia pages on visa requirements by nationality. The app reads these bundled or downloaded files. It does not make live Wikipedia requests while you search.
-
-When the repository variable `VISABROWSER_ENABLE_REFRESH` is set to `true`, GitHub Actions attempts a refresh on Tuesdays at **10:23 UTC**. A maintainer can also run **Validate and deploy VisaBrowser** manually with **Fetch Wikipedia rule data before deploying** enabled. Each successful import replaces the previous passport rules after checks for missing rows, classifications, and notes. An unsuccessful passport import keeps its previous usable rules and is marked **Update delayed**. A source older than 14 days can cause an otherwise favorable result to show **Pending verification**. Open **Wikipedia source** on a result to see its last successful refresh date. Reviewed exceptions can supplement the Wikipedia table.
-
-## First GitHub release
-
-1. Add this folder to `kchorst/VisaBrowser`. In repository settings, choose **GitHub Actions** under **Pages → Build and deployment**.
-2. Run **Validate and deploy VisaBrowser** on the default branch. Enable `VISABROWSER_ENABLE_REFRESH` in repository Actions variables when you want the weekly refresh to begin.
-3. Push tag `v0.3.0` on the release commit. After validation passes, Actions creates the GitHub Release and attaches **VisaBrowser-Windows.zip**. Confirm the asset and the hosted page are available before sharing their links.
+1. In repository settings, choose **GitHub Actions** under **Pages → Build and deployment**.
+2. Run **Validate and deploy VisaBrowser** on `main`. Select **Fetch Wikipedia rule data before deploying** for a manual refresh. Set the repository Actions variable `VISABROWSER_ENABLE_REFRESH` to `true` to enable the weekly schedule.
+3. Push a version tag on the release commit. After validation passes, Actions creates the GitHub Release and attaches **VisaBrowser-Windows.zip**.
 
 ## License
 
 VisaBrowser software uses the [PolyForm Noncommercial License 1.0.0](LICENSE.md). Wikipedia-derived material in `site/data/` is adapted under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The original article links are in `site/data/index.json` and the relevant passport files. The import converts Wikipedia tables into structured rules and extracts or summarizes source notes.
-
-See the [User Guide](USER_GUIDE.md) for comparing passengers, saving destinations, and choosing which data to use offline.
