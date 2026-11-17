@@ -70,7 +70,7 @@ def workflows(browser, base):
     expect(page.get_by_text(f'v{version}')).to_be_visible()
     expect(page.get_by_text('Six months from today is May 17, 2027.')).to_be_visible()
     page.get_by_role('button', name='Dismiss passport reminder').click()
-    expect(page.get_by_label('Passport reminder')).to_be_hidden()
+    expect(page.get_by_label('Passport reminder', exact=True)).to_be_hidden()
     visit(page, 'Destination A')
     expect(page.get_by_role('button', name='Add passengers')).to_be_visible()
     page.get_by_role('button', name='Add passengers').click()
@@ -90,7 +90,7 @@ def workflows(browser, base):
     page.goto(base)
     expect(page.get_by_role('heading', name='Alex')).to_be_visible()
     expect(page.get_by_role('heading', name='Aline')).to_be_visible()
-    expect(page.get_by_label('Passport reminder')).to_be_visible()
+    expect(page.get_by_label('Passport reminder', exact=True)).to_be_visible()
 
     visit(page, 'Destination B')
     expect(page.get_by_text('1 issue', exact=True)).to_be_visible()
