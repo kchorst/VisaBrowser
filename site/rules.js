@@ -105,7 +105,11 @@ export function compare(passengers, destination, data) {
   const rows = passengers.map(passenger => ({
     passenger, source: data[passenger.passport], ...evaluate(passenger, destination, data)
   }));
-  const allFree = rows.length > 0 && rows.every(row => row.options.includes('free'));
+  const allFree = rows.length > 0 && rows.every(row =>
+    row.options.length === 1 && row.options[0] === 'free');
+  const allUnconditional = allFree && rows.every(row =>
+    !row.viaDocument && !row.condition && !row.flags?.length &&
+    !row.controls?.length && !row.questions?.length && !row.reason);
   const allEasy = rows.length > 0 && rows.every(row => row.options.some(easy));
   const hasFree = rows.some(row => row.options.includes('free'));
   for (const row of rows) {
@@ -116,7 +120,8 @@ export function compare(passengers, destination, data) {
   return {
     rows, issues: rows.filter(row => row.issue).length,
     pending: rows.filter(row => row.options.includes('pending')).length,
-    group: allFree ? 'Visa-free for everyone' :
+    group: allUnconditional ? 'Visa-free for everyone' :
+      allFree ? 'Visa-free with conditions' :
       allEasy && !rows.some(row => row.options.includes('residentArrival')) ? 'E-visa or visa on arrival for everyone' : ''
   };
 }
