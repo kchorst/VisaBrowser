@@ -383,44 +383,54 @@ function compareShortlist(value, people, data) {
   return { message: message.join(' '), cards };
 }
 
+const browseState = { countries: { query: '', filter: 'all', expanded: ['free','authorization','required','review'] },
+  group: { query: '', filter: 'all', expanded: [] } };
 function countries(data, groupMode = false) {
-  const query = el('input', { type: 'search', placeholder: 'Search by country or territory', autocomplete: 'off' });
+  const viewState = browseState[groupMode ? 'group' : 'countries'];
+  const query = el('input', { type: 'search', placeholder: 'Search by country or territory',
+    autocomplete: 'off', value: viewState.query });
   const results = el('div', { class: 'stack' });
   const people = activePassengers();
-  const filter = select('filter', [['all', 'All destinations'], ['free', 'Visa-free for everyone'],
-    ['covered', 'No conventional advance visa needed'], ['pending', 'Pending verification']], 'all');
-  filter.remove(0);
+  const filter = select('filter', [['all', 'All Countries'], ['free', 'Visa-Free'],
+    ['authorization', 'eVisa / Authorization'], ['required', 'Visa Required'],
+    ['review', 'Needs Review']], viewState.filter);
   const sections = people.length ? rank(destinations, people, data) : [{
-    heading: 'Destinations A–Z', destinations: destinations.map(([id, name]) => ({ id, name }))
+    id: 'all', heading: 'All Countries', destinations: destinations.map(([id, name]) => ({ id, name }))
   }];
   function paint() {
+    viewState.query = query.value;
+    viewState.filter = filter.value;
     const term = normalizeName(query.value.trim());
     const cards = [];
     for (const section of sections) {
-      const entries = section.destinations.filter(({ id, name, result }) => {
-        const matches = normalizeName(name).includes(term) || id.toLowerCase() === term;
-        if (!matches || !result || filter.value === 'all') return matches;
-        if (filter.value === 'free') return result.group === 'Visa-free for everyone';
-        if (filter.value === 'covered') return noAdvanceVisa(result);
-        return result.pending > 0;
-      });
-      if (!entries.length) continue;
-      cards.push(el('section', { class: 'panel country-section' }, el('h2', {}, `${section.heading} (${entries.length})`),
+      if (filter.value !== 'all' && section.id !== filter.value) continue;
+      const entries = section.destinations.filter(({ id, name }) =>
+        normalizeName(name).includes(term) || id.toLowerCase() === term);
+      const expanded = viewState.expanded.includes(section.id);
+      const list = el('details', { class: 'panel country-section', ...(expanded ? { open: '' } : {}) },
+        el('summary', {}, `${section.heading} (${entries.length})`),
         el('ul', { class: 'country-list' }, entries.map(({ id, name, result }) => {
-          const control = button(name, () => go(`destination/${id}`));
+          const control = button(name, () => go(`destination/${id}/${groupMode ? 'group' : 'countries'}`));
           if (result?.pending) control.append(chip(`${result.pending} pending verification`, 'warn'));
           return el('li', {}, control);
-        }))));
+        })));
+      list.addEventListener('toggle', () => {
+        viewState.expanded = sections.filter(s => s.id === section.id ? list.open :
+          viewState.expanded.includes(s.id)).map(s => s.id);
+      });
+      cards.push(list);
     }
     results.replaceChildren(...(cards.length ? cards : [panel(muted('No matching destinations.'))]));
   }
   query.addEventListener('input', paint);
   filter.addEventListener('change', paint);
   paint();
-
-  return [title(groupMode ? 'Check Group Requirements' : 'Browse Countries'), refreshNotice(people, data), el('div', { class: 'stack' },
-    people.length ? null : invite(), panel(el('h2', {}, 'Search and filter'), label('Search destinations', query),
-      people.length ? label('Filter by visa result', filter) : null), results)];
+  return [title(groupMode ? 'Check Group Requirements' : 'Browse Countries'),
+    refreshNotice(people, data), el('div', { class: 'stack' },
+      people.length ? null : invite(),
+      panel(label('Search destinations', query), people.length ? label('Filter requirements', filter) : null),
+      groupMode ? muted('Group results follow the most restrictive requirement among selected travelers.') : null,
+      results)];
 }
 
 function multiSearch(data) {
