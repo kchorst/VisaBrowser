@@ -45,7 +45,7 @@ def add_traveler(page, name, passport, issuer=None):
         form.get_by_label('Issuing country or area').select_option(issuer)
         form.get_by_role('button', name='Add visa or permit').click()
     form.get_by_role('button', name='Save first traveler' if first else 'Save traveler').click()
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Travelers', exact=True)).to_be_visible()
     expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
     page.get_by_role('button', name='Continue').click()
 
