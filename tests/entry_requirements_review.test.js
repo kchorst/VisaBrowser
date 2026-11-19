@@ -6,7 +6,12 @@ import { compare, classify, rank, statuses, noAdvanceVisa } from '../site/rules.
 const read = file => JSON.parse(readFileSync(new URL('../site/data/' + file, import.meta.url)));
 const catalog = read('index.json');
 const person = (passport, documents = []) => ({ passport, documents, facts: {}, name: passport });
-const passports = ['US', 'KW', 'CA', 'BR', 'NI', 'TW', 'IE'];
+const kenyaExemptions = {
+  CM: 60, CV: 60, SC: 60, SN: 60, ST: 60,
+  CG: 90, GM: 90, LC: 90, MZ: 90,
+  BI: 180, CD: 180, SS: 180, TZ: 180
+};
+const passports = ['US', 'KW', 'CA', 'BR', 'NI', 'TW', 'IE', 'BNO', 'HK', ...Object.keys(kenyaExemptions)];
 const data = Object.fromEntries(passports.map(passport => [passport, {
   ...catalog.sources[passport],
   ...read('passports/' + passport + '.json'),
@@ -89,4 +94,37 @@ test('Free entries with steps are distinguished from unsupported/passport-specif
   assert.deepEqual(rows.map(group => [group.id, group.destinations.length]), [
     ['free',1],['steps',2],['authorization',0],['required',0],['review',1]
   ]);
+});
+
+test('UK visitor exemption is tied to the BN(O) passport', () => {
+  const bno = person('BNO', [{ id: 'unrelated', issuer: 'US', type: 'visa' }]);
+  const result = compare([bno], 'GB', data);
+  const visitor = result.rows[0];
+  assert.deepEqual(visitor.options, ['free']);
+  assert.equal(visitor.viaDocument, false);
+  assert.match(visitor.official, /^https:\/\/www.gov.uk\//);
+  assert.match(visitor.notes.join(' '), /No visitor visa or ETA is required/);
+  assert.equal(classify(result), 'free');
+  assert.equal(classify(compare([bno, person('HK')], 'GB', data)), 'steps');
+});
+
+for (const [passport, days] of Object.entries(kenyaExemptions)) {
+  test(`Kenya eTA exemption for ${passport} lasts up to ${days} days`, () => {
+    const visitor = row(passport, 'KE');
+    assert.deepEqual(visitor.options, ['free']);
+    assert.equal(visitor.stay, `Confirm on arrival · eTA exemption up to ${days} days`);
+    assert.equal(visitor.official, 'https://etakenya.go.ke/general-information');
+    assert.doesNotMatch(visitor.notes.join(' '), /USD|apply for|single entry/i);
+    assert.equal(visitor.fee, undefined);
+    assert.deepEqual(visitor.flags, (data[passport].rules.KE.flags ?? [])
+      .filter(flag => flag !== 'Electronic travel authorization'));
+    assert.match(visitor.notes.join(' '), /yellow fever/);
+  });
+}
+
+test('Kenya exemptions do not extend to US passport holders in a mixed group', () => {
+  const result = compare([person('CG'), person('US')], 'KE', data);
+  assert.equal(result.rows[0].official, 'https://etakenya.go.ke/general-information');
+  assert.equal(result.rows[1].official, undefined);
+  assert.equal(classify(result), 'review');
 });
