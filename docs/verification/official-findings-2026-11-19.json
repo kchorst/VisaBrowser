@@ -1,0 +1,179 @@
+{
+  "review_date": "2026-11-19",
+  "repo_version": "v0.4.6",
+  "authority": "Each record has an official source; findings are scoped to the stated ordinary-passport route and tourist eligibility.",
+  "method": "Compare imported baseline to published destination immigration guidance; inspect site/reviewed.js for existing overrides.",
+  "count": 17,
+  "findings": [
+    {
+      "passport": "BNO",
+      "destination": "GB",
+      "case": "BN(O) UK visitor exemption",
+      "source_problem": "Imported source has 'Bespoke UK Immigration Status' and an unclassified/pending visitor outcome.",
+      "verified_requirement": "British National (Overseas) passport holders need neither a UK visitor visa nor an ETA for ordinary visits.",
+      "source": "https://www.gov.uk/eta/when-not-need-eta",
+      "status": "requires-correction",
+      "category": "eligibility"
+    },
+    {
+      "passport": "CG",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary CG nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 90 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "CM",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary CM nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 60 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "CV",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary CV nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 60 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "GM",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary GM nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 90 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "LC",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary LC nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 90 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "MZ",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary MZ nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 90 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "SC",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary SC nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 60 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "SN",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary SN nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 60 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "ST",
+      "destination": "KE",
+      "case": "Kenya nationality eTA exemption",
+      "source_problem": "Imported record includes an electronic-travel-authorization label or flag despite an official nationality exemption.",
+      "verified_requirement": "Ordinary ST nationals are included in Kenya's published nationality-specific eTA exemption for stays not exceeding 60 days; entry remains subject to immigration admission.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "eta-exemption"
+    },
+    {
+      "passport": "BI",
+      "destination": "KE",
+      "case": "Kenya East African Community exemption",
+      "source_problem": "Imported stay field is 3 months, inconsistent with the official exemption category's 180-day ceiling.",
+      "verified_requirement": "Kenya's eTA exemption for East African Partner State citizens is stated for a period not exceeding 180 days; individual admission remains subject to officials.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "stay-limit"
+    },
+    {
+      "passport": "CD",
+      "destination": "KE",
+      "case": "Kenya East African Community exemption",
+      "source_problem": "Imported stay field is 90 days, inconsistent with the official exemption category's 180-day ceiling.",
+      "verified_requirement": "Kenya's eTA exemption for East African Partner State citizens is stated for a period not exceeding 180 days; individual admission remains subject to officials.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "stay-limit"
+    },
+    {
+      "passport": "SS",
+      "destination": "KE",
+      "case": "Kenya East African Community exemption",
+      "source_problem": "Imported stay field is 3 months, inconsistent with the official exemption category's 180-day ceiling.",
+      "verified_requirement": "Kenya's eTA exemption for East African Partner State citizens is stated for a period not exceeding 180 days; individual admission remains subject to officials.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "stay-limit"
+    },
+    {
+      "passport": "TZ",
+      "destination": "KE",
+      "case": "Kenya East African Community exemption",
+      "source_problem": "Imported stay field is 3 months, inconsistent with the official exemption category's 180-day ceiling.",
+      "verified_requirement": "Kenya's eTA exemption for East African Partner State citizens is stated for a period not exceeding 180 days; individual admission remains subject to officials.",
+      "source": "https://etakenya.go.ke/form/apply/how-to-apply",
+      "status": "requires-correction",
+      "category": "stay-limit"
+    },
+    {
+      "passport": "KW",
+      "destination": "NZ",
+      "case": "Kuwait visa-waiver suspension",
+      "source_problem": "Imported source says visa-free/NZeTA, without the temporary suspension.",
+      "verified_requirement": "Kuwait passport travelers cannot use visa waiver/NZeTA during the published suspension, 12 Nov 2026 to 11 Feb 2027 NZDT; v0.4.6 contains a reviewed override.",
+      "source": "https://www.immigration.govt.nz/about-us/news-centre/visa-waiver-travel-changes-for-kuwait-nationals/",
+      "status": "covered-v0.4.6-monitor-end-date",
+      "category": "time-limited-waiver"
+    },
+    {
+      "passport": "US",
+      "destination": "GB",
+      "case": "UK ETA cost and ordinary visitor route",
+      "source_problem": "Imported source lists £16; v0.4.6 shows £20 and a reviewed ETA rule.",
+      "verified_requirement": "Eligible US ordinary passport holders generally need an ETA rather than a Standard Visitor visa; the official ETA fee is £20.",
+      "source": "https://www.gov.uk/eta",
+      "status": "covered-v0.4.6",
+      "category": "fee-and-eta"
+    },
+    {
+      "passport": "US",
+      "destination": "KR",
+      "case": "K-ETA temporary exemption",
+      "source_problem": "Imported source contains conflicting statements about whether K-ETA is required.",
+      "verified_requirement": "US ordinary passport holders are included in the temporary K-ETA exemption through 31 Dec 2026 KST; arrival-card duties may apply. v0.4.6 has a dated override.",
+      "source": "https://www.k-eta.go.kr/portal/board/viewboarddetail.do?bbsSn=299707&locale=EN",
+      "status": "covered-v0.4.6-monitor-end-date",
+      "category": "time-limited-eta"
+    }
+  ]
+}
