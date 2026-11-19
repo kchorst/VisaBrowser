@@ -290,7 +290,7 @@ function go(path) {
   else location.hash = path;
 }
 function passengerList() {
-  const add = button('Add passenger', () => passengerEditor(null, passenger => {
+  const add = button('Add Another Traveler', () => passengerEditor(null, passenger => {
     state.passengers.push(passenger);
     state.selected.push(passenger.id);
     persist();
@@ -338,9 +338,9 @@ function passengerList() {
       passenger.documents.length ? muted(`Document issuers · ${[...new Set(passenger.documents.map(d => places[d.issuer]))].join(', ')}`) : null);
   });
   updateSelection();
-  return [title('Passengers', add),
+  return [title('Travelers', add),
     el('div', { class: 'stack' }, people.length ? [selection, people,
-      el('div', { class: 'actions' }, clearButton)] :
+      el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary'))] :
       panel(muted('Add a passenger to compare tourist entry requirements.')))];
 }
 let pendingDestination = '';
@@ -700,20 +700,35 @@ function destinationDetails(placeId, saved, data) {
     });
     return el('div', { class: 'stack' }, label(`Is ${row.passenger.name} there now, or have they visited recently?`, answer), hint);
   });
-  const notes = panel(el('h2', {}, 'Notes'), cumulative, destinationTravelNotes(placeId),
+  const warnings = destinationTravelNotes(placeId);
+  warnings?.querySelectorAll('a').forEach(anchor => anchor.replaceWith(anchor.textContent));
+  const notes = panel(el('h2', {}, 'Notes'), cumulative, warnings,
     muted('Enter during the allowed window and leave before the authorized stay expires. Check with local immigration or a qualified local visa agent before relying on re-entry.'),
     muted('Check transit requirements for each connection, including whether each traveler can remain airside.'),
     muted('Confirm current rules with the destination’s embassy, consulate, or immigration authority before booking or traveling.'),
     el('p', {}, link('Open Travel-Prep', `${travelPrep}#country=${encodeURIComponent(placeId)}`)));
+  const origin = route()[2];
+  const mixed = new Set(people.map(p => p.passport)).size > 1;
+  const summaryBox = people.length > 1 ?
+    el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
+      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : issueLabel(summary.issues)),
+      el('div', { class: 'chips' },
+        noIssues(summary) ? chip('NO ISSUES — check passport and entry conditions', 'good') : null,
+        summary.group ? chip(summary.group, 'warn') : null,
+        chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
+        summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
+      muted(groupDetail(summary))) :
+    people.length ? panel(el('div', { class: 'chips' },
+      noIssues(summary) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
+      chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
+      summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
     el('div', { class: 'stack' }, el('div', { class: 'actions' }, controls,
       people.length ? button('Copy', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()))) : null,
-      people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null), people.length ?
-      panel(el('div', { class: 'chips' }, noIssues(summary) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : summary.group ? chip(summary.group, 'warn') : null,
-        chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
-        summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
-      muted(groupDetail(summary))) : invite(placeId),
-    summary.rows.map(row => passengerResult(row, placeId, saved, data)), notes, edits, disclaimer())];
+      people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null),
+    summaryBox,
+    summary.rows.map(row => passengerResult(row, placeId, saved, data)),
+    notes, edits, disclaimer())];
 }
 
 function savedList() {
