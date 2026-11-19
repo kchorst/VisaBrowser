@@ -25,7 +25,7 @@ For mixed-passport groups, **Check Group Req** appears first. Otherwise **View C
 
 ### Open a specific destination from another app
 
-Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. If none are selected, the result screen asks for traveler setup. Unknown codes return to the country picker with a notice.
+Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. **On a first visit, a country link retains the destination and shows “Destination: Japan” above the first-traveler form. Once you save the first name and passport, the linked country's result opens immediately, without another country selection.** If existing travelers are deselected, select one to compare. Unknown codes return to the country picker with a notice.
 
 ## 3. Interpret results carefully
 
