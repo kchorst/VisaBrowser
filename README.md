@@ -11,7 +11,7 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
 
-**Browse Countries** starts with every category hidden. Each category displays a clearly labeled **Show countries** button; select it to reveal that list and **Hide countries** to collapse it. A filter alone never opens country lists.
+**Lists and counts:** Browse Countries and Check Group Req start with country lists hidden, displaying each category's real count and a clearly labeled **Show countries** button. Other collections—travelers, saved searches, itinerary destinations and result groups—also show their item counts and **Show/Hide** controls. Lists of more than five items start collapsed; shorter lists appear expanded to keep immediate actions discoverable. The **Hide** control works on every list.
 
 **Search Multiple** accepts a comma-separated itinerary in one entry, including a pasted list such as `Mozambique, Brazil, Cape Verde, Portugal, China`. Recognized destinations appear automatically in travel order, and **Search Requirements** compares the list. Unknown names remain in the field for correction. You can also select a single destination from suggestions or press Enter.
 
