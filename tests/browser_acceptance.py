@@ -312,8 +312,9 @@ def real_country_journeys(browser, base):
     expect(search).to_be_enabled()
     search.click()
     expect(page.locator('.country-result')).to_have_count(5)
+    page.get_by_role('button', name='Clear All').click()
+    page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
     page.goto(base + '#home')
-    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
 
     # Other apps can deep-link with the same #country=ISO format as Travel-Prep.
     page.goto(base + '#country=jp')
