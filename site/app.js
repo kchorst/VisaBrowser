@@ -308,10 +308,10 @@ function route() {
 }
 let unsavedResult = null;
 let lastRouteHash = location.hash;
-function leaveUnsaved(nextHash) {
+function leaveUnsaved(nextHash, onLeave = () => { lastRouteHash = nextHash; location.hash = nextHash; }) {
   const form = el('div', { class: 'stack' });
   const dialog = modal(form);
-  const continueTo = () => { unsavedResult = null; dialog.close(); lastRouteHash = nextHash; location.hash = nextHash; };
+  const continueTo = () => { unsavedResult = null; dialog.close(); onLeave(); };
   const saveAndLeave = () => {
     const draft = unsavedResult;
     if (!draft) return continueTo();
@@ -1155,6 +1155,7 @@ async function readCatalog() {
 }
 
 const offlineButton = document.querySelector('#save-offline');
+const updateButton = document.querySelector('#update-app');
 const offlineMessage = document.querySelector('#offline-status');
 let savingPack = false;
 let packCheck = 0;
@@ -1166,7 +1167,7 @@ async function showOfflineStatus(message) {
     ? await onlineManifest().catch(() => null) : null;
   if (request !== packCheck || savingPack) return;
   offlineButton.textContent = saved && latest && saved.version !== latest.version
-    ? 'Update available' : saved ? 'Refresh offline data' : 'Save offline';
+    ? 'Offline data update available' : saved ? 'Refresh offline data' : 'Save offline';
   offlineButton.disabled = !navigator.onLine || !navigator.serviceWorker?.controller;
   const connectivity = !navigator.onLine || cachedCatalog ? 'Offline' : '';
   const copy = saved ? `Offline dataset · ${saved.generated.slice(0, 10)}` :
@@ -1179,6 +1180,7 @@ offlineButton.addEventListener('click', async () => {
   if (savingPack) return;
   savingPack = true;
   offlineButton.disabled = true;
+  updateButton.disabled = true;
   offlineMessage.hidden = false;
   let notice = 'Download interrupted. Any previous complete offline dataset is still available.';
   offlineMessage.textContent = 'Preparing offline download…';
@@ -1193,6 +1195,7 @@ offlineButton.addEventListener('click', async () => {
     // The active dataset remains untouched on download or integrity failure.
   } finally {
     savingPack = false;
+    updateButton.disabled = false;
     await showOfflineStatus(notice);
   }
 });
@@ -1252,9 +1255,51 @@ async function start() {
 start();
 
 if ('serviceWorker' in navigator && 'caches' in window) {
-  navigator.serviceWorker.register('./sw.js', { type: 'module', updateViaCache: 'none' }).then(() => {
-    navigator.serviceWorker.addEventListener('controllerchange', () => showOfflineStatus());
-    return navigator.serviceWorker.ready;
+  const workers = navigator.serviceWorker;
+  const updateNotice = document.querySelector('#app-update');
+  let controller = workers.controller;
+  let reloadForUpdate = false;
+  workers.addEventListener('controllerchange', () => {
+    if (reloadForUpdate) {
+      location.reload();
+      return;
+    }
+    if (controller && workers.controller !== controller) updateNotice.hidden = false;
+    controller = workers.controller;
+    showOfflineStatus();
+  });
+
+  workers.register('./sw.js', { type: 'module', updateViaCache: 'none' }).then(registration => {
+    const showWaiting = () => {
+      if (registration.waiting && workers.controller) updateNotice.hidden = false;
+    };
+    const watchInstall = () => registration.installing?.addEventListener('statechange', showWaiting);
+    registration.addEventListener('updatefound', watchInstall);
+    watchInstall();
+    showWaiting();
+
+    const checkForUpdate = () => {
+      if (!document.hidden && navigator.onLine) registration.update().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', checkForUpdate);
+    window.addEventListener('online', checkForUpdate);
+    window.setInterval(checkForUpdate, 30 * 60 * 1000);
+
+    updateButton.addEventListener('click', () => {
+      const applyUpdate = () => {
+        if (!registration.waiting) {
+          location.reload();
+          return;
+        }
+        updateButton.disabled = true;
+        offlineButton.disabled = true;
+        reloadForUpdate = true;
+        registration.waiting.postMessage('activate-update');
+      };
+      if (unsavedResult) leaveUnsaved(location.hash, applyUpdate);
+      else applyUpdate();
+    });
+    return workers.ready;
   }).then(() => {
     offlineButton.hidden = false;
     return showOfflineStatus();

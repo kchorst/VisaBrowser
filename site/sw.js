@@ -10,6 +10,10 @@ self.addEventListener('install', event => {
   event.waitUntil(caches.open(shell).then(cache => cache.addAll(
     assets.map(asset => new Request(new URL(asset, self.registration.scope), { cache: 'reload' })))));
 });
+self.addEventListener('message', event => {
+  if (event.data === 'activate-update') event.waitUntil(self.skipWaiting());
+});
+
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();

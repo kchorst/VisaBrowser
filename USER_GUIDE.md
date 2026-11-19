@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.7 — User Guide
+# VisaBrowser v0.4.8 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -90,7 +90,9 @@ Because storage is local to the current browser/profile, clearing website data o
 
 ## 6. Use the app offline
 
-While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Update available** lets you replace it.
+While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Offline data update available** lets you replace it.
+
+When **VisaBrowser update available** appears, choose **Update VisaBrowser** to reload with the new app version. You can save or discard an open comparison first. If you are upgrading from v0.4.7, close all VisaBrowser tabs and any installed app window, then reopen while online to load v0.4.8.
 
 An interrupted offline update preserves the previous complete pack. Always check the displayed data date and do not treat outdated or unavailable sources as travel clearance. Links to Travel-Prep or external sites require a connection.
 
