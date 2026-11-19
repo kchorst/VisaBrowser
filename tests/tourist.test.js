@@ -45,3 +45,22 @@ test('Australia treats eVisitor as a visa for Bulgarian and Romanian passports',
     assert.match(result.rows[0].status, /651/);
   }
 });
+
+test('Reviewed tourist pathways distinguish U.S. ESTA, Canadian visitors and Australian eVisas', () => {
+  const [fr] = compare([{ passport: 'FR' }], 'US', {}).rows;
+  assert.match(fr.flags[0], /ESTA/);
+  assert.match(touristDetails('US', fr)[0].text, /air or sea/);
+  const [ca] = compare([{ passport: 'CA' }], 'US', {}).rows;
+  assert.deepEqual(ca.options, ['free']);
+  assert.equal(ca.flags, undefined);
+  const [jp] = compare([{ passport: 'JP' }], 'AU', {}).rows;
+  assert.match(jp.status, /601/);
+  assert.match(touristEntryTerms('AU', jp).entries, /Multiple/);
+});
+
+test('Imported onward references become confirmation prompts', () => {
+  const row = { ...traveler('US'), notes: ['Bring a return ticket.'] };
+  const [notice] = touristDetails('BT', row);
+  assert.equal(notice.heading, 'Proof of onward travel');
+  assert.match(notice.text, /Confirm whether/);
+});
