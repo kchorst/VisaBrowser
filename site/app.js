@@ -812,7 +812,8 @@ function passengerResult(row, placeId, saved, data) {
   const routes = row.routes?.map(option => el('p', {},
     option.url?.startsWith('https://') ? link(option.title, option.url) : option.title,
     option.detail ? ` · ${option.detail}` : null));
-  const authority = row.official?.startsWith('https://') ?
+  const authority = row.official?.startsWith('https://') &&
+    !row.routes?.some(option => option.url === row.official) ?
     el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
   const passportWarnings = (row.notes ?? []).filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
