@@ -131,3 +131,33 @@ main { min-width: 0; }
 .counted-list[hidden] { display: none !important; }
 .counted-list > .panel { min-width: 0; }
 .counted-list .itinerary-stop { width: 100%; }
+
+/* v0.4.5: recognizable navigation and independently actionable itinerary cards */
+.brand-home { color: var(--green); font-size: 1.25rem; font-weight: 750; letter-spacing: .015em;
+  text-decoration: none; border-radius: .25rem; }
+.brand-home:hover, .brand-home:focus-visible { text-decoration: underline; }
+.section-head h1 { max-width: 100%; overflow-wrap: anywhere; line-height: 1.2; }
+.itinerary-country { display: grid; gap: .6rem; padding: .8rem 1rem; min-width: 0; }
+.itinerary-country .country-result { border: 0; min-width: 0; }
+.itinerary-country .country-result-summary { display: flex; flex-wrap: wrap; align-items: center;
+  gap: .25rem .65rem; min-height: 54px; padding: .35rem 0; font-weight: 700;
+  cursor: pointer; border-radius: .45rem; list-style: none; }
+.itinerary-country summary::-webkit-details-marker { display: none; }
+.itinerary-country .country-result-summary::before { content: '▸'; color: var(--green);
+  display: inline-block; font-size: 1.15rem; flex: none; }
+.itinerary-country .country-result[open] > .country-result-summary::before { content: '▾'; }
+.itinerary-country .country-result-summary:hover { color: var(--green); }
+.itinerary-country .country-result-name { flex: 1 1 12rem; overflow-wrap: anywhere; }
+.itinerary-country .country-result-status { flex: 1 1 11rem; font-weight: 500; color: var(--muted); }
+.itinerary-country .country-result-toggle { color: var(--green); text-decoration: underline;
+  text-underline-offset: .2em; font-weight: 650; font-size: .9rem; }
+.itinerary-country .country-result[open] > summary { margin-bottom: .6rem; border-bottom: 1px solid var(--line); }
+.itinerary-country .country-result-body { padding-block: .4rem .75rem; }
+.itinerary-country .country-result-links { border-top: 1px solid var(--line);
+  padding-top: .65rem; display: flex; justify-content: flex-end; }
+.itinerary-country .country-result-links a { display: inline-flex; align-items: center; min-height: 44px;
+  font-weight: 650; text-decoration: underline; padding: .3rem .45rem; }
+@media (max-width: 440px) {
+  .itinerary-country .country-result-status { flex-basis: 100%; padding-left: 1.1rem; }
+  .itinerary-country .country-result-toggle { margin-left: 1.1rem; }
+}
