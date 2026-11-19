@@ -246,6 +246,43 @@ function passengerEditor(passenger, onSave) {
 }
 
 const route = () => location.hash.slice(1).split('/');
+let unsavedResult = null;
+let lastRouteHash = location.hash;
+function leaveUnsaved(nextHash) {
+  const form = el('div', { class: 'stack' });
+  const dialog = modal(form);
+  const continueTo = () => { unsavedResult = null; dialog.close(); lastRouteHash = nextHash; location.hash = nextHash; };
+  const saveAndLeave = () => {
+    const draft = unsavedResult;
+    if (!draft) return continueTo();
+    const suggestion = draft.itinerary ?
+      draft.itinerary.map(id => places[id]).join(' → ') + ' · ' + checkedDate() :
+      (places[draft.placeId] ?? draft.placeId) + ' · ' + checkedDate();
+    const name = prompt('Name this saved search', suggestion);
+    if (name === null) return;
+    const record = { id: uid(), name: name.trim() || suggestion,
+      checkedAt: new Date().toISOString(), passengers: structuredClone(draft.passengers) };
+    if (draft.itinerary) {
+      record.itinerary = [...draft.itinerary];
+      record.results = structuredClone(draft.results);
+    } else {
+      record.placeId = draft.placeId;
+      record.result = structuredClone(draft.result);
+      record.snapshot = resultSnapshot(draft.result);
+    }
+    state.saved.push(record);
+    persist();
+    continueTo();
+  };
+  form.append(el('h2', { id: 'dialog-title' }, 'Save these requirements before leaving?'),
+    muted('Search results are not stored automatically.'),
+    el('div', { class: 'actions' },
+      button('Save Search', saveAndLeave, 'primary'),
+      button('Discard', continueTo),
+      button('Cancel', () => dialog.close())));
+}
+
+
 function dashboard() {
   const people = activePassengers();
   const mixed = new Set(people.map(p => p.passport)).size > 1;
@@ -532,9 +569,11 @@ function multiSearch(data) {
     search.disabled = !people.length || !itinerary.length;
     clear.hidden = !itinerary.length;
     results.replaceChildren();
-    if (!comparedItinerary?.length) return;
+    if (!comparedItinerary?.length) { if (unsavedResult?.itinerary) unsavedResult = null; return; }
     const header = el('h2', {}, 'Itinerary results');
     const all = comparedItinerary.map(id => ({ id, summary: compare(people, id, data) }));
+    unsavedResult = { itinerary: comparedItinerary.slice(), passengers: structuredClone(people),
+      results: Object.fromEntries(all.map(({ id, summary }) => [id, structuredClone(summary)])) };
     const shareText = all.map(({ id, summary }) => reportText(id, summary)).join('\n\n---\n\n');
     results.append(header,
       el('div', { class: 'actions' }, button('Save Search', () => {
@@ -547,6 +586,7 @@ function multiSearch(data) {
           results: Object.fromEntries(all.map(({ id, summary }) => [id, structuredClone(summary)])) };
         state.saved.push(record);
         persist();
+        unsavedResult = null;
         go(`saved/${record.id}`);
       }, 'primary'), button('Copy Itinerary', () => copyOrShare(shareText)),
         button('Share Itinerary', () => copyOrShare(shareText, true))),
@@ -664,6 +704,7 @@ function destinationDetails(placeId, saved, data) {
   const people = saved?.passengers ?? activePassengers();
   const freshSummary = compare(people, placeId, data);
   const summary = saved?.result ? structuredClone(saved.result) : freshSummary;
+  if (!saved && people.length) unsavedResult = { placeId, passengers: structuredClone(people), result: structuredClone(summary) };
   const save = () => {
     const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary), result: structuredClone(summary) };
     const chosen = prompt('Name this saved search', record.name);
@@ -671,6 +712,7 @@ function destinationDetails(placeId, saved, data) {
     record.name = chosen.trim() || record.name;
     state.saved.push(record);
     persist();
+    unsavedResult = null;
     go(`saved/${record.id}`);
   };
   const controls = saved ? [
@@ -943,7 +985,20 @@ async function start() {
       if (tab.dataset.route !== 'multi' || (screen !== 'multi' && origin !== 'multi')) clearShortlist();
       go(tab.dataset.route);
     });
-    window.addEventListener('hashchange', () => render(true));
+    lastRouteHash = location.hash;
+    window.addEventListener('hashchange', () => {
+      const nextHash = location.hash;
+      const previousHash = lastRouteHash;
+      if (unsavedResult && nextHash !== previousHash &&
+          (previousHash.startsWith('#destination/') || previousHash === '#multi')) {
+        history.replaceState(null, '', previousHash);
+        leaveUnsaved(nextHash);
+        return;
+      }
+      lastRouteHash = nextHash;
+      unsavedResult = null;
+      render(true);
+    });
     if (!location.hash) location.hash = state.passengers.length ? '#home' : '#passengers';
     await render();
     if (!navigator.onLine || cachedCatalog) await showOfflineStatus();
