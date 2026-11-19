@@ -2,8 +2,8 @@ import { version } from './version.js';
 import { readOffline } from './offline.js';
 
 const prefix = 'visabrowser-shell:' + encodeURIComponent(self.registration.scope);
-const shell = prefix + ':' + version + '';
-const assets = ['./', './index.html', './app.js', './rules.js', './reviewed.js', './offline.js', './version.js',
+const shell = prefix + ':' + version + ':health-notices';
+const assets = ['./', './index.html', './app.js', './rules.js', './reviewed.js', './health.js', './offline.js', './version.js',
   './styles.css', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
