@@ -262,6 +262,12 @@ export function healthNotices(destination, passport, now = Date.now()) {
     notices.push(notice(screening,
       'On U.S.-bound flights, crew must report certain illnesses to CDC, including fever with persistent cough. Officials assess any measures that apply.',
       'https://www.cdc.gov/port-health/php/airline-guidance/reporting-deaths-and-illnesses.html'));
+    // This attestation has its own term, independent of the entry suspension.
+    if (now >= Date.parse('2026-11-04T00:00:00-05:00') && now < Date.parse('2026-12-18T00:00:00-05:00')) {
+      notices.push(notice(screening,
+        'Before boarding an international flight to or through the U.S., sign your airline’s CDC Ebola attestation confirming no presence in the Democratic Republic of the Congo (Kinshasa) in the previous 21 days. A DRC airport connection counts, even if you stayed on the plane. This applies across passports, including U.S. citizens, subject to CDC exemptions. If you were in the DRC, check CDC instructions and contact your airline before travel.',
+        'https://www.cdc.gov/port-health/legal-authorities/attestation-order.html'));
+    }
     if (now >= Date.parse('2026-11-10T00:00:00-05:00') && now < Date.parse('2026-12-10T00:00:00-05:00')) {
       notices.push(notice(screening,
         'A temporary U.S. Ebola order can affect entry after recent presence in the DRC, Uganda or South Sudan. Check the current CDC order for your travel date and status.',
