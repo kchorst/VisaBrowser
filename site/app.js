@@ -257,9 +257,32 @@ function dashboard() {
     el('p', {}, link('Travel-Prep', travelPrep)))];
 }
 function viewCountry() {
-  const picker = select('destination', destinations, '', 'Choose a country or territory');
-  picker.addEventListener('change', () => { if (picker.value) go(`destination/${picker.value}`); });
-  return [title('View Country'), panel(label('Destination', picker), muted('Select a destination to see its entry requirements.'))];
+  const picker = el('input', { type: 'search', placeholder: 'Search countries and territories',
+    list: 'country-picker-suggestions', autocomplete: 'off', autofocus: '' });
+  const options = el('datalist', { id: 'country-picker-suggestions' },
+    destinations.map(([, name]) => el('option', { value: name })));
+  const feedback = el('p', { class: 'muted', role: 'status' }, 'Start typing a destination.');
+  const matches = el('div', { class: 'stack' });
+  const paint = () => {
+    const term = normalizeName(picker.value.trim());
+    const found = term ? destinations.filter(([id, name]) =>
+      normalizeName(name).includes(term) || id.toLowerCase() === term).slice(0, 15) : [];
+    matches.replaceChildren(...found.map(([id, name]) =>
+      button(name, () => go(`destination/${id}/view`))));
+    feedback.textContent = found.length ? `${found.length} matching destinations. Select a country to see requirements.` :
+      term ? 'No matching destination. Try a shorter name.' : 'Start typing a destination.';
+    const exact = found.find(([id, name]) => normalizeName(name) === term || id.toLowerCase() === term);
+    if (exact && found.length === 1) go(`destination/${exact[0]}/view`);
+  };
+  picker.addEventListener('input', paint);
+  picker.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      const term = normalizeName(picker.value.trim());
+      const matched = destinations.filter(([id, name]) => normalizeName(name) === term || id.toLowerCase() === term);
+      if (matched.length === 1) { event.preventDefault(); go(`destination/${matched[0][0]}/view`); }
+    }
+  });
+  return [title('View Country'), panel(label('Destination', picker), options, feedback, matches)];
 }
 
 function go(path) {
@@ -722,7 +745,7 @@ function breadcrumbs(screen, id, parent, saved) {
 async function render(focus = false) {
   const request = ++renderId;
   const [screen, id, origin] = route();
-  const current = screen === 'destination' ? (origin === 'multi' ? 'multi' : 'countries') :
+  const current = screen === 'destination' ? (['multi','view','group','countries'].includes(origin) ? origin : 'view') :
     Object.hasOwn(screenNames, screen) ? screen : 'passengers';
   for (const tab of tabs) tab.setAttribute('aria-current', tab.dataset.route === current ? 'page' : 'false');
   main.setAttribute('aria-busy', 'true');
