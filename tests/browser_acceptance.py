@@ -89,7 +89,7 @@ def fixture(browser, base):
     page.get_by_role('button', name='Destination B').click()
     expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
     expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
-    page.go_back()
+    page.get_by_role('navigation', name='Breadcrumb').get_by_role('link', name='Check Group Req').click()
     expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
     page.get_by_role('dialog').get_by_role('button', name='Cancel').click()
     expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
