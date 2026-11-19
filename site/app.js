@@ -13,6 +13,17 @@ const tabs = [...document.querySelectorAll('[data-route]')];
 const disclaimerText = 'VisaBrowser provides general entry guidance, not a guarantee of admission. Confirm current requirements with the destination country’s immigration or consular authorities before departure. Check passport validity and blank pages, visas and supporting documents, vaccinations and health rules, prior-country visits, permitted stay, transit conditions and fees. Entry is always at the discretion of immigration authorities.';
 const disclaimer = () => el('details', { class: 'panel travel-disclaimer' }, el('summary', {}, '⚠ Important Travel Requirements & Disclaimer'), el('p', {}, disclaimerText));
 const checkedDate = () => new Date().toLocaleDateString();
+function compactResult(result) {
+  // Never persist full passport rule tables in each saved search.
+  return { ...result, rows: result.rows.map(row => ({
+    ...row, passenger: structuredClone(row.passenger),
+    source: row.source ? {
+      url: row.source.url, lastSuccess: row.source.lastSuccess,
+      error: row.source.error, unavailable: row.source.unavailable
+    } : undefined
+  })) };
+}
+
 function reportText(placeId, summary, when = checkedDate()) {
   const destination = places[placeId] ?? placeId;
   return ['VisaBrowser · ' + destination, 'Checked: ' + when,
@@ -264,10 +275,10 @@ function leaveUnsaved(nextHash) {
       checkedAt: new Date().toISOString(), passengers: structuredClone(draft.passengers) };
     if (draft.itinerary) {
       record.itinerary = [...draft.itinerary];
-      record.results = structuredClone(draft.results);
+      record.results = Object.fromEntries(Object.entries(draft.results).map(([id, result]) => [id, compactResult(result)]));
     } else {
       record.placeId = draft.placeId;
-      record.result = structuredClone(draft.result);
+      record.result = compactResult(draft.result);
       record.snapshot = resultSnapshot(draft.result);
     }
     state.saved.push(record);
@@ -574,7 +585,7 @@ function multiSearch(data) {
     const header = el('h2', {}, 'Itinerary results');
     const all = comparedItinerary.map(id => ({ id, summary: compare(people, id, data) }));
     unsavedResult = { itinerary: comparedItinerary.slice(), passengers: structuredClone(people),
-      results: Object.fromEntries(all.map(({ id, summary }) => [id, structuredClone(summary)])) };
+      results: Object.fromEntries(all.map(({ id, summary }) => [id, compactResult(summary)])) };
     const shareText = all.map(({ id, summary }) => reportText(id, summary)).join('\n\n---\n\n');
     results.append(header,
       el('div', { class: 'actions' }, button('Save Search', () => {
@@ -584,7 +595,7 @@ function multiSearch(data) {
         const record = { id: uid(), name: name.trim() || draftName,
           checkedAt: new Date().toISOString(), itinerary: all.map(item => item.id),
           passengers: structuredClone(people),
-          results: Object.fromEntries(all.map(({ id, summary }) => [id, structuredClone(summary)])) };
+          results: Object.fromEntries(all.map(({ id, summary }) => [id, compactResult(summary)])) };
         state.saved.push(record);
         persist();
         unsavedResult = null;
@@ -705,9 +716,9 @@ function destinationDetails(placeId, saved, data) {
   const people = saved?.passengers ?? activePassengers();
   const freshSummary = compare(people, placeId, data);
   const summary = saved?.result ? structuredClone(saved.result) : freshSummary;
-  if (!saved && people.length) unsavedResult = { placeId, passengers: structuredClone(people), result: structuredClone(summary) };
+  if (!saved && people.length) unsavedResult = { placeId, passengers: structuredClone(people), result: compactResult(summary) };
   const save = () => {
-    const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary), result: structuredClone(summary) };
+    const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary), result: compactResult(summary) };
     const chosen = prompt('Name this saved search', record.name);
     if (chosen === null) return;
     record.name = chosen.trim() || record.name;
@@ -732,7 +743,7 @@ function destinationDetails(placeId, saved, data) {
         const changes = Object.fromEntries(refreshed.rows.map(row => [row.passenger.id,
           requirementChange(row, saved)]).filter(([, change]) => change));
         saved.snapshot = resultSnapshot(refreshed);
-        saved.result = structuredClone(refreshed);
+        saved.result = compactResult(refreshed);
         saved.changes = changes;
         saved.checkedAt = new Date().toISOString();
         persist();
@@ -809,7 +820,7 @@ function savedItineraryDetails(saved, data) {
         const changes = results[id].rows.map(row => requirementChange(row, previous)).filter(Boolean);
         return [id, changes];
       }));
-      saved.results = structuredClone(results);
+      saved.results = Object.fromEntries(Object.entries(results).map(([id, result]) => [id, compactResult(result)]));
       saved.checkedAt = new Date().toISOString();
       persist();
       render(true);
