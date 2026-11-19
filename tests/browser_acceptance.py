@@ -257,6 +257,16 @@ def real_country_journeys(browser, base):
     add_traveler(page, 'Sam', 'US')
     expect(page.locator('.dashboard-actions button').first).to_have_text('View Country')
 
+    # Other apps can deep-link with the same #country=ISO format as Travel-Prep.
+    page.goto(base + '#country=jp')
+    expect(page.get_by_role('heading', name='Japan')).to_be_visible()
+    expect(page.get_by_role('heading', name='Sam')).to_be_visible()
+    page.goto(base + '#country=ZZZ')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    expect(page.get_by_role('heading', name='View Country')).to_be_visible()
+    expect(page.get_by_text('The linked country was not found.')).to_be_visible()
+    page.goto(base + '#home')
+
     # One U.S. passport visiting Japan.
     page.get_by_role('button', name='View Country', exact=True).click()
     page.get_by_label('Destination').fill('Japan')
