@@ -705,7 +705,7 @@ function multiSearch(data) {
     }
   });
   function paint() {
-    chips.replaceChildren(...itinerary.map((id, index) =>
+    const itineraryItems = itinerary.map((id, index) =>
       el('div', { class: 'itinerary-stop row' },
         el('strong', {}, `${index + 1}. ${places[id]}`),
         el('div', { class: 'actions' },
@@ -714,7 +714,9 @@ function multiSearch(data) {
           button('Down', () => { if (index < itinerary.length - 1) [itinerary[index + 1], itinerary[index]] = [itinerary[index], itinerary[index + 1]]; comparedItinerary = null; paint(); },
             '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
           button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
-            '', { 'aria-label': `Remove ${places[id]}` })))));
+            '', { 'aria-label': `Remove ${places[id]}` }))));
+    chips.replaceChildren(itinerary.length ? countedList('Destinations in order', itineraryItems) :
+      muted('No destinations selected yet.'));
     search.disabled = !people.length || (!itinerary.length && !picker.value.trim());
     search.classList.add('primary');
     clear.hidden = !itinerary.length;
@@ -740,7 +742,7 @@ function multiSearch(data) {
         go(`saved/${record.id}`);
       }, 'primary'), button('Copy Itinerary', () => copyOrShare(shareText)),
         button('Share Itinerary', () => copyOrShare(shareText, true))),
-      ...all.map(({ id, summary }, index) =>
+      countedList('Destination results', all.map(({ id, summary }, index) =>
         el('details', { class: 'panel country-result' }, el('summary', { tabindex: '0' },
           `${index + 1}. ${places[id]} · ${noIssues(summary) ? 'NO ISSUES' :
             summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
@@ -748,7 +750,7 @@ function multiSearch(data) {
           el('div', { class: 'stack' },
             summary.rows.map(row => passengerResult(row, id, null, data)),
             el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)),
-            button('View Country', () => go(`destination/${id}/multi`))))),
+            button('View Country', () => go(`destination/${id}/multi`)))))),
       disclaimer());
   }
   paint();
@@ -937,7 +939,9 @@ function destinationDetails(placeId, saved, data) {
       people.length ? button('Copy', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()))) : null,
       people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null),
     summaryBox,
-    summary.rows.map(row => passengerResult(row, placeId, saved, data)),
+    people.length > 1 ? countedList('Traveler requirements',
+      summary.rows.map(row => passengerResult(row, placeId, saved, data))) :
+      summary.rows.map(row => passengerResult(row, placeId, saved, data)),
     notes, edits, disclaimer())];
 }
 
@@ -980,13 +984,14 @@ function savedItineraryDetails(saved, data) {
         persist();
         go('saved');
       }), 'danger')),
-    ...saved.itinerary.map((id, index) => el('details', { class: 'panel country-result' },
+    countedList('Destination results', saved.itinerary.map((id, index) =>
+      el('details', { class: 'panel country-result' },
       el('summary', {}, `${index + 1}. ${places[id]} · ${saved.results[id].pending ? 'Needs Review' :
         saved.results[id].group || issueLabel(saved.results[id].issues)}`),
       el('div', { class: 'stack' },
         ...(saved.changes?.[id]?.length ? [muted(saved.changes[id].join(' · '))] : []),
         saved.results[id].rows.map(row => passengerResult(row, id, saved, data)),
-        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`))))),
+        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)))))),
     disclaimer()];
 }
 
