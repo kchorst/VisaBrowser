@@ -22,7 +22,19 @@
     </div>
   </header>
   <div class="layout">
-    <p class="muted" id="visa-data-date" hidden></p>
+    <div class="page-meta">
+      <div>
+        <div class="data-dates muted" id="visa-data-dates" hidden>
+          <span id="visa-data-date"></span>
+          <span id="visa-next-update"></span>
+        </div>
+        <div id="page-breadcrumbs"></div>
+      </div>
+      <nav class="travel-tools" aria-label="Travel tools">
+        <a href="https://kchorst.github.io/Travel-Prep/" target="_blank" rel="noopener">Travel-Prep</a>
+        <span class="muted">TravelAgent</span>
+      </nav>
+    </div>
     <p class="muted" id="offline-status" role="status" hidden></p>
     <section class="panel" id="app-update" aria-label="VisaBrowser update" hidden>
       <p role="status">VisaBrowser update available.</p>
@@ -30,7 +42,17 @@
     </section>
     <div id="storage-alert" role="alert" hidden></div>
     <main id="main" tabindex="-1" aria-busy="true"><p class="panel" role="status">Loading VisaBrowser…</p></main>
-    <footer><a href="https://github.com/kchorst/VisaBrowser/releases/latest">Download latest</a> <span>·</span> <a href="https://en.wikipedia.org/wiki/Category:Visa_requirements_by_nationality">Wikipedia sources</a> <span>·</span> <a href="https://creativecommons.org/licenses/by-sa/4.0/">Adapted under CC BY-SA 4.0</a></footer>
+    <footer>
+      <a href="https://github.com/kchorst/VisaBrowser/releases/latest">Download latest</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://en.wikipedia.org/wiki/Category:Visa_requirements_by_nationality">Wikipedia sources</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">Adapted under CC BY-SA 4.0</a>
+      <span aria-hidden="true">·</span>
+      <a href="mailto:catsoftravels@gmail.com">catsoftravels@gmail.com</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://kchorst.github.io/">kchorst.github.io</a>
+    </footer>
   </div>
   <noscript>Enable JavaScript to compare tourist entry requirements.</noscript>
 </body>
