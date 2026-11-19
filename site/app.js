@@ -638,7 +638,7 @@ function editAnswer(row, question, choice, placeId, saved, data) {
 function pendingResearch(row, placeId, includeReason = false) {
   const search = `${places[placeId]} entry requirements ${places[row.passenger.passport]} ordinary passport ${row.search ?? 'tourist visa immigration authority'}`;
   return [includeReason && row.reason ? muted(row.reason) : null, muted(`Search terms: ${search}`),
-    includeReason && row.official ? el('p', {}, link('Official guidance', row.official)) : null];
+    null];
 }
 
 function passengerResult(row, placeId, saved, data) {
@@ -664,7 +664,7 @@ function passengerResult(row, placeId, saved, data) {
   });
   const research = !known ? pendingResearch(row, placeId) : null;
   const routes = row.routes?.map(option => el('p', {},
-    option.url ? link(option.title, option.url) : option.title, option.detail ? ` · ${option.detail}` : null));
+    option.title, option.detail ? ` · ${option.detail}` : null));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
   const notes = row.notes?.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
     row.notes.map(note => el('p', {}, note))) : null;
