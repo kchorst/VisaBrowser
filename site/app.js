@@ -831,7 +831,8 @@ function passengerResult(row, placeId, saved, data) {
     row.home ? muted('Travel on your passport for this destination.') : null,
     known && !row.home && !row.options.includes('denied') ?
       muted(row.stay ? `Stay limit · ${row.stay}` : 'Stay limit unknown') : null,
-    requiresVisa ? muted(row.fee ? `Fee · ${row.fee}` : 'Fee unknown') : null,
+    row.fee ? muted(`Application / entry fee · ${row.fee}`) :
+      requiresVisa ? muted('Visa fee unknown') : null,
     row.entry ? el('p', {}, row.entry) : null,
     saved?.changes?.[row.passenger.id] ? el('p', { class: 'condition' }, saved.changes[row.passenger.id]) : null,
     saved ? null : controls, research, authority, routes, notes,
