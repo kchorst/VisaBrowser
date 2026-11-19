@@ -140,8 +140,12 @@ const yellowFever = {
     'https://www.ica.gov.sg/information-and-e-services/entry-and-departure/entering-singapore/entry-requirements/yellow-fever-vaccination-certificate'),
   CN: notice(check, 'Mainland China requires a yellow fever certificate for travelers aged 9 months or older arriving from a listed risk country or after airport transit over 12 hours in one, regardless of passport. South Sudan is a risk country. Rwanda has low transmission potential and a Rwanda-only itinerary generally does not trigger this rule. Check every stop.',
     'https://wwwnc.cdc.gov/travel/destinations/traveler/none/China'),
-  IN: notice(check, 'Check yellow fever proof requirements if arriving within six days of leaving a listed risk country. India also publishes a polio certificate advisory for certain routes.',
-    'https://www.ihpoe.mohfw.gov.in/'),
+  IN: notice(check, 'India checks original yellow fever vaccination proof for covered arrivals within six days of leaving a listed risk area. Transit and arrival-mode exceptions apply. Confirm your full itinerary with India Port Health.',
+    'https://www.mohfw.gov.in/sites/default/files/Advisory%20for%20Passengers%20Coming%20to%20India%20from%20Yellow%20Fever%20Endemics%20Countries_0.pdf'),
+  CG: notice(documents, 'The Republic of the Congo (Brazzaville) requires yellow fever vaccination proof for covered arrivals from any country. Confirm the age cutoff and exemptions for your traveler.',
+    'https://www.gov.uk/foreign-travel-advice/congo/entry-requirements'),
+  CD: notice(documents, 'The Democratic Republic of the Congo (Kinshasa) requires yellow fever vaccination proof for covered arrivals from any country. Confirm the age cutoff and exemptions for your traveler.',
+    'https://www.gov.uk/foreign-travel-advice/democratic-republic-of-the-congo/entry-requirements'),
   AL: notice(check, 'Check yellow fever proof if arriving from a country with a risk of transmission. Confirm the applicable age and route rules.',
     'https://www.gov.uk/foreign-travel-advice/albania/entry-requirements'),
   MT: notice(check, 'Malta requires yellow fever proof for covered arrivals aged 9 months or older from risk countries, including airport transit over 12 hours.',
@@ -174,7 +178,7 @@ const yellowFever = {
     'https://www.health.gov.au/sites/default/files/2026-11/national-guidelines-for-yellow-fever-vaccination-centres-and-providers.pdf'),
   BQ: notice(check, 'Bonaire, Saba and Sint Eustatius have separate yellow fever entries in the WHO list. Check the exact island, recent travel, transit duration and age threshold before departure.',
     whoCountryList),
-  BT: notice(check, 'Sources differ on Bhutan’s yellow fever documentation rules. Confirm your itinerary with Bhutan Port Health.',
+  BT: notice(check, 'Bhutan’s aviation guide says yellow fever vaccination may be required after leaving a WHO risk area, while CDC lists no entry requirement. Confirm your full route with Bhutan Port Health.',
     'https://www.doat.gov.bt/wp-content/uploads/2023/10/AIP-AMDT-01_23.pdf')
 };
 
@@ -209,6 +213,18 @@ export function healthNotices(destination, passport, now = Date.now()) {
   if (datedPolioChecks.has(destination)) notices.push(notice(check,
     'WHO’s country list reports a polio rule for certain travelers. Confirm the current affected origins, age or trip purpose and accepted proof with the destination authority.',
     whoYellowFever));
+  if (destination === 'IN') notices.push(notice(check,
+    'India’s polio advisory names Afghanistan, Pakistan, Nigeria, Somalia, Syria, Cameroon, Malawi, Mozambique, Madagascar and both Congos. It distinguishes passport, residence and travel history. Check whether you need a certificate for your visa application and arrival, or before leaving India for a listed country.',
+    'https://www.ihpoe.mohfw.gov.in/assets/pdf/advisory_Poliovirus_guideline_for_travellers_from_Endemic_Countries.pdf'));
+  if (destination === 'CD') {
+    notices.push(notice(check, 'Polio vaccination proof may apply in some circumstances. Confirm the current requirements for entry and departure with the DRC embassy or port health authority.',
+      'https://www.gov.uk/foreign-travel-advice/democratic-republic-of-the-congo/entry-requirements'));
+    notices.push(notice(screening, 'Check current Ebola measures before travel. The DRC may use temperature checks or passenger locator forms on arrival and departure. Check onward destinations and connections for separate restrictions.',
+      'https://www.gov.uk/foreign-travel-advice/democratic-republic-of-the-congo/entry-requirements#ebola'));
+  }
+  if (destination === 'CG') notices.push(notice(screening,
+    'Travelers arriving in the Republic of the Congo may face enhanced Ebola screening because of the outbreak centered in the neighboring DRC. Check current port health guidance for your route.',
+    'https://www.gov.uk/foreign-travel-advice/congo/entry-requirements#ebola'));
   if (destination === 'NP') notices.push(notice(check,
     'Nepal publishes a polio certificate requirement for arrivals from listed origins, including Afghanistan, Pakistan, Kenya, Nigeria and South Sudan. Check the full origin list and timing for residents, stays over four weeks and urgent travel in section GEN 1.3.',
     'https://e-aip.caanepal.gov.np/_uploads/_pdf/41e27dcc2352870eeac952cbdf61f042.pdf'));
