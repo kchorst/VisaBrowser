@@ -194,6 +194,20 @@ def fixture(browser, base):
     expect(page.get_by_text('Europe Trip 2027')).to_be_visible()
     page.reload()
     expect(page.get_by_text('Europe Trip 2027')).to_be_visible()
+
+    # Traveler updates mark saved snapshots Needs Refresh; refreshing applies new passport.
+    page.goto(base + '#passengers')
+    page.get_by_role('button', name='Edit Aline').click()
+    page.get_by_role('dialog').get_by_label('Passport').select_option('US')
+    page.get_by_role('dialog').get_by_role('button', name='Save passenger').click()
+    page.goto(base + '#saved')
+    expect(page.get_by_text('Needs Refresh').first).to_be_visible()
+    page.get_by_role('button', name='Open').last.click()
+    page.once('dialog', lambda dialog: dialog.accept())
+    page.get_by_role('button', name='Refresh Results').click()
+    expect(page.get_by_role('heading', name='Aline')).to_be_visible()
+    assert json.loads(page.evaluate("localStorage.getItem('visabrowser.v1')"))['saved'][-1]['passengers'][1]['passport'] == 'US'
+
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile horizontal overflow'
     assert not failures, failures
     context.close()
