@@ -1,4 +1,4 @@
-"""End-to-end acceptance for the v0.4.0 mobile-first user journeys.
+"""End-to-end acceptance for the v0.4.x mobile-first user journeys.
 
 Runs in CI against the actual site JS and real Chromium, serving on the GitHub
 Pages subpath. Test data is deterministic and intentionally independent of
@@ -346,7 +346,7 @@ def run():
             finally:
                 browser.close()
                 server.shutdown()
-    print('Mobile-first VisaBrowser v0.4.0 acceptance walkthroughs passed.')
+    print('Mobile-first VisaBrowser v0.4.x acceptance walkthroughs passed.')
 
 
 if __name__ == '__main__':
