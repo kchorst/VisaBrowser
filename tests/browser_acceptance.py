@@ -462,6 +462,20 @@ def real_country_journeys(browser, base):
     context.close()
 
 
+def ghana_health_notice(browser, base):
+    page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+    try:
+        page.goto(base)
+        add_traveler(page, 'France traveler', 'FR')
+        page.goto(base + '#country=GH')
+        expect(page.get_by_role('heading', name='Ghana', exact=True)).to_be_visible()
+        expect(page.get_by_text('Ghana requires a yellow fever vaccination certificate', exact=False)).to_be_visible()
+        expect(page.get_by_role('link', name='Official health guidance ↗')).to_have_attribute(
+            'href', 'https://evisa.immigration.gov.gh/applicant-guide.html')
+    finally:
+        page.close()
+
+
 def run():
     with TemporaryDirectory() as folder, sync_playwright() as playwright:
         shutil.copytree(ROOT / 'site', Path(folder) / 'VisaBrowser')
@@ -477,6 +491,7 @@ def run():
                 deep_link_first_visit(browser, base)
                 real_country_journeys(browser, base)
                 production(browser, base)
+                ghana_health_notice(browser, base)
             finally:
                 browser.close()
                 server.shutdown()
