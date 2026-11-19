@@ -341,6 +341,7 @@ def real_country_journeys(browser, base):
     page.goto(base + '#passengers')
     page.get_by_role('button', name='Edit Pat').click()
     editor = page.get_by_role('dialog')
+    editor.locator('.optional-documents summary').click()
     editor.get_by_label('Issuing country or area').select_option('US')
     editor.get_by_label('Visa or permit type').select_option('permit')
     editor.get_by_role('button', name='Add visa or permit').click()
