@@ -62,7 +62,7 @@ function persist() {
 
 function el(tag, props = {}, ...children) {
   const node = document.createElement(tag);
-  for (const [key, value] of Object.entries(props)) node.setAttribute(key, value);
+  for (const [key, value] of Object.entries(props)) if (value !== undefined && value !== null && value !== false) node.setAttribute(key, value);
   node.append(...children.flat(Infinity).filter(child => child !== null && child !== undefined && child !== false));
   return node;
 }
@@ -529,8 +529,6 @@ function multiSearch(data) {
             '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
           button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
             '', { 'aria-label': `Remove ${places[id]}` })))));
-    // Undefined HTML attributes must not accidentally disable buttons.
-    chips.querySelectorAll('button[disabled="undefined"]').forEach(item => item.removeAttribute('disabled'));
     search.disabled = !people.length || !itinerary.length;
     clear.hidden = !itinerary.length;
     results.replaceChildren();
@@ -757,6 +755,8 @@ function savedList() {
         button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger'))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
 }
 
+const scrollByRoute = new Map();
+window.addEventListener('scroll', () => scrollByRoute.set(location.hash, window.scrollY), { passive: true });
 let renderId = 0;
 const screenNames = { home: 'Home', view: 'View Country', group: 'Check Group Req', passengers: 'Travelers', countries: 'Browse Countries', multi: 'Search Multiple', saved: 'Saved Searches' };
 function breadcrumbs(screen, id, parent, saved) {
@@ -795,6 +795,7 @@ async function render(focus = false) {
     else if (screen === 'destination' && destinations.some(([code]) => code === id)) nodes = destinationDetails(id, null, data);
     else nodes = passengerList();
     main.replaceChildren(breadcrumbs(screen, id, current, saved), ...nodes.filter(Boolean));
+    requestAnimationFrame(() => window.scrollTo(0, scrollByRoute.get(location.hash) ?? 0));
   } catch (error) {
     if (request !== renderId) return;
     console.error('VisaBrowser could not open the requested screen.', error);
