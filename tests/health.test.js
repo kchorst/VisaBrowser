@@ -40,3 +40,25 @@ test('Remove obsolete U.S. vaccine instructions without removing unrelated notes
   assert.deepEqual(currentHealthNotes(notes, 'US'), ['Carry your visa.']);
   assert.deepEqual(currentHealthNotes(notes, 'CA'), notes);
 });
+
+test('Mainland China describes the same itinerary trigger across passports', () => {
+  const [notice] = healthNotices('CN', 'SS');
+  assert.deepEqual(healthNotices('CN', 'RW')[0], notice);
+  assert.deepEqual(healthNotices('CN', 'FR')[0], notice);
+  assert.match(notice.text, /aged 9 months or older/);
+  assert.match(notice.text, /transit over 12 hours/);
+  assert.match(notice.text, /South Sudan is a risk country/);
+  assert.match(notice.text, /Rwanda has low transmission potential/);
+});
+
+test('Published historical triggers are visible without assuming passport means origin', () => {
+  const [route] = healthNotices('TH', 'FR');
+  assert.deepEqual(healthNotices('TH', 'GH')[0], route);
+  assert.match(route.text, /aged 9 months or over/);
+  assert.match(route.text, /transit of more than 12 hours/);
+  assert.match(route.url, /#page=42$/);
+  const [all] = healthNotices('CM', 'FR');
+  assert.match(all.text, /arrivals from any country/);
+  assert.equal(all.heading, 'Check health documents');
+  assert.deepEqual(healthNotices('BR', 'FR'), []);
+});
