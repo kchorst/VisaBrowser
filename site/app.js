@@ -1,3 +1,4 @@
+import { touristDetails, touristEntryTerms } from './tourist.js';
 import { currentHealthNotes, healthNotices } from './health.js';
 import { actions, compare, groupDetail, issueLabel, noAdvanceVisa, rank, requirementChange,
   resultSnapshot, sixMonthsFrom, sourceDelayed, statuses } from './rules.js';
@@ -31,8 +32,9 @@ function reportText(placeId, summary, when = checkedDate()) {
     ...summary.rows.map(row => [row.passenger.name + ' (' + (places[row.passenger.passport] ?? row.passenger.passport) + ')',
       statuses(row), row.condition, row.reason, row.stay ? 'Stay: ' + row.stay : '',
       ...(row.flags ?? []),
-      ...healthNotices(placeId, row.passenger.passport).map(({ heading, text, url }) =>
-        heading + ' · ' + text + ' ' + url)].filter(Boolean).join(' · ')),
+      ...Object.entries(touristEntryTerms(placeId, row) ?? {}).map(([label, value]) => label + ' · ' + value),
+      ...[...healthNotices(placeId, row.passenger.passport), ...touristDetails(placeId, row)]
+        .map(({ heading, text, url, more = [] }) => [heading, text, url, ...more].join(' · '))].filter(Boolean).join(' · ')),
     'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
     'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
     'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
@@ -54,6 +56,7 @@ const noIssues = (result, placeId) => result.rows.length > 0 && !result.pending 
   result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
     !row.condition && !row.reason && !row.issue && !row.flags?.length &&
     !healthNotices(placeId, row.passenger.passport).some(notice => notice.heading === 'Required health documents') &&
+    !touristDetails(placeId, row).some(notice => notice.heading === 'Confirm entry details' || notice.heading === 'Proof of onward travel' || notice.heading === 'Arrival forms and documents') &&
     !row.questions?.length && !row.controls?.length && !row.viaDocument &&
     !row.source?.unavailable && !row.source?.error &&
     (!row.source?.url || (row.source?.lastSuccess &&
@@ -542,6 +545,7 @@ function compareShortlist(value, people, data) {
             row.flags?.length ? ` · ${row.flags.join(' · ')}` : null),
           row.condition ? muted(row.condition) : null,
           healthDetails(row, id),
+          travelDetails(row, id),
           row.stay ? muted(`Stay limit · ${row.stay}`) : null,
           row.options.includes('pending') ? pendingResearch(row, id, true) : null)))));
   }) : [];
@@ -799,6 +803,14 @@ function healthDetails(row, placeId) {
       link('Official health guidance ↗', url)));
 }
 
+function travelDetails(row, placeId) {
+  return touristDetails(placeId, row).map(({ heading, text, url, more = [] }) =>
+    el('div', { class: 'stack' },
+      el('p', {}, el('strong', {}, heading), '. ', text),
+      el('p', {}, link('Source guidance ↗', url),
+        more.map((source, index) => [' · ', link(`Related source ${index + 1} ↗`, source)]))));
+}
+
 function passengerResult(row, placeId, saved, data) {
   const bad = row.options.includes('denied') || row.issue;
   const known = !row.options.includes('pending');
@@ -828,6 +840,7 @@ function passengerResult(row, placeId, saved, data) {
     !row.routes?.some(option => option.url === row.official) ?
     el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
   const sourceNotes = currentHealthNotes(row.notes, placeId) ?? [];
+  const terms = touristEntryTerms(placeId, row);
   const passportWarnings = sourceNotes.filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
@@ -840,6 +853,9 @@ function passengerResult(row, placeId, saved, data) {
     row.condition ? el('p', { class: 'condition' }, `* ${row.condition}`) : null,
     passportWarnings.map(note => el('p', { class: 'condition' }, `Passport requirement: ${note}`)),
     healthDetails(row, placeId),
+    travelDetails(row, placeId),
+    terms ? el('dl', {}, Object.entries(terms).map(([key, value]) =>
+      [el('dt', {}, { entries: 'Number of entries', validity: 'Visa validity', stay: 'Permitted stay' }[key]), el('dd', {}, value)])) : null,
     row.reason ? el('p', {}, row.reason) : null,
     advice.length ? el('ul', {}, advice.map(text => el('li', {}, text))) : null,
     row.home ? muted('Travel on your passport for this destination.') : null,
