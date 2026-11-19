@@ -527,7 +527,7 @@ function compareShortlist(value, people, data) {
   return { message: message.join(' '), cards };
 }
 
-const browseState = { countries: { query: '', filter: 'all', expanded: ['free','authorization','required','review'] },
+const browseState = { countries: { query: '', filter: 'all', expanded: [] },
   group: { query: '', filter: 'all', expanded: [] } };
 function countries(data, groupMode = false) {
   const viewState = browseState[groupMode ? 'group' : 'countries'];
@@ -581,43 +581,101 @@ let itinerary = [];
 let comparedItinerary = null;
 function multiSearch(data) {
   const people = activePassengers();
-  const picker = el('input', { type: 'search', placeholder: 'Type a country or territory', autocomplete: 'off',
-    list: 'destination-suggestions' });
+  const picker = el('input', { type: 'search', placeholder: 'e.g. Mozambique, Brazil, Cape Verde, Portugal, China',
+    autocomplete: 'off', list: 'destination-suggestions' });
   const suggestions = el('datalist', { id: 'destination-suggestions' },
     destinations.map(([, name]) => el('option', { value: name })));
   const chips = el('div', { class: 'stack' });
   const results = el('section', { class: 'stack' });
-  const message = el('p', { role: 'status', class: 'muted' });
-  const add = button('Add Country', () => {
-    const term = normalizeName(picker.value.trim());
-    const found = destinations.filter(([id, name]) => normalizeName(name) === term || id.toLowerCase() === term);
-    if (found.length !== 1) {
-      const partial = destinations.filter(([, name]) => normalizeName(name).includes(term));
-      if (partial.length === 1 && term) found.push(partial[0]);
-    }
-    if (found.length !== 1) {
-      message.textContent = 'Choose a country from the suggestions, or type a unique country name.';
-      return;
-    }
-    const id = found[0][0];
-    if (!itinerary.includes(id)) itinerary.push(id);
-    picker.value = '';
-    comparedItinerary = null;
-    message.textContent = '';
-    paint();
-    picker.focus();
-  });
-  const search = button('Search', () => {
+  const message = el('p', { role: 'status', class: 'muted', 'aria-live': 'polite' });
+  const search = button('Search Requirements', () => {
+    // Search is also the completion action for a single unfinished typed destination.
+    if (picker.value.trim() && !addTerms(picker.value)) return;
+    if (!people.length || !itinerary.length) return;
     comparedItinerary = [...itinerary];
+    message.textContent = `Comparing ${comparedItinerary.length} destinations. Open a country result below for details.`;
     paint();
     results.querySelector('summary')?.focus();
   }, 'primary');
   const clear = button('Clear All', () => confirmAction('Clear all countries in this trip?', 'Clear All', () => {
     itinerary = [];
     comparedItinerary = null;
+    picker.value = '';
+    message.textContent = 'The itinerary has been cleared.';
     paint();
     picker.focus();
   }));
+  function resolve(term) {
+    const key = destinationKey(term);
+    if (!key) return null;
+    const exact = destinations.filter(([id, name]) =>
+      [id, name, ...(destinationAliases[id] ?? [])].some(value => destinationKey(value) === key));
+    if (exact.length === 1) return exact[0][0];
+    // A partial country name is acceptable only when it identifies exactly one place.
+    const partial = destinations.filter(([, name]) => destinationKey(name).includes(key));
+    return partial.length === 1 ? partial[0][0] : null;
+  }
+  function addTerms(value) {
+    // Users may paste a full itinerary. Never silently discard unknown names.
+    const terms = value.split(/[,\r\n]+/u).map(term => term.trim()).filter(Boolean);
+    let added = 0;
+    const unknown = [];
+    for (const term of terms) {
+      const id = resolve(term);
+      if (!id) { unknown.push(term); continue; }
+      if (!itinerary.includes(id)) {
+        itinerary.push(id);
+        added++;
+      }
+    }
+    picker.value = unknown.join(', ');
+    comparedItinerary = null;
+    paint();
+    message.textContent = unknown.length ?
+      `Please check: ${unknown.join(', ')}. The unmatched text stays in the field.` :
+      added ? `${added} destination${added === 1 ? '' : 's'} added. Press Search Requirements when ready.` :
+        'No new destinations to add.';
+    return !unknown.length;
+  }
+  picker.addEventListener('paste', event => {
+    const pasted = event.clipboardData?.getData('text');
+    if (!pasted || !/[,\r\n]/u.test(pasted)) return;
+    event.preventDefault();
+    addTerms([picker.value, pasted].filter(Boolean).join(', '));
+    picker.focus();
+  });
+  picker.addEventListener('input', () => {
+    // Commas typed manually complete preceding names; leave the last name
+    // editable until Enter, list selection, or Search.
+    if (picker.value.includes(',')) {
+      const input = picker.value;
+      // A complete pasted/typed list becomes ordered chips immediately,
+      // including its final country, without requiring an Add Country click.
+      const fullList = input.split(',').map(term => term.trim()).filter(Boolean);
+      if (fullList.length > 1 && fullList.every(term => resolve(term))) {
+        addTerms(input);
+        return;
+      }
+      const boundary = input.lastIndexOf(',');
+      const complete = input.slice(0, boundary);
+      const remainder = input.slice(boundary + 1).trimStart();
+      if (complete.trim()) {
+        addTerms(complete);
+        const unknown = picker.value;
+        picker.value = [unknown, remainder].filter(Boolean).join(', ');
+      }
+    }
+    search.disabled = !people.length || (!itinerary.length && !picker.value.trim());
+  });
+  picker.addEventListener('change', () => {
+    if (picker.value.trim() && !picker.value.includes(',')) addTerms(picker.value);
+  });
+  picker.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && picker.value.trim()) {
+      event.preventDefault();
+      addTerms(picker.value);
+    }
+  });
   function paint() {
     chips.replaceChildren(...itinerary.map((id, index) =>
       el('div', { class: 'itinerary-stop row' },
@@ -629,8 +687,8 @@ function multiSearch(data) {
             '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
           button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
             '', { 'aria-label': `Remove ${places[id]}` })))));
-    search.disabled = !people.length || !itinerary.length || comparedItinerary !== null;
-    search.classList.toggle('primary', comparedItinerary === null);
+    search.disabled = !people.length || (!itinerary.length && !picker.value.trim());
+    search.classList.add('primary');
     clear.hidden = !itinerary.length;
     results.replaceChildren();
     if (!comparedItinerary?.length) { if (unsavedResult?.itinerary) unsavedResult = null; return; }
@@ -665,15 +723,12 @@ function multiSearch(data) {
             button('View Country', () => go(`destination/${id}/multi`))))),
       disclaimer());
   }
-  picker.addEventListener('keydown', event => {
-    if (event.key === 'Enter') { event.preventDefault(); add.click(); }
-  });
   paint();
   return [title('Search Multiple'), refreshNotice(people, data),
     people.length ? null : invite(),
-    panel(label('Add destinations', picker), suggestions, add,
-      muted('Add countries, rearrange them in travel order, then Search.'),
-      chips, el('div', { class: 'actions' }, search, clear), message), results];
+    panel(label('Destinations — type or paste a country list', picker), suggestions,
+      muted('Paste a comma-separated list, or choose a country from suggestions. Countries appear below automatically; reorder or remove them before searching.'),
+      message, chips, el('div', { class: 'actions' }, search, clear)), results];
 }
 
 function editAnswer(row, question, choice, placeId, saved, data) {
@@ -934,6 +989,8 @@ let renderId = 0;
 const screenNames = { home: 'Home', view: 'View Country', group: 'Check Group Req', passengers: 'Travelers', countries: 'Browse Countries', multi: 'Search Multiple', saved: 'Saved Searches' };
 function breadcrumbs(screen, id, parent, saved) {
   const home = el('a', { href: '#home' }, 'Home');
+  if (screen === 'home' || !screen) return el('nav', { 'aria-label': 'Breadcrumb', class: 'breadcrumb' },
+    el('span', { 'aria-current': 'page' }, 'Home'));
   const items = [home];
   if (screen === 'destination' || saved) {
     items.push(el('a', { href: `#${parent}` }, screenNames[parent]));

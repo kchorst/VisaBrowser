@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.2 — User Guide
+# VisaBrowser v0.4.3 — User Guide
 
 ## Open the app on a phone or computer
 
@@ -17,9 +17,9 @@ Travelers are saved automatically in this browser's local storage. Different dev
 There are four ways to browse requirements:
 
 - **View Country** — type part of one destination's name and select it to open that country's requirements immediately.
-- **Browse Countries** — search destinations alphabetically and filter by **Visa-Free**, **eVisa / Authorization**, **Visa Required**, or **Needs Review**. Each section displays an actual country count; tap a section to expand or collapse it.
+- **Browse Countries** — search destinations alphabetically and filter by **Visa-Free**, **eVisa / Authorization**, **Visa Required**, or **Needs Review**. Each section displays an actual country count; all categories start collapsed; tap a section heading to expand or collapse its country list.
 - **Check Group Req** — compare all selected travelers using the most restrictive group classification. Group country lists start collapsed. When you open a country from this screen, the Group Summary starts expanded.
-- **Search Multiple** — enter countries individually, then use **Up**, **Down**, or **Remove** on the destination chips to arrange the trip. Select **Search** once to compare the complete itinerary. Tap a result section to expand each traveler's details.
+- **Search Multiple** — enter or paste multiple countries separated by commas (for example, *Mozambique, Brazil, Cape Verde, Portugal, China*) or select an individual country from the autocomplete list. Recognized destinations become ordered chips automatically; unknown entries stay in the text field for correction. Use **Up**, **Down**, or **Remove** to arrange the trip. Choose **Search Requirements** to compare all destinations. The results appear below as collapsed country summaries. Tap a result section to expand each traveler's details.
 
 For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
 
