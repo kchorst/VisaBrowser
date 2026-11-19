@@ -1,4 +1,4 @@
-# VisaBrowser v0.3.0
+# VisaBrowser v0.4.0
 
 **[Open VisaBrowser on your phone](https://kchorst.github.io/VisaBrowser/)**
 
@@ -6,9 +6,11 @@ VisaBrowser compares tourist entry requirements for travelers with different pas
 
 ## Get started
 
-1. Open **Passengers** and add the people traveling.
-2. Use **Countries** to search and filter destinations or **Multi-search** to check a list at once.
-3. Open a destination for each traveler's visa result, entry conditions, and source links. Use **Save destination** to keep the comparison in your browser.
+1. Add traveler names and passport countries (and optional existing visas or permits).
+2. Open the mobile dashboard to **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**.
+3. Review each traveler’s result and the expandable travel disclaimer; check official requirements before travel.
+
+The [v0.4.0 UX redesign specification](docs/VisaBrowser-UX-Spec-v0.4.0.md) tracks the complete approved design. The current release begins its implementation; features not yet implemented are not represented as complete.
 
 Select **Save offline** to make the visa data available on this device when you’re offline. When **Update available** appears, select it to refresh that copy. See the [User Guide](USER_GUIDE.md) for more detail.
 
