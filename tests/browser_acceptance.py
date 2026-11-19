@@ -441,6 +441,18 @@ def real_country_journeys(browser, base):
     editor.get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
+    # A masthead click is a real Home navigation, even with unsaved country
+    # requirements: it offers Save/Discard and respects the user's choice.
+    page.goto(base + '#destination/GB/view')
+    expect(page.get_by_role('heading', name='United Kingdom')).to_be_visible()
+    page.get_by_role('link', name='VisaBrowser — go to Home').click()
+    expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
+    page.wait_for_function('window.scrollY === 0')
+    # On Home, clicking the title again keeps Home at the top.
+    page.get_by_role('link', name='VisaBrowser — go to Home').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (
         'Shipped country workflows overflow the mobile viewport')
     assert not errors, errors
