@@ -85,3 +85,10 @@ dialog::backdrop { background: #020617bd; }
 #offline-status, #visa-data-date { margin-bottom: .8rem; font-size: .86rem; }
 #save-offline { margin-left: auto; padding: .4rem .65rem; }
 @media (max-width: 380px) { #save-offline { margin-left: 0; } }
+
+/* v0.4.0 mobile-first navigation */
+.dashboard-actions { margin-block: .5rem; }
+.dashboard-actions button { width: 100%; text-align: left; min-height: 52px; }
+.travel-disclaimer { margin-top: 1rem; }
+.travel-disclaimer summary { font-weight: 700; }
+.travel-disclaimer p { margin-top: .8rem; }
