@@ -432,8 +432,8 @@ function passengerList() {
 }
 let pendingDestination = '';
 function invite(id = '') {
-  return panel(muted('Select passengers to see entry requirements for your group.'),
-    el('div', {}, button(state.passengers.length ? 'Select passengers' : 'Add passengers', () => {
+  return panel(muted('Choose your travelers to see entry requirements for your group.'),
+    el('div', {}, button(state.passengers.length ? 'Select travelers' : 'Set up first traveler', () => {
       pendingDestination = id;
       go('passengers');
     }, 'primary')));
