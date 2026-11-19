@@ -1032,7 +1032,7 @@ async function start() {
       const nextHash = location.hash;
       const previousHash = lastRouteHash;
       if (unsavedResult && nextHash !== previousHash &&
-          (previousHash.startsWith('#destination/') || previousHash === '#multi')) {
+          (previousHash.startsWith('#destination/') || /^#country=/i.test(previousHash) || previousHash === '#multi')) {
         // Restore the unsaved screen without deleting the browser Back target.
         // Pushing the prior URL preserves Back semantics after Cancel.
         history.pushState(null, '', previousHash);
