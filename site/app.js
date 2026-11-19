@@ -161,11 +161,12 @@ function uniqueDocuments(documents) {
   return [...new Map(documents.map(doc => [documentKey(doc), doc])).values()];
 }
 
-function passengerEditor(passenger, onSave) {
+function passengerEditor(passenger, onSave, inline = false) {
   const draft = passenger ? structuredClone(passenger) : { id: uid(), name: '', passport: '', documents: [] };
   draft.documents = uniqueDocuments(draft.documents);
-  const form = el('form', { class: 'stack' });
-  const name = el('input', { name: 'name', value: draft.name, maxlength: '80', required: '', autofocus: '' });
+  const form = el('form', { class: 'stack traveler-form', ...(inline ? { 'aria-label': 'First traveler details' } : {}) });
+  const name = el('input', { name: 'name', type: 'text', placeholder: 'Name or initials',
+    value: draft.name, maxlength: '80', required: '', autocomplete: 'name', autofocus: '' });
   const passport = select('passport', passports, draft.passport, 'Select a passport');
   passport.required = true;
   const issuer = select('issuer', issuers, '', 'Select an issuing country or area');
@@ -233,20 +234,26 @@ function passengerEditor(passenger, onSave) {
     paint();
     return true;
   };
-  const documents = el('fieldset', { class: 'stack visa-section' }, el('legend', {}, 'Visas and residence permits'),
-    list, label('Issuing country or area', issuer), label('Visa or permit type', type),
-    label('Label (optional)', nickname), button('Add visa or permit', addDocument), message);
+  const documents = el('details', { class: 'optional-documents' },
+    el('summary', {}, 'Existing visas or residence permits (optional)'),
+    el('div', { class: 'stack' },
+      muted('Only add documents you already hold. You can do this later.'),
+      list, label('Issuing country or area', issuer), label('Visa or permit type', type),
+      label('Label (optional)', nickname), button('Add visa or permit', addDocument), message));
+  if (draft.documents.length) documents.open = true;
   paint();
-  form.append(el('h2', { id: 'dialog-title' }, passenger ? 'Edit passenger' : 'Add passenger'),
-    label('Name', name), label('Passport', passport), documents);
+  form.append(inline ? muted('Start with your name and passport. No account or passport expiry date is needed.') :
+    el('h2', { id: 'dialog-title' }, passenger ? 'Edit traveler' : 'Add traveler'),
+    label('Traveler name or initials', name), label('Passport country', passport), documents);
   if (Object.keys(draft.facts ?? {}).length) form.append(button('Reset entry answers', event => {
     delete draft.facts;
     event.currentTarget.textContent = 'Entry answers reset';
     event.currentTarget.disabled = true;
   }));
-  form.append(el('div', { class: 'actions' }, el('button', { type: 'submit', class: 'primary' }, 'Save passenger'),
-    button('Cancel', () => dialog.close())));
-  const dialog = modal(form);
+  form.append(el('div', { class: 'actions' }, el('button', { type: 'submit', class: 'primary' },
+    inline ? 'Save first traveler' : 'Save traveler'),
+    inline ? null : button('Cancel', () => dialog.close())));
+  const dialog = inline ? null : modal(form);
   name.addEventListener('input', () => name.setCustomValidity(''));
   form.addEventListener('submit', event => {
     event.preventDefault();
@@ -259,9 +266,10 @@ function passengerEditor(passenger, onSave) {
     draft.name = name.value.trim();
     if (draft.passport !== passport.value) delete draft.facts;
     draft.passport = passport.value;
-    dialog.close();
+    dialog?.close();
     onSave(draft);
   });
+  if (inline) return panel(form);
 }
 
 // Compatible with Travel-Prep's public #country=XX deep-link convention.
@@ -359,16 +367,25 @@ function go(path) {
   else location.hash = path;
 }
 function passengerList() {
-  const add = button('Add Another Traveler', () => passengerEditor(null, passenger => {
+  const firstTime = state.passengers.length === 0;
+  const saveNew = passenger => {
     state.passengers.push(passenger);
-    state.selected.push(passenger.id);
+    if (!state.selected.includes(passenger.id)) state.selected.push(passenger.id);
     persist();
     if (pendingDestination) {
       const id = pendingDestination;
       pendingDestination = '';
       go(`destination/${id}`);
-    } else go('home');
-  }), state.passengers.length ? '' : 'primary');
+    } else {
+      // Show the completed traveler before offering the next one.
+      render(true);
+    }
+  };
+  if (firstTime) {
+    return [title('Your first traveler'),
+      passengerEditor(null, saveNew, true)];
+  }
+
   const selection = el('span', { role: 'status' });
   const clearButton = button('Clear selection', () => {
     state.selected = [];
@@ -398,7 +415,7 @@ function passengerList() {
           persist();
           render(true);
         }), '', { 'aria-label': `Edit ${passenger.name}` }),
-        button('Remove', () => confirmAction(`Remove ${passenger.name}?`, 'Remove passenger', () => {
+        button('Remove', () => confirmAction(`Remove ${passenger.name}?`, 'Remove traveler', () => {
           state.passengers = state.passengers.filter(p => p.id !== passenger.id);
           state.selected = state.selected.filter(id => id !== passenger.id);
           persist();
@@ -407,10 +424,11 @@ function passengerList() {
       passenger.documents.length ? muted(`Document issuers · ${[...new Set(passenger.documents.map(d => places[d.issuer]))].join(', ')}`) : null);
   });
   updateSelection();
-  return [title('Travelers', add),
-    el('div', { class: 'stack' }, people.length ? [selection, people,
-      el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary'))] :
-      panel(muted('Add a passenger to compare tourist entry requirements.')))];
+  return [title('Travelers'),
+    el('div', { class: 'stack' }, selection, people,
+      // Add follows the existing traveler list, never precedes the first field.
+      button('Add Another Traveler', () => passengerEditor(null, saveNew)),
+      el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary')))];
 }
 let pendingDestination = '';
 function invite(id = '') {
