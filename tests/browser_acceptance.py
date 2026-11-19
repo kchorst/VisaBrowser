@@ -88,6 +88,17 @@ def fixture(browser, base):
     expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
     expect(page.locator('.dashboard-actions button').first).to_have_text('Check Group Req')
 
+    # Browse Countries (not only Group Req) starts with every category collapsed.
+    page.get_by_role('button', name='Browse Countries').click()
+    expect(page.locator('.country-section')).to_have_count(4)
+    assert all(section.get_attribute('open') is None
+               for section in page.locator('.country-section').all())
+    page.get_by_label('Filter requirements').select_option('review')
+    assert page.locator('.country-list li:visible').count() == 0
+    page.locator('.country-section summary').first.click()
+    assert page.locator('.country-list li:visible').count() > 0
+    page.goto(base + '#home')
+
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
@@ -127,16 +138,14 @@ def fixture(browser, base):
     page.goto(base + '#multi')
     expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
     page.get_by_role('dialog').get_by_role('button', name='Discard').click()
-    destination = page.get_by_label('Add destinations')
-    for name in ['Destination A', 'Destination C', 'Destination B']:
-        destination.fill(name)
-        page.get_by_role('button', name='Add Country').click()
+    destination = page.get_by_label('Destinations — type or paste a country list')
+    destination.fill('Destination A, Destination C, Destination B')
     expect(page.locator('.itinerary-stop strong')).to_have_text(
         ['1. Destination A', '2. Destination C', '3. Destination B'])
     page.get_by_role('button', name='Move Destination B up').click()
     expect(page.locator('.itinerary-stop strong')).to_have_text(
         ['1. Destination A', '2. Destination B', '3. Destination C'])
-    page.get_by_role('button', name='Search', exact=True).click()
+    page.get_by_role('button', name='Search Requirements', exact=True).click()
     expect(page.locator('.country-result')).to_have_count(3)
     expect(page.locator('.country-result').first).not_to_have_attribute('open', '')
     page.locator('.country-result summary').first.click()
@@ -153,11 +162,9 @@ def fixture(browser, base):
     page.goto(base + '#multi')
     assert not json.loads(page.evaluate(
         "localStorage.getItem('visabrowser.v1')"))['saved']
-    destination = page.get_by_label('Add destinations')
-    for country in ['Destination A', 'Destination C']:
-        destination.fill(country)
-        page.get_by_role('button', name='Add Country').click()
-    page.get_by_role('button', name='Search', exact=True).click()
+    destination = page.get_by_label('Destinations — type or paste a country list')
+    destination.fill('Destination A, Destination C')
+    page.get_by_role('button', name='Search Requirements', exact=True).click()
     page.once('dialog', lambda dialog: dialog.accept('Autumn Itinerary'))
     page.get_by_role('button', name='Save Search').click()
     expect(page.get_by_role('heading', name='Autumn Itinerary')).to_be_visible()
@@ -295,6 +302,19 @@ def real_country_journeys(browser, base):
     add_traveler(page, 'Sam', 'US')
     expect(page.locator('.dashboard-actions button').first).to_have_text('View Country')
 
+    # Reproduce the five-country input provided during Windows acceptance.
+    page.get_by_role('button', name='Search Multiple').click()
+    example = page.get_by_label('Destinations — type or paste a country list')
+    example.fill('Mozambique, Brazil, Cape Verde, Portugal, China')
+    expect(page.locator('.itinerary-stop strong')).to_have_text(
+        ['1. Mozambique', '2. Brazil', '3. Cape Verde', '4. Portugal', '5. China'])
+    search = page.get_by_role('button', name='Search Requirements')
+    expect(search).to_be_enabled()
+    search.click()
+    expect(page.locator('.country-result')).to_have_count(5)
+    page.goto(base + '#home')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+
     # Other apps can deep-link with the same #country=ISO format as Travel-Prep.
     page.goto(base + '#country=jp')
     expect(page.get_by_role('heading', name='Japan')).to_be_visible()
@@ -341,13 +361,11 @@ def real_country_journeys(browser, base):
 
     # France -> Italy -> Croatia itinerary, in exactly the selected order.
     page.goto(base + '#multi')
-    picker = page.get_by_label('Add destinations')
-    for country in ['France', 'Italy', 'Croatia']:
-        picker.fill(country)
-        page.get_by_role('button', name='Add Country').click()
+    picker = page.get_by_label('Destinations — type or paste a country list')
+    picker.fill('France, Italy, Croatia')
     expect(page.locator('.itinerary-stop strong')).to_have_text(
         ['1. France', '2. Italy', '3. Croatia'])
-    page.get_by_role('button', name='Search', exact=True).click()
+    page.get_by_role('button', name='Search Requirements', exact=True).click()
     page.get_by_role('button', name='Copy Itinerary').click()
     report = page.evaluate('navigator.clipboard.readText()')
     assert report.index('France') < report.index('Italy') < report.index('Croatia')
