@@ -258,6 +258,21 @@ export function healthNotices(destination, passport, now = Date.now()) {
   if (destination === 'KE') notices.push(notice(screening,
     'If arriving with flu-like symptoms, Kenya Port Health requires a passenger locator form.',
     'https://porthealth.health.go.ke/entry-requirements'));
+  if (destination === 'CA' &&
+      now >= Date.parse('2026-07-20T00:00:00-04:00') && now < Date.parse('2026-11-28T00:00:00-05:00')) {
+    notices.push(notice(screening,
+      'Canada says foreign nationals who were in the Democratic Republic of the Congo in the past 21 days cannot board flights to Canada. Canada also temporarily suspended certain immigration documents for foreign nationals who listed the DRC, South Sudan or Uganda as their last country of residence. The published measures run through November 27, 2026 Eastern time. Check the current order and your status.',
+      'https://www.canada.ca/en/immigration-refugees-citizenship/services/special-measures/ebola-2026.html'));
+  }
+  if (destination === 'RW') notices.push(notice(screening,
+    'If you were in or transited through the Democratic Republic of the Congo in the last 30 days, check Rwanda’s current Ebola measures. Rwanda’s published notice describes entry refusal for affected foreign visitors and quarantine for returning Rwandan nationals or eligible residents.',
+    'https://rbc.gov.rw/info-note-for-travelers/'));
+  if (destination === 'UG') notices.push(notice(screening,
+    'Check Uganda’s current Ebola restrictions if you recently traveled in the Democratic Republic of the Congo or plan to connect through Uganda. Published notices describe passenger registration and route-specific transit, entry and isolation measures.',
+    'https://ug.china-embassy.gov.cn/chn/sggg/202610/t20261027_12047824.htm'));
+  if (destination === 'CN') notices.push(notice(screening,
+    'Check China Customs’ Ebola declaration rule if arriving from an affected country or if you visited one in the previous 21 days. China requires covered travelers with symptoms or known contact with a case to declare this at entry.',
+    'https://fec.mofcom.gov.cn/article/ggfw/fxff/tbtx/cryqfx/202611/9409.html'));
   if (destination === 'US') {
     notices.push(notice(screening,
       'On U.S.-bound flights, crew must report certain illnesses to CDC, including fever with persistent cough. Officials assess any measures that apply.',
