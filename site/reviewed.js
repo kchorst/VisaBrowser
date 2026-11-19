@@ -447,6 +447,16 @@ export function reviewedRule(passenger, destination, base, data) {
   // From 12 Nov 2026 NZDT Kuwait passports cannot use the NZeTA visa waiver.
   // Do not reinstate the waiver automatically after the published suspension ends.
   if (destination === 'NZ' && nationality === 'KW') {
+    // Holders of a qualifying Australian permanent-resident document may
+    // have a separate resident-visa pathway, not the suspended tourist waiver.
+    const auResidence = (passenger.documents ?? []).filter(doc => doc.issuer === 'AU' &&
+      doc.type === 'permit' && doc.valid !== false && doc.qualifications?.NZ !== false);
+    if (auResidence.some(doc => doc.qualifications?.NZ === true)) return newZealand(passenger);
+    if (auResidence.length) return unknown(
+      'Kuwait passport visa-waiver travel is suspended. Check whether your Australian permanent-resident document independently qualifies for New Zealand resident entry.',
+      official.kwNz, 'New Zealand Australian permanent resident NZeTA Kuwait passport visa waiver',
+      auResidence.map(doc => docCheck(doc, 'qualify',
+        'Does this Australian permanent-resident document independently qualify for a New Zealand resident visa?')));
     const start = Date.parse('2026-11-12T23:59:00+13:00');
     const end = Date.parse('2027-02-11T23:59:00+13:00');
     if (Date.now() >= start && Date.now() < end) return rule('advance', official.kwNz, {
@@ -478,8 +488,11 @@ export function reviewedRule(passenger, destination, base, data) {
     if (destination === 'KR' && base?.options?.includes('free')) {
       const expires = Date.parse('2027-01-01T00:00:00+09:00');
       if (Date.now() < expires) return rule('free', official.koreaUs, {
-        stay: base.stay, notes: ['U.S. ordinary passport holders are exempt from K-ETA through 31 December 2026 (Korea time).',
-          'Recheck entry procedures and required arrival declaration before travel.']
+        stay: base.stay,
+        flags: ['Complete Korean e-Arrival card unless exempt'],
+        notes: ['U.S. ordinary passport holders are exempt from K-ETA through 31 December 2026 (Korea time).',
+          'K-ETA-exempt visitors generally submit an e-Arrival card unless another exemption applies; check the official traveler navigator.'],
+        routes: [{ title: 'Official Korean e-Arrival card', url: 'https://www.e-arrivalcard.go.kr/' }]
       });
       return unknown('The published K-ETA exemption ended 31 December 2026. Check whether an extension applies or apply for K-ETA before travel.',
         official.koreaUs, 'US passport South Korea K-ETA exemption January 2027');
