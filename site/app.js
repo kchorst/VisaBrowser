@@ -551,8 +551,9 @@ function countries(data, groupMode = false) {
     autocomplete: 'off', value: viewState.query });
   const results = el('div', { class: 'stack' });
   const people = activePassengers();
-  const filter = select('filter', [['all', 'All Countries'], ['free', 'Visa-Free'],
-    ['authorization', 'eVisa / Authorization'], ['required', 'Visa Required'],
+  const filter = select('filter', [['all', 'All Countries'], ['free', 'Visa-Free · No Additional Steps'],
+    ['steps', 'Visa-Free · Entry Steps Required'],
+    ['authorization', 'Electronic Visa / Visa on Arrival'], ['required', 'Visa Required'],
     ['review', 'Needs Review']], viewState.filter);
   const sections = people.length ? rank(destinations, people, data) : [{
     id: 'all', heading: 'All Countries', destinations: destinations.map(([id, name]) => ({ id, name }))
@@ -789,7 +790,7 @@ function pendingResearch(row, placeId, includeReason = false) {
 function passengerResult(row, placeId, saved, data) {
   const bad = row.options.includes('denied') || row.issue;
   const known = !row.options.includes('pending');
-  const tone = bad ? 'bad' : !known || row.condition ? 'warn' : 'good';
+  const tone = bad ? 'bad' : !known || row.condition || row.flags?.length ? 'warn' : 'good';
   const advice = row.options.map(option => actions[option]).filter(Boolean);
   const controls = [...new Map([...(row.controls ?? []), ...(row.questions ?? [])]
     .map(question => [`${question.id ?? ''}:${question.field}`, question])).values()].map(question => {
@@ -1173,6 +1174,14 @@ window.addEventListener('online', async () => {
 async function start() {
   try {
     await readCatalog();
+    // Route the masthead through the same guarded navigation as dashboard
+    // actions, instead of relying on a bare hash hyperlink. An unsaved
+    // comparison must still offer Save/Discard before leaving.
+    const homeBrand = document.querySelector('.brand-home');
+    homeBrand.addEventListener('click', event => {
+      event.preventDefault();
+      go('home');
+    });
     for (const tab of tabs) tab.addEventListener('click', () => {
       pendingDestination = '';
       const [screen, , origin] = route();
