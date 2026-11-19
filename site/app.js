@@ -631,7 +631,7 @@ function passengerResult(row, placeId, saved, data) {
       muted(row.stay ? `Stay limit · ${row.stay}` : 'Stay limit unknown') : null,
     requiresVisa ? muted(row.fee ? `Fee · ${row.fee}` : 'Fee unknown') : null,
     row.entry ? el('p', {}, row.entry) : null,
-    saved && saved.result && requirementChange(compare([row.passenger], placeId, data).rows[0], saved) ? el('p', { class: 'condition' }, requirementChange(compare([row.passenger], placeId, data).rows[0], saved)) : null,
+    saved?.changes?.[row.passenger.id] ? el('p', { class: 'condition' }, saved.changes[row.passenger.id]) : null,
     saved ? null : controls, research, routes, notes,
     null);
 }
@@ -668,18 +668,23 @@ function destinationDetails(placeId, saved, data) {
     button('Refresh Results', async event => {
       if (!confirm('Refresh and replace the saved results? The previous version will not be retained.')) return;
       event.currentTarget.disabled = true;
-      try { await readCatalog(); }
-      catch { /* the current catalog is available */ }
-      for (const p of people) cache.delete(p.passport);
       try {
+        if (!navigator.onLine) throw new Error('Offline');
+        await readCatalog();
+        for (const p of people) cache.delete(p.passport);
         const fresh = await loadGroup(people);
         const refreshed = compare(people, placeId, fresh);
-        if (refreshed.rows.some(row => row.source?.unavailable)) throw new Error('Some sources are unavailable');
+        if (refreshed.rows.some(row => row.source?.unavailable ||
+            (row.source?.url && sourceDelayed(row.source, new Date(), catalog.overdueDays))))
+          throw new Error('One or more sources are unavailable or stale');
+        const changes = Object.fromEntries(refreshed.rows.map(row => [row.passenger.id,
+          requirementChange(row, saved)]).filter(([, change]) => change));
         saved.snapshot = resultSnapshot(refreshed);
         saved.result = structuredClone(refreshed);
+        saved.changes = changes;
         saved.checkedAt = new Date().toISOString();
         persist();
-      } catch { alert('Refresh failed. Your saved results remain unchanged.'); }
+      } catch (error) { alert('Refresh failed. Original saved results were preserved. ' + error.message); }
       render(true);
     }),
     button('Delete saved destination', () => confirmAction(`Delete saved ${places[placeId]}?`, 'Delete', () => {
@@ -731,13 +736,22 @@ function destinationDetails(placeId, saved, data) {
     notes, edits, disclaimer())];
 }
 
+function savedNeedsRefresh(record) {
+  if (!record.checkedAt || Date.now() - Date.parse(record.checkedAt) > 30 * 86400000) return true;
+  return record.passengers.some(original => {
+    const current = state.passengers.find(person => person.id === original.id);
+    return !current || JSON.stringify([current.passport, current.documents, current.facts]) !==
+      JSON.stringify([original.passport, original.documents, original.facts]);
+  });
+}
+
 function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
     [...state.saved].reverse().map(record => panel(el('div', { class: 'row' },
       el('div', {}, el('h2', {}, record.name ?? places[record.placeId] ?? record.placeId),
         muted(record.passengers.map(p => p.name).join(', ')),
         muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
-        muted(record.checkedAt && Date.now() - Date.parse(record.checkedAt) > 30 * 86400000 ? 'Needs Refresh' : '')),
+        muted(savedNeedsRefresh(record) ? 'Needs Refresh' : '')),
       el('div', { class: 'actions' }, button('Open', () => go(`saved/${record.id}`)),
         button('Rename', () => { const name = prompt('Saved search name', record.name ?? places[record.placeId]); if (name?.trim()) { record.name = name.trim(); persist(); render(true); } }),
         button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger'))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
