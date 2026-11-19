@@ -34,7 +34,7 @@ async function copyOrShare(text, nativeShare = false) {
   catch { prompt('Copy your report', text); }
 }
 
-const noIssues = result => result.rows.length > 0 && result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' && !row.condition && !row.issue && !row.flags?.length && !row.questions?.length && !row.controls?.length && !row.source?.unavailable && !sourceDelayed(row.source, new Date(), catalog.overdueDays));
+const noIssues = result => result.rows.length > 0 && result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' && !row.condition && !row.issue && !row.flags?.length && !row.questions?.length && !row.controls?.length && !row.viaDocument && !row.source?.unavailable && !sourceDelayed(row.source, new Date(), catalog.overdueDays));
 
 function storageAlert() {
   const alert = document.querySelector('#storage-alert');
