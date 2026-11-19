@@ -209,6 +209,13 @@ def production(browser, base):
     expect(page.get_by_text('VisaBrowser', exact=True).first).to_be_visible()
     expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    page.get_by_role('button', name='Save offline').click()
+    expect(page.locator('#offline-status')).to_contain_text('Saved offline', timeout=60000)
+    context.set_offline(True)
+    page.reload()
+    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.locator('#offline-status')).to_contain_text('Offline')
+    context.set_offline(False)
     assert not errors, errors
     context.close()
 
