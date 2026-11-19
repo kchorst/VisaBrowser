@@ -12,6 +12,13 @@ const official = {
   brazil: 'https://www.gov.br/mre%20/pt-br/assuntos/portal-consular/qgrv-simples-ing-18jul25.pdf',
   brEvisa: 'https://brazil.vfsevisa.com/prod_vfsevisa_txt?country=United+States',
   usVisitor: 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visitor.html',
+  kwNz: 'https://www.immigration.govt.nz/about-us/news-centre/visa-waiver-travel-changes-for-kuwait-nationals/',
+  ukEta: 'https://www.gov.uk/eta',
+  koreaUs: 'https://travel.state.gov/en/international-travel/travel-advisories/south-korea.html',
+  mexicoUs: 'https://travel.state.gov/en/international-travel/travel-advisories/mexico.html',
+  australiaUs: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601',
+  nzWaiverUs: 'https://www.immigration.govt.nz/visit/what-you-need-to-visit-new-zealand/visa-waiver-countries-and-territories/',
+
   brAruba: 'https://www.aruba.com/br/planeje-sua-visita/requisitos-para-turistas-na-entrada-a-aruba',
   israelEta: 'https://www.gov.il/en/service/group_entry_to_israel',
   brIsrael: 'https://embassies.gov.il/brazil/en/services/foreign-citizens/entry-visa-visiting-or-touring-israel',
@@ -410,6 +417,61 @@ function mutualVisa(passenger, destination, base) {
 
 export function reviewedRule(passenger, destination, base, data) {
   const nationality = passenger.passport;
+  // An emergency immigration direction applies independently of a wiki snapshot.
+  // From 12 Nov 2026 NZDT Kuwait passports cannot use the NZeTA visa waiver.
+  // Do not reinstate the waiver automatically after the published suspension ends.
+  if (destination === 'NZ' && nationality === 'KW') {
+    const start = Date.parse('2026-11-12T23:59:00+13:00');
+    const end = Date.parse('2027-02-11T23:59:00+13:00');
+    if (Date.now() >= start && Date.now() < end) return rule('advance', official.kwNz, {
+      status: 'Visitor visa required before travel',
+      condition: 'New Zealand has temporarily suspended visa-waiver travel for Kuwait passport holders. An NZeTA alone does not qualify.',
+      notes: ['Visa-waiver suspension is published through 11 February 2027 (NZDT). Verify any changes before travel.'],
+      routes: [{ title: 'Immigration New Zealand Kuwait notice', url: official.kwNz }]
+    });
+    if (Date.now() >= end) return unknown(
+      'The published Kuwait visa-waiver suspension has reached its review date. Confirm current NZ immigration instructions before relying on the waiver.',
+      official.kwNz, 'New Zealand Kuwait visa waiver suspension after February 2027 extension');
+  }
+  // Verified ordinary U.S. tourist passport routes. Keep an ETA distinct
+  // from a conventional visa and don't classify routine arrival forms as visas.
+  if (nationality === 'US') {
+    if (destination === 'GB' && base?.options?.includes('free')) return rule('free', official.ukEta, {
+      stay: 'Up to six months per visit',
+      flags: ['UK ETA required before travel (unless exempt)'],
+      notes: ['An ETA currently costs £20. Check exemptions for existing UK immigration status and other qualifying circumstances.', 'An ETA is permission to travel, not a guarantee of admission.'],
+      routes: [{ title: 'Official UK ETA application and exemptions', url: official.ukEta }]
+    });
+    if (destination === 'MX' && base?.options?.includes('free')) return rule('free', official.mexicoUs, {
+      stay: 'Up to 180 days maximum; immigration decides the actual authorized stay',
+      flags: ['Check FMM entry documentation for your arrival route'],
+      notes: ['Visa-free for ordinary tourism; additional immigration documentation depends on air, land or sea arrival.',
+        'Check the Mexican INM / U.S. State Department entry requirements and border-zone exemptions.'],
+      routes: [{ title: 'Mexico: entry and exit requirements', url: official.mexicoUs }]
+    });
+    if (destination === 'KR' && base?.options?.includes('free')) {
+      const expires = Date.parse('2027-01-01T00:00:00+09:00');
+      if (Date.now() < expires) return rule('free', official.koreaUs, {
+        stay: base.stay, notes: ['U.S. ordinary passport holders are exempt from K-ETA through 31 December 2026 (Korea time).',
+          'Recheck entry procedures and required arrival declaration before travel.']
+      });
+      return unknown('The published K-ETA exemption ended 31 December 2026. Check whether an extension applies or apply for K-ETA before travel.',
+        official.koreaUs, 'US passport South Korea K-ETA exemption January 2027');
+    }
+    if (destination === 'AU' && base?.options?.includes('free')) return rule('evisa', official.australiaUs, {
+      status: 'Electronic Travel Authority visa (subclass 601)',
+      stay: 'Up to three months per visit',
+      flags: ['Obtain Australian ETA subclass 601 before travel'],
+      notes: ['Australia calls its ETA subclass 601 a visa; eligible U.S. ordinary passports may apply via the official Australian ETA app.'],
+      routes: [{ title: 'Australia ETA subclass 601', url: official.australiaUs }]
+    });
+    if (destination === 'NZ' && base?.options?.includes('free')) return rule('free', official.nzWaiverUs, {
+      stay: 'Generally up to three months per visit',
+      flags: ['Obtain NZeTA before travel'],
+      notes: ['NZeTA is a pre-travel authority for eligible visa-waiver visitors. Fees and visitor levy may apply; check current official amounts.'],
+      routes: [{ title: 'NZ visa-waiver and NZeTA guidance', url: official.nzWaiverUs }]
+    });
+  }
   if (destination === 'NZ' && (nationality === 'BR' || nzReviewed.has(nationality))) return newZealand(passenger);
   if ((destination === 'JP' && nationality === 'BR') || (destination === 'BR' && nationality === 'JP'))
     return brazilJapanWaiver(passenger, destination);
