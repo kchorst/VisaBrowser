@@ -454,49 +454,90 @@ function countries(data, groupMode = false) {
       results)];
 }
 
+let itinerary = [];
+let comparedItinerary = null;
 function multiSearch(data) {
   const people = activePassengers();
-  const input = el('input', { type: 'text', placeholder: 'Brazil, USA, Japan', autocomplete: 'off',
-    'aria-describedby': 'shortlist-help' });
-  input.value = destinationDraft;
-  const feedback = el('p', { role: 'status', class: 'muted' });
-  const shortlist = el('section', { class: 'stack', 'aria-labelledby': 'shortlist-heading' });
-  const submit = el('button', { type: 'submit', class: 'primary' }, 'Check destinations');
-  const clear = button('Clear All', () => confirmAction('Clear all selected destinations?', 'Clear All', () => {
-    clearShortlist();
-    input.value = '';
-    paintShortlist();
-    input.focus();
+  const picker = el('input', { type: 'search', placeholder: 'Type a country or territory', autocomplete: 'off',
+    list: 'destination-suggestions' });
+  const suggestions = el('datalist', { id: 'destination-suggestions' },
+    destinations.map(([, name]) => el('option', { value: name })));
+  const chips = el('div', { class: 'stack' });
+  const results = el('section', { class: 'stack' });
+  const message = el('p', { role: 'status', class: 'muted' });
+  const add = button('Add Country', () => {
+    const term = normalizeName(picker.value.trim());
+    const found = destinations.filter(([id, name]) => normalizeName(name) === term || id.toLowerCase() === term);
+    if (found.length !== 1) {
+      const partial = destinations.filter(([, name]) => normalizeName(name).includes(term));
+      if (partial.length === 1 && term) found.push(partial[0]);
+    }
+    if (found.length !== 1) {
+      message.textContent = 'Choose a country from the suggestions, or type a unique country name.';
+      return;
+    }
+    const id = found[0][0];
+    if (!itinerary.includes(id)) itinerary.push(id);
+    picker.value = '';
+    comparedItinerary = null;
+    message.textContent = '';
+    paint();
+    picker.focus();
+  });
+  const search = button('Search', () => {
+    comparedItinerary = [...itinerary];
+    paint();
+    results.querySelector('summary')?.focus();
+  }, 'primary');
+  const clear = button('Clear All', () => confirmAction('Clear all countries in this trip?', 'Clear All', () => {
+    itinerary = [];
+    comparedItinerary = null;
+    paint();
+    picker.focus();
   }));
-  input.addEventListener('input', () => {
-    destinationDraft = input.value;
-    if (submittedDestinations !== null && input.value !== submittedDestinations) submittedDestinations = null;
-    paintShortlist();
-  });
-  function paintShortlist(focusResults = false) {
-    const submitted = submittedDestinations !== null;
-    const { message, cards } = submitted ? compareShortlist(submittedDestinations, people, data) : { message: '', cards: [] };
-    feedback.textContent = [cards.length ? `${cards.length} destination${cards.length === 1 ? '' : 's'} checked.` : '',
-      message].filter(Boolean).join(' ');
-    shortlist.hidden = !cards.length;
-    const heading = el('h2', { id: 'shortlist-heading', tabindex: '-1' }, 'Destination results');
-    shortlist.replaceChildren(heading, ...cards);
-    clear.hidden = !submitted && !input.value;
-    submit.disabled = !people.length || !input.value.trim() || submitted;
-    if (focusResults && cards.length) heading.focus();
-    else if (focusResults) input.focus();
+  function paint() {
+    chips.replaceChildren(...itinerary.map((id, index) =>
+      el('div', { class: 'itinerary-stop row' },
+        el('strong', {}, `${index + 1}. ${places[id]}`),
+        el('div', { class: 'actions' },
+          button('Up', () => { if (index) [itinerary[index - 1], itinerary[index]] = [itinerary[index], itinerary[index - 1]]; comparedItinerary = null; paint(); },
+            '', { disabled: index === 0 ? '' : undefined, 'aria-label': `Move ${places[id]} up` }),
+          button('Down', () => { if (index < itinerary.length - 1) [itinerary[index + 1], itinerary[index]] = [itinerary[index], itinerary[index + 1]]; comparedItinerary = null; paint(); },
+            '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
+          button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
+            '', { 'aria-label': `Remove ${places[id]}` })))));
+    // Undefined HTML attributes must not accidentally disable buttons.
+    chips.querySelectorAll('button[disabled="undefined"]').forEach(item => item.removeAttribute('disabled'));
+    search.disabled = !people.length || !itinerary.length;
+    clear.hidden = !itinerary.length;
+    results.replaceChildren();
+    if (!comparedItinerary?.length) return;
+    const header = el('h2', {}, 'Itinerary results');
+    const all = comparedItinerary.map(id => ({ id, summary: compare(people, id, data) }));
+    const shareText = all.map(({ id, summary }) => reportText(id, summary)).join('\n\n---\n\n');
+    results.append(header,
+      el('div', { class: 'actions' }, button('Copy Itinerary', () => copyOrShare(shareText)),
+        button('Share Itinerary', () => copyOrShare(shareText, true))),
+      ...all.map(({ id, summary }, index) =>
+        el('details', { class: 'panel country-result' }, el('summary', { tabindex: '0' },
+          `${index + 1}. ${places[id]} · ${noIssues(summary) ? 'NO ISSUES' :
+            summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
+              summary.group || 'Check requirements'}`),
+          el('div', { class: 'stack' },
+            summary.rows.map(row => passengerResult(row, id, null, data)),
+            el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)),
+            button('View Country', () => go(`destination/${id}/multi`))))),
+      disclaimer());
   }
-  const form = el('form', { class: 'panel stack' }, label('Destinations to compare', input),
-    el('p', { id: 'shortlist-help', class: 'muted' }, 'Separate country or territory names with commas.'),
-    el('div', { class: 'actions' }, submit, clear), feedback);
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-    submittedDestinations = input.value;
-    paintShortlist(true);
+  picker.addEventListener('keydown', event => {
+    if (event.key === 'Enter') { event.preventDefault(); add.click(); }
   });
-  paintShortlist();
-  return [title('Multi-search'), refreshNotice(people, data), el('div', { class: 'stack' },
-    people.length ? null : invite(), form, shortlist)];
+  paint();
+  return [title('Search Multiple'), refreshNotice(people, data),
+    people.length ? null : invite(),
+    panel(label('Add destinations', picker), suggestions, add,
+      muted('Add countries, rearrange them in travel order, then Search.'),
+      chips, el('div', { class: 'actions' }, search, clear), message), results];
 }
 
 function editAnswer(row, question, choice, placeId, saved, data) {
