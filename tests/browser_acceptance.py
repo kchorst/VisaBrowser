@@ -187,6 +187,7 @@ def fixture(browser, base):
         "localStorage.getItem('visabrowser.v1')"))['saved'][-1]['result']
     assert record_after == record_before
     assert any('Original saved results were preserved' in message for message in dialogs)
+    page.remove_listener('dialog', handle_dialog)
     context.set_offline(False)
 
     # Browser-scoped persistence and mobile viewport.
