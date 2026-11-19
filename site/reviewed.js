@@ -424,10 +424,10 @@ function mutualVisa(passenger, destination, base) {
 export function reviewedRule(passenger, destination, base, data) {
   const nationality = passenger.passport;
   if (destination === 'GB') {
-    if (nationality === 'IE' && base?.options?.includes('free')) return rule('free', official.ukEta, {
+    if (nationality === 'IE') return rule('free', official.ukEta, {
       notes: ['Irish citizens generally do not need a UK ETA or visitor visa; check other travel-document and Common Travel Area conditions.']
     });
-    if (nationality === 'TW' && base?.options?.includes('free')) return unknown(
+    if (nationality === 'TW') return unknown(
       'Taiwan ETA eligibility requires a passport containing a Taiwanese identification number. Confirm this before relying on the ETA route.',
       official.ukEta, 'UK ETA Taiwan passport identification card number');
     if (ukEtaNotEligible.has(nationality) && base?.options?.includes('free')) return unknown(
@@ -435,7 +435,7 @@ export function reviewedRule(passenger, destination, base, data) {
       official.ukEta, 'UK ETA visitor visa eligibility nationality 2026',
       [], { routes: [{ title: 'Official UK ETA eligibility list',
         url: 'https://www.gov.uk/guidance/check-when-you-can-get-an-electronic-travel-authorisation-eta' }] });
-    if (ukEtaEligible.has(nationality) && base?.options?.includes('free')) return rule('free', official.ukEta, {
+    if (ukEtaEligible.has(nationality)) return rule('free', official.ukEta, {
       stay: base.stay || 'Up to six months per visit',
       flags: ['Obtain UK ETA before travel unless exempt'],
       notes: ['UK ETA application fee: £20 (verified November 2026). The UK lists specific exemptions and eligibility conditions.',
