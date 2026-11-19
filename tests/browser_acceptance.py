@@ -510,8 +510,9 @@ def app_update(browser, base, site):
         expect(page.get_by_role('status').filter(has_text='VisaBrowser update available.')).to_be_visible()
         update = page.get_by_role('button', name='Update VisaBrowser')
         update.click()
-        expect(page.get_by_role('button', name='Save Search', exact=True).last).to_be_visible()
-        page.get_by_role('button', name='Cancel', exact=True).click()
+        dialog = page.get_by_role('dialog')
+        expect(dialog.get_by_role('button', name='Save Search', exact=True)).to_be_visible()
+        dialog.get_by_role('button', name='Cancel', exact=True).click()
         expect(update).to_be_visible()
         expect(page.locator('#version')).not_to_have_text('v9.9.9')
 
@@ -521,9 +522,8 @@ def app_update(browser, base, site):
         expect(page.locator('#version')).to_have_text('v9.9.9')
         expect(page.get_by_role('heading', name='Ghana', exact=True)).to_be_visible()
         expect(update).to_be_hidden()
-        page.reload()
-        page.goto(base + '#saved')
-        expect(page.get_by_text('Before app update', exact=False).first).to_be_visible()
+        page.goto(base + '?verify-saved=1#saved')
+        expect(page.get_by_role('heading', name='Before app update', exact=True)).to_be_visible()
     finally:
         page.close()
         version_file.write_text(published_version)
