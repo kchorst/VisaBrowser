@@ -91,6 +91,22 @@ function button(text, click, className = '', props = {}) {
   return control;
 }
 const panel = (...contents) => el('section', { class: 'panel stack' }, contents);
+function countedList(name, items, initiallyOpen = items.length <= 5) {
+  const content = el('div', { class: 'stack counted-list', ...(initiallyOpen ? {} : { hidden: '' }) }, items);
+  const toggle = button(initiallyOpen ? `Hide ${name.toLowerCase()}` : `Show ${name.toLowerCase()}`, () => {
+    const expanded = content.hidden;
+    content.hidden = !expanded;
+    toggle.textContent = expanded ? `Hide ${name.toLowerCase()}` : `Show ${name.toLowerCase()}`;
+    toggle.setAttribute('aria-expanded', String(expanded));
+  }, 'country-toggle', { 'aria-expanded': String(initiallyOpen) });
+  const controlId = `items-${++fieldId}`;
+  content.id = controlId;
+  toggle.setAttribute('aria-controls', controlId);
+  return el('section', { class: 'panel counted-section' },
+    el('div', { class: 'country-header' }, el('h2', {}, `${name} (${items.length})`), toggle),
+    content);
+}
+
 const title = (text, ...controls) => el('div', { class: 'section-head' }, el('h1', {}, text), controls);
 const muted = text => el('p', { class: 'muted' }, text);
 const chip = (text, tone = '') => el('span', { class: `chip ${tone}` }, text);
@@ -438,8 +454,8 @@ function passengerList() {
   });
   updateSelection();
   return [title('Travelers'),
-    el('div', { class: 'stack' }, selection, people,
-      // Add follows the existing traveler list, never precedes the first field.
+    el('div', { class: 'stack' }, selection,
+      countedList('Travelers', people),
       button('Add Another Traveler', () => passengerEditor(null, saveNew)),
       el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary')))];
 }
@@ -985,14 +1001,15 @@ function savedNeedsRefresh(record) {
 
 function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
-    [...state.saved].reverse().map(record => panel(el('div', { class: 'row' },
+    countedList('Saved searches', [...state.saved].reverse().map(record =>
+      panel(el('div', { class: 'row' },
       el('div', {}, el('h2', {}, record.name ?? (record.itinerary?.map(id => places[id]).join(' → ') || places[record.placeId] || record.placeId)),
         muted(record.passengers.map(p => p.name).join(', ')),
         muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
         muted(savedNeedsRefresh(record) ? 'Needs Refresh' : '')),
       el('div', { class: 'actions' }, button('Open', () => go(`saved/${record.id}`)),
         button('Rename', () => { const name = prompt('Saved search name', record.name ?? places[record.placeId]); if (name?.trim()) { record.name = name.trim(); persist(); render(true); } }),
-        button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger'))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
+        button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger')))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
 }
 
 const scrollByRoute = new Map();
