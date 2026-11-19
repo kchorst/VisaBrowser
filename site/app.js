@@ -781,7 +781,6 @@ function destinationDetails(placeId, saved, data) {
     el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
       el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
-        noIssues(summary) ? chip('NO ISSUES — check passport and entry conditions', 'good') : null,
         summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
