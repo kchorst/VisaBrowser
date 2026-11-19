@@ -90,6 +90,11 @@ def fixture(browser, base):
     expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
     expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
     page.go_back()
+    expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
+    page.get_by_role('dialog').get_by_role('button', name='Cancel').click()
+    expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
+    page.go_back()
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
     expect(page.get_by_label('Search destinations')).to_have_value('Destination B')
     expect(page.get_by_label('Filter requirements')).to_have_value('authorization')
 
