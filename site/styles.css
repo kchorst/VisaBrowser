@@ -81,7 +81,8 @@ footer { display: flex; flex-wrap: wrap; justify-content: center; text-align: ce
 dialog { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: .85rem; padding: 1rem; }
 dialog::backdrop { background: #020617bd; }
 #app-update { margin-bottom: .8rem; }
-#app-update button { margin-top: .45rem; }
+#update-app { margin-top: .45rem; background: #34d399; border-color: var(--green); color: #052e24; }
+#update-app:hover:not(:disabled) { background: var(--green); }
 #storage-alert { color: var(--gold); margin-bottom: 1rem; }
 
 .passenger-identity { display: flex; align-items: center; gap: .7rem; }
