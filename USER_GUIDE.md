@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.1 — User Guide
+# VisaBrowser v0.4.2 — User Guide
 
 ## Open the app on a phone or computer
 
@@ -22,6 +22,10 @@ There are four ways to browse requirements:
 - **Search Multiple** — enter countries individually, then use **Up**, **Down**, or **Remove** on the destination chips to arrange the trip. Select **Search** once to compare the complete itinerary. Tap a result section to expand each traveler's details.
 
 For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
+
+### Open a specific destination from another app
+
+Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. If none are selected, the result screen asks for traveler setup. Unknown codes return to the country picker with a notice.
 
 ## 3. Interpret results carefully
 
