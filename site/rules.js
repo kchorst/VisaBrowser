@@ -153,11 +153,11 @@ export function classify(result) {
   if (result.rows.some(row => row.options.some(option =>
       ['evisa', 'arrival', 'residentArrival', 'transit'].includes(option))))
     return 'authorization';
-  if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
-      !row.source?.error && (!row.source?.url || !sourceDelayed(row.source)))) {
-    if (result.rows.some(row => row.condition || row.flags?.length || row.controls?.length ||
-        row.questions?.length || row.viaDocument))
-      return 'steps';
+  if (result.rows.some(row => row.controls?.length || row.questions?.length ||
+      row.viaDocument || row.source?.error || (row.source?.url && sourceDelayed(row.source))))
+    return 'review';
+  if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free')) {
+    if (result.rows.some(row => row.condition || row.flags?.length)) return 'steps';
     return 'free';
   }
   return 'review';
