@@ -485,8 +485,8 @@ const destinationAliases = {
   'US': ['USA', 'United States of America'],
   'GB': ['UK', 'Great Britain'],
   'BR': ['Brasil'],
-  'CD': ['DRC', 'DR Congo', 'Democratic Republic of the Congo'],
-  'CG': ['Republic of the Congo'],
+  'CD': ['DRC', 'DR Congo', 'Democratic Republic of the Congo', 'Congo - Kinshasa', 'Congo Kinshasa'],
+  'CG': ['Republic of the Congo', 'Congo - Brazzaville', 'Congo Brazzaville'],
   'CI': ['Ivory Coast'],
   'CZ': ['Czech Republic'],
   'KN': ['Saint Kitts and Nevis'],
@@ -942,7 +942,7 @@ function destinationDetails(placeId, saved, data) {
 }
 
 function countryResultCard(id, index, summary, contents) {
-  const status = summary.pending ? 'Needs Review' :
+  const status = summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' :
     summary.issues ? issueLabel(summary.issues) : summary.group || 'Check requirements';
   const details = el('details', { class: 'country-result' },
     el('summary', { class: 'country-result-summary' },
