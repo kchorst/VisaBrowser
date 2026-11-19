@@ -476,6 +476,22 @@ def ghana_health_notice(browser, base):
         page.close()
 
 
+def tourist_document_notices(browser, base):
+    page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+    try:
+        page.goto(base)
+        add_traveler(page, 'Romania traveler', 'RO')
+        page.goto(base + '#country=US')
+        expect(page.get_by_text('Visa required before travel', exact=True)).to_be_visible()
+        expect(page.get_by_text('$30', exact=False)).to_have_count(0)
+        page.reload()
+        page.goto(base + '#country=TH')
+        expect(page.get_by_text('Proof of onward travel', exact=True).first).to_be_visible()
+        expect(page.get_by_text('Submit the Thailand Digital Arrival Card', exact=False)).to_be_visible()
+    finally:
+        page.close()
+
+
 def run():
     with TemporaryDirectory() as folder, sync_playwright() as playwright:
         shutil.copytree(ROOT / 'site', Path(folder) / 'VisaBrowser')
@@ -492,6 +508,7 @@ def run():
                 real_country_journeys(browser, base)
                 production(browser, base)
                 ghana_health_notice(browser, base)
+                tourist_document_notices(browser, base)
             finally:
                 browser.close()
                 server.shutdown()
