@@ -105,8 +105,10 @@ def fixture(browser, base):
     # Title is a Home link; a new screen starts at the top rather than
     # inheriting the previous screen's scroll position.
     page.goto(base + '#countries')
+    page.set_viewport_size({'width': 390, 'height': 440})
     page.get_by_label('Filter requirements').select_option('all')
-    page.get_by_role('button', name='Show countries').first.click()
+    for toggle in page.get_by_role('button', name='Show countries').all():
+        toggle.click()
     page.evaluate('window.scrollTo(0, 900)')
     assert page.evaluate('window.scrollY') > 0
     page.locator('.brand-home').click()
@@ -115,6 +117,7 @@ def fixture(browser, base):
     page.get_by_role('button', name='Browse Countries').click()
     expect(page.get_by_role('heading', name='Browse Countries')).to_be_visible()
     page.wait_for_function('window.scrollY === 0')
+    page.set_viewport_size({'width': 390, 'height': 844})
 
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
