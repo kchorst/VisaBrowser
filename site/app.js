@@ -13,6 +13,27 @@ const tabs = [...document.querySelectorAll('[data-route]')];
 const disclaimerText = 'VisaBrowser provides general entry guidance, not a guarantee of admission. Confirm current requirements with the destination country’s immigration or consular authorities before departure. Check passport validity and blank pages, visas and supporting documents, vaccinations and health rules, prior-country visits, permitted stay, transit conditions and fees. Entry is always at the discretion of immigration authorities.';
 const disclaimer = () => el('details', { class: 'panel travel-disclaimer' }, el('summary', {}, '⚠ Important Travel Requirements & Disclaimer'), el('p', {}, disclaimerText));
 const checkedDate = () => new Date().toLocaleDateString();
+function reportText(placeId, summary, when = checkedDate()) {
+  const destination = places[placeId] ?? placeId;
+  return ['VisaBrowser · ' + destination, 'Checked: ' + when,
+    ...summary.rows.map(row => [row.passenger.name + ' (' + (places[row.passenger.passport] ?? row.passenger.passport) + ')',
+      statuses(row), row.condition, row.reason, row.stay ? 'Stay: ' + row.stay : '',
+      ...(row.flags ?? [])].filter(Boolean).join(' · ')),
+    'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
+    'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
+    'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
+}
+async function copyOrShare(text, nativeShare = false) {
+  if (nativeShare && navigator.share) {
+    try { await navigator.share({ title: 'VisaBrowser travel requirements', text }); } catch (error) {
+      if (error.name !== 'AbortError') prompt('Copy your report', text);
+    }
+    return;
+  }
+  try { await navigator.clipboard.writeText(text); }
+  catch { prompt('Copy your report', text); }
+}
+
 const noIssues = result => result.rows.length > 0 && result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' && !row.condition && !row.issue && !row.flags?.length && !row.questions?.length && !row.controls?.length && !row.source?.unavailable && !sourceDelayed(row.source, new Date(), catalog.overdueDays));
 
 function storageAlert() {
@@ -621,7 +642,9 @@ function destinationDetails(placeId, saved, data) {
     muted('Confirm current rules with the destination’s embassy, consulate, or immigration authority before booking or traveling.'),
     el('p', {}, link('Open Travel-Prep', `${travelPrep}#country=${encodeURIComponent(placeId)}`)));
   return [title(places[placeId]), refreshNotice(people, data),
-    el('div', { class: 'stack' }, el('div', { class: 'actions' }, controls), people.length ?
+    el('div', { class: 'stack' }, el('div', { class: 'actions' }, controls,
+      people.length ? button('Copy', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()))) : null,
+      people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null), people.length ?
       panel(el('div', { class: 'chips' }, noIssues(summary) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
