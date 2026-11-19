@@ -14,8 +14,7 @@ import argparse
 import csv
 import json
 import re
-from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,22 +26,22 @@ ETA_LABEL = re.compile(
     re.I,
 )
 MONEY = re.compile(
-    r"(?:£|€|\\$|\\b(?:USD|GBP|AUD|NZD|EUR|KES|NIS|CAD)\\s*)\\s*\\d+[.,]?\\d*|"
-    r"\\b\\d+[.,]?\\d*\\s*(?:USD|GBP|AUD|NZD|EUR|KES|NIS|CAD)\\b",
+    r"(?:£|€|\$|\b(?:USD|GBP|AUD|NZD|EUR|KES|NIS|CAD)\s*)\s*\d+[.,]?\d*|"
+    r"\b\d+[.,]?\d*\s*(?:USD|GBP|AUD|NZD|EUR|KES|NIS|CAD)\b",
     re.I,
 )
 TEMPORARY = re.compile(
-    r"\\b(?:temporar(?:y|ily)|suspend(?:ed|sion)?|until|expires?|"
-    r"extended|waiver ends?|valid through|as of|effective from|202[5-9])\\b",
+    r"\b(?:temporar(?:y|ily)|suspend(?:ed|sion)?|until|expires?|"
+    r"extended|waiver ends?|valid through|as of|effective from|202[5-9])\b",
     re.I,
 )
 PASSPORT = re.compile(
-    r"\\b(?:biometric|identification number|travel document|refugee|"
-    r"passport card|diplomatic|service passport|non-citizen passport)\\b", re.I
+    r"\b(?:biometric|identification number|travel document|refugee|"
+    r"passport card|diplomatic|service passport|non-citizen passport)\b", re.I
 )
 ROUTE = re.compile(
-    r"\\b(?:airport|land border|port of entry|transit|cruise|"
-    r"airside|multiple entry|residen(?:t|ce)|permit)\\b", re.I
+    r"\b(?:airport|land border|port of entry|transit|cruise|"
+    r"airside|multiple entry|residen(?:t|ce)|permit)\b", re.I
 )
 CASE_IDS = {
     ("KW", "NZ"): ("published-waiver-suspension", 110),
