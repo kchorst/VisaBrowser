@@ -62,3 +62,22 @@ test('Published historical triggers are visible without assuming passport means 
   assert.equal(all.heading, 'Check health documents');
   assert.deepEqual(healthNotices('BR', 'FR'), []);
 });
+
+test('Jamaica reflects both vaccine-proof waiver groups', () => {
+  for (const passport of 'AL BA BG BY HR KZ MD ME MK RO RS'.split(' ')) {
+    assert.match(healthNotices('JM', passport)[1].text, /qualifying U.S., Canadian, UK or Schengen visa/);
+  }
+  for (const passport of ['EE', 'LT', 'LV', 'SI']) {
+    assert.doesNotMatch(healthNotices('JM', passport)[1].text, /qualifying/);
+  }
+});
+
+test('Nepal and Egypt polio notices follow the route across passports', () => {
+  for (const destination of ['NP', 'EG']) {
+    const notice = healthNotices(destination, 'FR').find(({ text }) => /polio/i.test(text));
+    assert.deepEqual(healthNotices(destination, 'GH').find(({ text }) => /polio/i.test(text)), notice);
+    assert.match(notice.text, /four weeks/);
+  }
+  assert.match(healthNotices('SA', 'GH').at(-1).text, /COVID-19 vaccination or immunity/);
+  assert.match(healthNotices('WS', 'FR').at(-1).text, /American Samoa/);
+});
