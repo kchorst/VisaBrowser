@@ -8,8 +8,8 @@ const single = (options, extra = {}) => ({ rows: [{ options, ...extra }], issues
 
 test('NO ISSUES categories reject every unresolved, conditional or foreign-document route', () => {
   assert.equal(classify(single(['free'])), 'free');
-  assert.equal(classify(single(['free'], { condition: 'Only at one airport' })), 'review');
-  assert.equal(classify(single(['free'], { flags: ['Online registration'] })), 'review');
+  assert.equal(classify(single(['free'], { condition: 'Only at one airport' })), 'steps');
+  assert.equal(classify(single(['free'], { flags: ['Online registration'] })), 'steps');
   assert.equal(classify(single(['free'], { controls: [{ field: 'qualify' }] })), 'review');
   assert.equal(classify(single(['existing'])), 'review');
   assert.equal(classify(single(['free'], { viaDocument: true })), 'review');
@@ -28,7 +28,7 @@ test('Mixed groups always use the most restrictive requirement and include actua
   const results = rank([['A','A'], ['B','B'], ['C','C'], ['D','D'], ['E','E']],
     [alex, aline], sample);
   assert.deepEqual(results.map(section => [section.id, section.destinations.length]),
-    [['free', 1], ['authorization', 2], ['required', 1], ['review', 1]]);
+    [['free', 1], ['steps', 0], ['authorization', 2], ['required', 1], ['review', 1]]);
   const visa = compare([alex, aline], 'E', sample);
   assert.equal(classify(visa), 'required');
   const unknown = compare([alex, aline], 'D', sample);

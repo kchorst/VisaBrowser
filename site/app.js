@@ -551,8 +551,9 @@ function countries(data, groupMode = false) {
     autocomplete: 'off', value: viewState.query });
   const results = el('div', { class: 'stack' });
   const people = activePassengers();
-  const filter = select('filter', [['all', 'All Countries'], ['free', 'Visa-Free'],
-    ['authorization', 'eVisa / Authorization'], ['required', 'Visa Required'],
+  const filter = select('filter', [['all', 'All Countries'], ['free', 'Visa-Free · No Additional Steps'],
+    ['steps', 'Visa-Free · Entry Steps Required'],
+    ['authorization', 'Electronic Visa / Visa on Arrival'], ['required', 'Visa Required'],
     ['review', 'Needs Review']], viewState.filter);
   const sections = people.length ? rank(destinations, people, data) : [{
     id: 'all', heading: 'All Countries', destinations: destinations.map(([id, name]) => ({ id, name }))
@@ -789,7 +790,7 @@ function pendingResearch(row, placeId, includeReason = false) {
 function passengerResult(row, placeId, saved, data) {
   const bad = row.options.includes('denied') || row.issue;
   const known = !row.options.includes('pending');
-  const tone = bad ? 'bad' : !known || row.condition ? 'warn' : 'good';
+  const tone = bad ? 'bad' : !known || row.condition || row.flags?.length ? 'warn' : 'good';
   const advice = row.options.map(option => actions[option]).filter(Boolean);
   const controls = [...new Map([...(row.controls ?? []), ...(row.questions ?? [])]
     .map(question => [`${question.id ?? ''}:${question.field}`, question])).values()].map(question => {
@@ -809,7 +810,11 @@ function passengerResult(row, placeId, saved, data) {
   });
   const research = !known ? pendingResearch(row, placeId) : null;
   const routes = row.routes?.map(option => el('p', {},
-    option.title, option.detail ? ` · ${option.detail}` : null));
+    option.url?.startsWith('https://') ? link(option.title, option.url) : option.title,
+    option.detail ? ` · ${option.detail}` : null));
+  const authority = row.official?.startsWith('https://') &&
+    !row.routes?.some(option => option.url === row.official) ?
+    el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
   const passportWarnings = (row.notes ?? []).filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
@@ -826,10 +831,11 @@ function passengerResult(row, placeId, saved, data) {
     row.home ? muted('Travel on your passport for this destination.') : null,
     known && !row.home && !row.options.includes('denied') ?
       muted(row.stay ? `Stay limit · ${row.stay}` : 'Stay limit unknown') : null,
-    requiresVisa ? muted(row.fee ? `Fee · ${row.fee}` : 'Fee unknown') : null,
+    row.fee ? muted(`Application / entry fee · ${row.fee}`) :
+      requiresVisa ? muted('Visa fee unknown') : null,
     row.entry ? el('p', {}, row.entry) : null,
     saved?.changes?.[row.passenger.id] ? el('p', { class: 'condition' }, saved.changes[row.passenger.id]) : null,
-    saved ? null : controls, research, routes, notes,
+    saved ? null : controls, research, authority, routes, notes,
     null);
 }
 
@@ -1173,6 +1179,14 @@ window.addEventListener('online', async () => {
 async function start() {
   try {
     await readCatalog();
+    // Route the masthead through the same guarded navigation as dashboard
+    // actions, instead of relying on a bare hash hyperlink. An unsaved
+    // comparison must still offer Save/Discard before leaving.
+    const homeBrand = document.querySelector('.brand-home');
+    homeBrand.addEventListener('click', event => {
+      event.preventDefault();
+      go('home');
+    });
     for (const tab of tabs) tab.addEventListener('click', () => {
       pendingDestination = '';
       const [screen, , origin] = route();

@@ -239,7 +239,7 @@ test('Audited matrix stays order-independent and pending never produces a green 
     }
   }
   const usa = person('HT', { 'us:effective-visa': 'yes' });
-  assert.equal(rank([['US', 'United States']], [usa], data)[3].heading, 'Needs Review');
+  assert.equal(rank([['US', 'United States']], [usa], data)[4].heading, 'Needs Review');
   assert.equal(statuses(row(person('SN'), 'X-JAN')), 'Prior permission required*');
 });
 

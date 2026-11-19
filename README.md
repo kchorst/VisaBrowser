@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.5
+# VisaBrowser v0.4.6
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
@@ -12,6 +12,8 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
 
 **Itinerary country cards** have a visible Show/Hide visa requirements hint and a separate always-visible Travel-Prep link for each destination, including saved searches. The title links Home; new screens start at the top, while returning to a filtered Browse/Group country list restores your previous position. The two Congos are labeled **Congo (Democratic Republic of the Congo)** and **Congo (Republic of the Congo)**, with their former names retained as search aliases.
+
+**Reviewed entry-classification corrections (v0.4.6):** visas and electronic entry permissions are separate from additional entry paperwork; visa-free destinations with a known requirement appear in their own **Visa-Free · Entry Steps Required** group rather than as unexplained visa restrictions. Officially reviewed cases include Kuwait passport New Zealand visa-waiver suspension (from 12 Nov 2026), current UK ETA passport eligibility and £20 application cost, US passport Mexico route-specific FMM documentation, temporary Korea K-ETA exemption and e-Arrival card, Australian ETA subclass 601 visa, and New Zealand NZeTA. These are targeted, cited overrides, **not** blanket corrections to 46,929 imported records. Unverified nationalities remain pending rather than receiving invented entry guarantees. A masthead click routes Home through the unsaved-result Save/Discard confirmation. See [official-source audit issue](https://github.com/kchorst/VisaBrowser/issues/18).
 
 **Lists and counts:** Browse Countries and Check Group Req start with country lists hidden, displaying each category's real count and a clearly labeled **Show countries** button. Other collections—travelers, saved searches, itinerary destinations and result groups—also show their item counts and **Show/Hide** controls. Lists of more than five items start collapsed; shorter lists appear expanded to keep immediate actions discoverable. The **Hide** control works on every list.
 

@@ -61,8 +61,8 @@ function evaluate(passenger, place, data) {
   if (rule.options.includes('free') &&
       /^(?:eta(?:-il| uk)?|k-eta|nzeta|etias|evisitor|evisa waiver|electronic(?:al)? (?:system for )?travel authori[sz](?:ation|ations|ed)|electronic travel authority)$/i
         .test(rule.sourceText ?? '')) {
-    return pending('The source gives an electronic authorization label. Verify who qualifies and whether a visa is also required.',
-      { notes: rule.notes, search: 'electronic travel authorization eligibility ordinary passport visa requirement', controls: rule.controls });
+    return pending('The source indicates a visa-waiver or electronic-authorization route, but official eligibility for this passport is not yet verified. This does not mean a conventional tourist visa is necessarily required.',
+      { notes: rule.notes, search: 'official electronic travel authorization eligibility ordinary passport visa requirement', controls: rule.controls });
   }
   const questions = [];
   for (const exception of rule.exceptions ?? []) {
@@ -139,24 +139,35 @@ export function groupDetail(result) {
   return [...counts].map(([label, count]) => `${count} ${label}`).join(' · ');
 }
 
+/**
+ * Keep visa-free entry with extra known steps separate from unresolved rules.
+ * `free` is reserved for travel with no identified additional requirements.
+ * `steps` still requires action and MUST NOT be rendered as "NO ISSUES".
+ */
 export function classify(result) {
-  if (!result.rows.length || result.pending || result.rows.some(row => row.options.includes('pending') || row.source?.unavailable))
+  if (!result.rows.length || result.pending || result.rows.some(row =>
+      row.options.includes('pending') || row.source?.unavailable || row.reason))
     return 'review';
   if (result.rows.some(row => row.options.some(option => ['denied', 'advance', 'permit'].includes(option))))
     return 'required';
-  if (result.rows.some(row => row.options.some(option => ['evisa', 'arrival', 'residentArrival', 'transit'].includes(option))))
+  if (result.rows.some(row => row.options.some(option =>
+      ['evisa', 'arrival', 'residentArrival', 'transit'].includes(option))))
     return 'authorization';
-  if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
-    !row.condition && !row.flags?.length && !row.controls?.length && !row.questions?.length && !row.viaDocument &&
-    !row.reason && !row.source?.error &&
-    (!row.source?.url || !sourceDelayed(row.source)))) return 'free';
+  if (result.rows.some(row => row.controls?.length || row.questions?.length ||
+      row.viaDocument || row.source?.error || (row.source?.url && sourceDelayed(row.source))))
+    return 'review';
+  if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free')) {
+    if (result.rows.some(row => row.condition || row.flags?.length)) return 'steps';
+    return 'free';
+  }
   return 'review';
 }
 
 export function rank(destinations, passengers, data, include = () => true) {
   const buckets = [
-    { id: 'free', heading: 'Visa-Free', destinations: [] },
-    { id: 'authorization', heading: 'eVisa / Authorization', destinations: [] },
+    { id: 'free', heading: 'Visa-Free · No additional steps identified', destinations: [] },
+    { id: 'steps', heading: 'Visa-Free · Entry Steps Required', destinations: [] },
+    { id: 'authorization', heading: 'Electronic Visa / Visa on Arrival', destinations: [] },
     { id: 'required', heading: 'Visa Required', destinations: [] },
     { id: 'review', heading: 'Needs Review', destinations: [] }
   ];

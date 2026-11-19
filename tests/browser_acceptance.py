@@ -90,7 +90,7 @@ def fixture(browser, base):
 
     # Browse Countries (not only Group Req) starts with every category collapsed.
     page.get_by_role('button', name='Browse Countries').click()
-    expect(page.locator('.country-section')).to_have_count(4)
+    expect(page.locator('.country-section')).to_have_count(5)
     assert all(section.locator('.country-list').is_hidden()
                for section in page.locator('.country-section').all())
     page.get_by_label('Filter requirements').select_option('review')
@@ -124,12 +124,12 @@ def fixture(browser, base):
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
-    expect(page.locator('.country-section')).to_have_count(4)
+    expect(page.locator('.country-section')).to_have_count(5)
     assert all(item.locator('.country-list').is_hidden()
                for item in page.locator('.country-section').all())
-    expect(page.get_by_text(re.compile(r'Visa-Free \(1\)'))).to_be_visible()
+    expect(page.get_by_text(re.compile(r'Visa-Free · No additional steps identified \(1\)'))).to_be_visible()
     page.get_by_label('Search destinations').fill('Destination B')
-    expect(page.get_by_text(re.compile(r'eVisa / Authorization \(1\)'))).to_be_visible()
+    expect(page.get_by_text(re.compile(r'Electronic Visa / Visa on Arrival \(1\)'))).to_be_visible()
     page.get_by_label('Filter requirements').select_option('authorization')
     page.get_by_role('button', name='Show countries').click()
     page.get_by_role('button', name='Destination B').click()
@@ -441,6 +441,21 @@ def real_country_journeys(browser, base):
     editor.get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
+    # A masthead click is a real Home navigation, even with unsaved country
+    # requirements: it offers Save/Discard and respects the user's choice.
+    page.goto(base + '#destination/GB/view')
+    expect(page.get_by_role('heading', name='United Kingdom')).to_be_visible()
+    expect(page.get_by_role('link', name='Official UK ETA eligibility and application').first).to_have_attribute(
+        'href', 'https://www.gov.uk/eta')
+    expect(page.get_by_text('Application / entry fee · £20 (UK ETA application)', exact=True).first).to_be_visible()
+    page.get_by_role('link', name='VisaBrowser — go to Home').click()
+    expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
+    page.wait_for_function('window.scrollY === 0')
+    # On Home, clicking the title again keeps Home at the top.
+    page.get_by_role('link', name='VisaBrowser — go to Home').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (
         'Shipped country workflows overflow the mobile viewport')
     assert not errors, errors
