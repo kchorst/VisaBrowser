@@ -436,7 +436,7 @@ export function reviewedRule(passenger, destination, base, data) {
       [], { routes: [{ title: 'Official UK ETA eligibility list',
         url: 'https://www.gov.uk/guidance/check-when-you-can-get-an-electronic-travel-authorisation-eta' }] });
     if (ukEtaEligible.has(nationality)) return rule('free', official.ukEta, {
-      stay: base.stay || 'Up to six months per visit',
+      stay: base?.stay || 'Up to six months per visit',
       flags: ['Obtain UK ETA before travel unless exempt'],
       notes: ['UK ETA application fee: £20 (verified November 2026). The UK lists specific exemptions and eligibility conditions.',
         'An ETA is permission to travel, not guaranteed admission.'],
