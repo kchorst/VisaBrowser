@@ -1,10 +1,14 @@
-# VisaBrowser v0.3.0 User Guide
+# VisaBrowser v0.4.0 User Guide
 
 ## Start and update on Windows
 
 Extract the ZIP and double-click **Start-VisaBrowser.bat**. Leave its window open while using VisaBrowser. You can also run `py -3 scripts/local.py` from PowerShell in the extracted folder.
 
 Use **Download latest** in the footer for a new app release. For newer published visa data in the current app, double-click **Update-Visa-Data.bat**, then stop and restart **Start-VisaBrowser.bat**. A successful data refresh updates the displayed data date. The app version changes when you start a newer release. Keep the same browser and local address to retain saved passengers and comparisons.
+
+## Mobile dashboard
+
+On first launch add a traveler, then open **Home** to use the focused actions **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. On a result, the **Important Travel Requirements & Disclaimer** is collapsed by default; expand it to read passport, documentation, health, travel history, stay and fee reminders. A **NO ISSUES** label does not certify passport validity or guarantee entry.
 
 ## Set up your group
 
