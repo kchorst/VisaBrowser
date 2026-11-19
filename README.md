@@ -1,51 +1,48 @@
 # VisaBrowser v0.4.0
 
-**[Open VisaBrowser on your phone](https://kchorst.github.io/VisaBrowser/)**
+**[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
-VisaBrowser compares tourist entry requirements for travelers with different passports. It runs in your mobile or desktop browser.
+VisaBrowser is a mobile-first browser app for comparing tourist entry requirements for one traveler or a group with different passports. **The hosted browser link is the primary product**; no download, account, or installation is required. A secondary, optional Windows local-server package is available for people who prefer to run a copy on their own machine.
 
-## Get started
+## Quick start
 
-1. Add traveler names and passport countries (and optional existing visas or permits).
-2. Open the mobile dashboard to **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**.
-3. Review each traveler’s result and the expandable travel disclaimer; check official requirements before travel.
+1. Open **[VisaBrowser](https://kchorst.github.io/VisaBrowser/)** in the browser on your phone, tablet or PC.
+2. Add each traveler's name and passport country, plus existing visas or residence permits when relevant. Choose **Continue** or add another traveler.
+3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
+4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
 
-The [v0.4.0 UX redesign specification](docs/VisaBrowser-UX-Spec-v0.4.0.md) tracks the complete approved design. The current release begins its implementation; features not yet implemented are not represented as complete.
+**View Country** supports a searchable destination picker; **Browse Countries** filters by visa-free, eVisa/authorization, visa required or needs review; **Check Group Req** uses the most restrictive group status; **Search Multiple** builds an ordered itinerary with editable country chips. Results can be copied or shared with destination-specific links to [Travel-Prep](https://kchorst.github.io/Travel-Prep/).
 
-Select **Save offline** to make the visa data available on this device when you’re offline. When **Update available** appears, select it to refresh that copy. See the [User Guide](USER_GUIDE.md) for more detail.
+Travelers persist in local browser storage. **Search results persist only when you explicitly choose Save Search**. Saved single destinations and itineraries retain their original snapshots; refreshing results is a confirmed, all-or-nothing action. A relevant traveler-profile change or an older result produces **Needs Refresh**. Saved data is not synchronized between browsers, devices or the optional local server.
 
-## Visa data and updates
+For screens, examples and limitations, see the [User Guide](USER_GUIDE.md) and the approved [v0.4.0 specification](docs/VisaBrowser-UX-Spec-v0.4.0.md).
 
-The date shown in VisaBrowser identifies the data snapshot. Open **Wikipedia source** on a result to see when that passport's source last refreshed. Reviewed exceptions can supplement the Wikipedia table. Check official immigration guidance before traveling.
+## Data confidence and offline use
 
-Once scheduled refreshes are enabled, GitHub Actions attempts to refresh the mapped Wikipedia sources on Tuesdays at **10:23 UTC**. The app uses the published snapshot when you search. If a passport's source fails to refresh, VisaBrowser keeps the previous usable rules and shows **Update delayed**. A source older than 14 days can cause an otherwise favorable result to show **Pending verification**.
+VisaBrowser uses Wikipedia-derived visa tables plus carefully reviewed exception rules. A **Pending verification** result indicates that missing, stale, conditional or conflicting information needs checking. Country-specific conditions remain visible even when the general travel disclaimer is collapsed.
 
-## Run locally on Windows
+Use **Save offline** in the app to download a full local visa-data pack for use without a connection. When **Update available** appears, choose it to update that pack. The data date appears in the header. Offline or stale data is **not a substitute for confirmation with immigration authorities**.
 
-For a self-hosted copy, open [GitHub Releases](https://github.com/kchorst/VisaBrowser/releases/latest) and download **VisaBrowser-Windows.zip** when available.
+## Optional Windows local-server package
 
-1. Download the ZIP and choose **Extract All**. Open the extracted `VisaBrowser` folder.
-2. Double-click **Start-VisaBrowser.bat**. It requires Python 3.9 or later and opens [http://localhost:8000](http://localhost:8000) in your default browser.
-3. Keep the command window open while you use VisaBrowser. Press **Ctrl+C** or close the window to stop it.
+The hosted browser link above is recommended. For the local copy, use the latest **[GitHub Release](https://github.com/kchorst/VisaBrowser/releases/latest)** and download `VisaBrowser-Windows.zip`.
 
-To start from PowerShell, open it in the extracted folder and run:
+1. Extract the ZIP and open the `VisaBrowser` folder.
+2. Double-click **Start-VisaBrowser.bat**. Python 3.9+ is required. The local server opens `http://localhost:8000` in your browser.
+3. Leave the command window open while using the app; close it to stop the server.
 
-```powershell
-py -3 scripts/local.py
-```
+PowerShell alternative: `py -3 scripts/local.py`. The `Update-Visa-Data.bat` script updates locally published visa data. Use the same localhost address, port and browser profile across local updates to retain that copy's saved records. The hosted app has separate browser storage.
 
-If Windows does not recognize `py`, use `python scripts/local.py`. To serve only the bundled visa data with Python’s standard server, run `py -3 -m http.server 8000 --bind 127.0.0.1 --directory site` and open the same address yourself.
+The command/status window displayed by Windows belongs to the **optional local server**. It is **not required** when using the hosted VisaBrowser link on a phone or PC.
 
-Keep using the same browser profile and address, including the port, to retain passenger profiles and saved comparisons across ZIP upgrades. Browser data for the hosted site is separate.
+## Developer tests and release
 
-To refresh the local visa data, run **Update-Visa-Data.bat** or `py -3 scripts/local.py --update`, then restart **Start-VisaBrowser.bat**. A successful refresh updates the visa-data date. An interrupted download leaves the previous dataset available. To update the app version, download a newer release, close the old VisaBrowser tabs, stop its server, and start the new copy.
+`npm test` runs Node rule and UX-safety tests. `python -m unittest discover -s tests -p 'test_*.py'` runs Python source/import tests. `python scripts/validate.py` validates generated data. `python tests/browser_acceptance.py` runs mobile-emulated Chromium workflows and requires Playwright with Chromium installed.
 
-## Maintainer setup
+GitHub Actions validates all these steps before publishing the site and release package. The workflow can optionally refresh mapped Wikipedia sources on its weekly schedule (configured by `VISABROWSER_ENABLE_REFRESH`). The release ZIP contains the same site as the deployed browser app.
 
-1. In repository settings, choose **GitHub Actions** under **Pages → Build and deployment**.
-2. Run **Validate and deploy VisaBrowser** on `main`. Select **Fetch Wikipedia rule data before deploying** for a manual refresh. Set the repository Actions variable `VISABROWSER_ENABLE_REFRESH` to `true` to enable the weekly schedule.
-3. Push a version tag on the release commit. After validation passes, Actions creates the GitHub Release and attaches **VisaBrowser-Windows.zip**.
+**Real-device Windows and mobile acceptance remains separate from CI.** Browser-emulated QA and automated tests do not establish success on every actual device.
 
-## License
+## License and source attribution
 
-VisaBrowser software uses the [PolyForm Noncommercial License 1.0.0](LICENSE.md). Wikipedia-derived material in `site/data/` is adapted under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The original article links are in `site/data/index.json` and the relevant passport files. The import converts Wikipedia tables into structured rules and extracts or summarizes source notes.
+Software: [PolyForm Noncommercial License 1.0.0](LICENSE.md). Wikipedia-derived rules in `site/data/`: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Source links and snapshot metadata are preserved in the published data files. Always verify current visa, authorization, passport, health, transit and entry rules with appropriate authorities before traveling.
