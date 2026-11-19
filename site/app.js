@@ -546,11 +546,9 @@ function passengerResult(row, placeId, saved, data) {
       muted(row.stay ? `Stay limit · ${row.stay}` : 'Stay limit unknown') : null,
     requiresVisa ? muted(row.fee ? `Fee · ${row.fee}` : 'Fee unknown') : null,
     row.entry ? el('p', {}, row.entry) : null,
-    saved && requirementChange(row, saved) ? el('p', { class: 'condition' }, requirementChange(row, saved)) : null,
-    controls, research, routes, notes,
-    row.official ? el('p', {}, link('Official guidance', row.official)) : null,
-    row.source?.url ? el('p', {}, link('Wikipedia source', row.source.url),
-      row.source.lastSuccess ? el('small', {}, ` · Refreshed ${row.source.lastSuccess.slice(0, 10)}`) : null) : null);
+    saved && saved.result && requirementChange(compare([row.passenger], placeId, data).rows[0], saved) ? el('p', { class: 'condition' }, requirementChange(compare([row.passenger], placeId, data).rows[0], saved)) : null,
+    saved ? null : controls, research, routes, notes,
+    null);
 }
 
 function destinationTravelNotes(placeId) {
@@ -570,9 +568,10 @@ function destinationTravelNotes(placeId) {
 
 function destinationDetails(placeId, saved, data) {
   const people = saved?.passengers ?? activePassengers();
-  const summary = compare(people, placeId, data);
+  const freshSummary = compare(people, placeId, data);
+  const summary = saved?.result ? structuredClone(saved.result) : freshSummary;
   const save = () => {
-    const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary) };
+    const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary), result: structuredClone(summary) };
     const chosen = prompt('Name this saved search', record.name);
     if (chosen === null) return;
     record.name = chosen.trim() || record.name;
@@ -592,6 +591,7 @@ function destinationDetails(placeId, saved, data) {
         const refreshed = compare(people, placeId, fresh);
         if (refreshed.rows.some(row => row.source?.unavailable)) throw new Error('Some sources are unavailable');
         saved.snapshot = resultSnapshot(refreshed);
+        saved.result = structuredClone(refreshed);
         saved.checkedAt = new Date().toISOString();
         persist();
       } catch { alert('Refresh failed. Your saved results remain unchanged.'); }
@@ -604,16 +604,7 @@ function destinationDetails(placeId, saved, data) {
     }), 'danger')
   ] : [people.length ?
     button('Save destination', save, 'primary') : null];
-  const edits = saved ? panel(el('h2', {}, 'Saved passengers'),
-    ...people.map(person => el('div', { class: 'row' }, el('span', {}, person.name),
-      button('Edit', () => passengerEditor(person, async updated => {
-        const updatedData = await loadGroup([updated]);
-        if (!state.saved.some(record => record.id === saved.id)) return;
-        saved.passengers = saved.passengers.map(p => p.id === person.id ? updated : p);
-        saved.snapshot[person.id] = resultSnapshot(compare([updated], placeId, updatedData))[person.id];
-        persist();
-        render(true);
-      }), '', { 'aria-label': `Edit saved passenger ${person.name}` })))) : null;
+  const edits = saved ? muted('This is the original saved result. Refresh to replace it with current requirements.') : null;
   const cumulative = summary.rows.filter(row => row.cumulative).map(row => {
     const answer = select('recent', [['yes', 'Yes'], ['no', 'No']], '', 'Skip for now');
     const hint = muted('');
