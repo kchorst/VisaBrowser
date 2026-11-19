@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.9
+# VisaBrowser v0.4.10
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
