@@ -336,7 +336,7 @@ function passengerList() {
       pendingDestination = '';
       go(`destination/${id}`);
     } else go('home');
-  }), 'primary');
+  }), state.passengers.length ? '' : 'primary');
   const selection = el('span', { role: 'status' });
   const clearButton = button('Clear selection', () => {
     state.selected = [];
@@ -566,7 +566,8 @@ function multiSearch(data) {
             '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
           button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
             '', { 'aria-label': `Remove ${places[id]}` })))));
-    search.disabled = !people.length || !itinerary.length;
+    search.disabled = !people.length || !itinerary.length || comparedItinerary !== null;
+    search.classList.toggle('primary', comparedItinerary === null);
     clear.hidden = !itinerary.length;
     results.replaceChildren();
     if (!comparedItinerary?.length) { if (unsavedResult?.itinerary) unsavedResult = null; return; }
