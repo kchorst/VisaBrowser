@@ -55,6 +55,12 @@ const codes = list => new Set(list.split(' '));
 const schengen = codes('AT BE BG HR CZ DK EE FI FR DE GR HU IS IT LV LI LT LU MT NL NO PL PT RO SK SI ES SE CH');
 const russianRestrictions = codes('NO FI EE LV LT PL');
 const nzReviewed = codes('XK PS AF SN CD CG IR RU BY HT TM CN');
+/* Nationalities in the UK government's 9 Apr 2026 ETA eligibility list.
+   Do not infer eligibility from the Wikipedia heading alone. TW requires
+   an identification number in its passport and is handled separately. */
+const ukEtaEligible = codes('AD AG AR AU AT BS BH BB BE BZ BR BN BG CA CL CR HR CY CZ DK EE FI FR DE GR GD GT GY HK HU IS IT IL JP KI KW LV LI LT LU MO MY MV MT MH MU MX FM MC NL NZ NO OM PW PA PG PY PE PL PT QA RO WS SM SA SC SG SB KR SK SI ES KN VC SE CH TO TV AE US UY VA');
+const ukEtaNotEligible = codes('NI LC NR BW TT CO');
+
 const usRestricted = codes('AF PS IR CG HT SN');
 const tmReviewed = codes('HT PS IR CN AF RU BY US SN CD CG XK');
 const chinaTransit = codes('AL AT BY BE BA BG HR CY CZ DK EE FI FR DE GR HU IS IE IT LV LT LU MT MC ME NL MK NO PL PT RO RU RS SK SI ES SE CH UA GB CA US AR BR CL MX AU NZ BN ID JP KG QA SG KR AE VN');
@@ -417,6 +423,26 @@ function mutualVisa(passenger, destination, base) {
 
 export function reviewedRule(passenger, destination, base, data) {
   const nationality = passenger.passport;
+  if (destination === 'GB') {
+    if (nationality === 'IE' && base?.options?.includes('free')) return rule('free', official.ukEta, {
+      notes: ['Irish citizens generally do not need a UK ETA or visitor visa; check other travel-document and Common Travel Area conditions.']
+    });
+    if (nationality === 'TW' && base?.options?.includes('free')) return unknown(
+      'Taiwan ETA eligibility requires a passport containing a Taiwanese identification number. Confirm this before relying on the ETA route.',
+      official.ukEta, 'UK ETA Taiwan passport identification card number');
+    if (ukEtaNotEligible.has(nationality) && base?.options?.includes('free')) return unknown(
+      'The latest UK ETA nationality list does not include this passport. Check whether a Standard Visitor visa is required.',
+      official.ukEta, 'UK ETA visitor visa eligibility nationality 2026',
+      [], { routes: [{ title: 'Official UK ETA eligibility list',
+        url: 'https://www.gov.uk/guidance/check-when-you-can-get-an-electronic-travel-authorisation-eta' }] });
+    if (ukEtaEligible.has(nationality) && base?.options?.includes('free')) return rule('free', official.ukEta, {
+      stay: base.stay || 'Up to six months per visit',
+      flags: ['Obtain UK ETA before travel unless exempt'],
+      notes: ['UK ETA application fee: £20 (verified November 2026). The UK lists specific exemptions and eligibility conditions.',
+        'An ETA is permission to travel, not guaranteed admission.'],
+      routes: [{ title: 'Official UK ETA eligibility and application', url: official.ukEta }]
+    });
+  }
   // An emergency immigration direction applies independently of a wiki snapshot.
   // From 12 Nov 2026 NZDT Kuwait passports cannot use the NZeTA visa waiver.
   // Do not reinstate the waiver automatically after the published suspension ends.
