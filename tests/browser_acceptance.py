@@ -203,7 +203,7 @@ def fixture(browser, base):
     page.get_by_role('dialog').get_by_role('button', name='Save passenger').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
-    page.get_by_role('button', name='Open').last.click()
+    page.get_by_role('button', name='Open', exact=True).first.click()
     page.once('dialog', lambda dialog: dialog.accept())
     page.get_by_role('button', name='Refresh Results').click()
     expect(page.get_by_role('heading', name='Aline')).to_be_visible()
