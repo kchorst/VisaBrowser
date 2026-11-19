@@ -537,7 +537,18 @@ function multiSearch(data) {
     const all = comparedItinerary.map(id => ({ id, summary: compare(people, id, data) }));
     const shareText = all.map(({ id, summary }) => reportText(id, summary)).join('\n\n---\n\n');
     results.append(header,
-      el('div', { class: 'actions' }, button('Copy Itinerary', () => copyOrShare(shareText)),
+      el('div', { class: 'actions' }, button('Save Search', () => {
+        const draftName = `${all.map(item => places[item.id]).join(' → ')} · ${checkedDate()}`;
+        const name = prompt('Name this saved itinerary', draftName);
+        if (name === null) return;
+        const record = { id: uid(), name: name.trim() || draftName,
+          checkedAt: new Date().toISOString(), itinerary: all.map(item => item.id),
+          passengers: structuredClone(people),
+          results: Object.fromEntries(all.map(({ id, summary }) => [id, structuredClone(summary)])) };
+        state.saved.push(record);
+        persist();
+        go(`saved/${record.id}`);
+      }, 'primary'), button('Copy Itinerary', () => copyOrShare(shareText)),
         button('Share Itinerary', () => copyOrShare(shareText, true))),
       ...all.map(({ id, summary }, index) =>
         el('details', { class: 'panel country-result' }, el('summary', { tabindex: '0' },
@@ -734,6 +745,52 @@ function destinationDetails(placeId, saved, data) {
     notes, edits, disclaimer())];
 }
 
+function savedItineraryDetails(saved, data) {
+  const checked = saved.checkedAt?.slice(0, 10) ?? 'Date unavailable';
+  const report = saved.itinerary.map(id => reportText(id, saved.results[id], checked)).join('\n\n---\n\n');
+  const refresh = button('Refresh Results', async () => {
+    if (!confirm('Refresh and replace this saved itinerary? Previous results will not be retained.')) return;
+    try {
+      if (!navigator.onLine) throw new Error('Offline');
+      await readCatalog();
+      for (const person of saved.passengers) cache.delete(person.passport);
+      const fresh = await loadGroup(saved.passengers);
+      const results = Object.fromEntries(saved.itinerary.map(id => [id, compare(saved.passengers, id, fresh)]));
+      if (Object.values(results).some(result => result.rows.some(row =>
+        row.source?.unavailable || (row.source?.url &&
+          sourceDelayed(row.source, new Date(), catalog.overdueDays)))))
+        throw new Error('Sources are unavailable or outdated');
+      saved.changes = Object.fromEntries(saved.itinerary.map(id => {
+        const previous = { snapshot: resultSnapshot(saved.results[id]) };
+        const changes = results[id].rows.map(row => requirementChange(row, previous)).filter(Boolean);
+        return [id, changes];
+      }));
+      saved.results = structuredClone(results);
+      saved.checkedAt = new Date().toISOString();
+      persist();
+      render(true);
+    } catch (error) { alert('Refresh failed. Original saved results were preserved. ' + error.message); }
+  });
+  return [title(saved.name || 'Saved itinerary'),
+    muted(`Saved results · Checked ${checked}`),
+    el('div', { class: 'actions' }, refresh,
+      button('Copy', () => copyOrShare(report)),
+      button('Share', () => copyOrShare(report, true)),
+      button('Delete', () => confirmAction('Delete this saved itinerary?', 'Delete', () => {
+        state.saved = state.saved.filter(item => item.id !== saved.id);
+        persist();
+        go('saved');
+      }), 'danger')),
+    ...saved.itinerary.map((id, index) => el('details', { class: 'panel country-result' },
+      el('summary', {}, `${index + 1}. ${places[id]} · ${saved.results[id].pending ? 'Needs Review' :
+        saved.results[id].group || issueLabel(saved.results[id].issues)}`),
+      el('div', { class: 'stack' },
+        ...(saved.changes?.[id]?.length ? [muted(saved.changes[id].join(' · '))] : []),
+        saved.results[id].rows.map(row => passengerResult(row, id, saved, data)),
+        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`))))),
+    disclaimer()];
+}
+
 function savedNeedsRefresh(record) {
   if (!record.checkedAt || Date.now() - Date.parse(record.checkedAt) > 30 * 86400000) return true;
   return record.passengers.some(original => {
@@ -746,7 +803,7 @@ function savedNeedsRefresh(record) {
 function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
     [...state.saved].reverse().map(record => panel(el('div', { class: 'row' },
-      el('div', {}, el('h2', {}, record.name ?? places[record.placeId] ?? record.placeId),
+      el('div', {}, el('h2', {}, record.name ?? (record.itinerary?.map(id => places[id]).join(' → ') || places[record.placeId] || record.placeId)),
         muted(record.passengers.map(p => p.name).join(', ')),
         muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
         muted(savedNeedsRefresh(record) ? 'Needs Refresh' : '')),
@@ -764,7 +821,7 @@ function breadcrumbs(screen, id, parent, saved) {
   const items = [home];
   if (screen === 'destination' || saved) {
     items.push(el('a', { href: `#${parent}` }, screenNames[parent]));
-    items.push(el('span', { 'aria-current': 'page' }, places[saved?.placeId ?? id] ?? 'Destination'));
+    items.push(el('span', { 'aria-current': 'page' }, saved?.name ?? places[saved?.placeId ?? id] ?? 'Destination'));
   } else {
     items.push(el('span', { 'aria-current': 'page' }, screenNames[parent]));
   }
@@ -790,6 +847,7 @@ async function render(focus = false) {
     else if (screen === 'group') nodes = countries(data, true);
     else if (screen === 'countries') nodes = countries(data);
     else if (screen === 'multi') nodes = multiSearch(data);
+    else if (saved?.itinerary?.length) nodes = savedItineraryDetails(saved, data);
     else if (saved && places[saved.placeId]) nodes = destinationDetails(saved.placeId, saved, data);
     else if (screen === 'saved') nodes = savedList();
     else if (screen === 'destination' && destinations.some(([code]) => code === id)) nodes = destinationDetails(id, null, data);
