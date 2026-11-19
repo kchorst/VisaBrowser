@@ -1,61 +1,84 @@
-# VisaBrowser v0.4.0 User Guide
+# VisaBrowser v0.4.0 — User Guide
 
-## Start and update on Windows
+## Open the app on a phone or computer
 
-Extract the ZIP and double-click **Start-VisaBrowser.bat**. Leave its window open while using VisaBrowser. You can also run `py -3 scripts/local.py` from PowerShell in the extracted folder.
+**[Open VisaBrowser](https://kchorst.github.io/VisaBrowser/)** in any modern mobile or desktop browser. It is designed primarily for use as a hosted website on your phone. No Windows installation is required for that version. The optional Windows local package is described below.
 
-Use **Download latest** in the footer for a new app release. For newer published visa data in the current app, double-click **Update-Visa-Data.bat**, then stop and restart **Start-VisaBrowser.bat**. A successful data refresh updates the displayed data date. The app version changes when you start a newer release. Keep the same browser and local address to retain saved passengers and comparisons.
+## 1. Set up travelers
 
-## Mobile dashboard
+On your first visit, choose **Add Another Traveler**. Enter a name or initials and choose the passport-issuing country. Optionally add existing visas or residence permits if you want them considered when checking a destination. Select **Save passenger**, then **Add Another Traveler** or **Continue**.
 
-On first launch add a traveler, then open **Home** to use the focused actions **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. On a result, the **Important Travel Requirements & Disclaimer** is collapsed by default; expand it to read passport, documentation, health, travel history, stay and fee reminders. A **NO ISSUES** label does not certify passport validity or guarantee entry.
+The **Travelers** screen lets you change names, passport countries, and saved visas/permits or remove a traveler with confirmation. Checkboxes choose which travelers are included in the next search. The app does **not** ask for passport expiration dates: you must verify each traveler's validity and blank pages yourself.
 
-## Set up your group
+Travelers are saved automatically in this browser's local storage. Different devices, browsers and local-server addresses do not share profiles.
 
-1. Open **Passengers** and select **Add passenger**.
-2. Enter a name and choose the passport the traveler will use. For someone with dual citizenship, choose the passport for this trip.
-3. To add a visa or residence document, use **Add visa or permit**. An optional label can distinguish two different documents from the same issuer. Under **Edit**, the saved rows show their current issuer and type. Use **Clear answers** or **Reset entry answers** to reconsider earlier answers.
-4. Select **Save passenger**. Use the checkbox by each name to choose the current group. **Clear selection** keeps everyone available. Check the selected count, then choose **Countries** or **Multi-search**.
+## 2. Select a dashboard action
 
-## Compare destinations
+There are four ways to browse requirements:
 
-Open **Multi-search** to check a shortlist. Type names separated by commas into **Destinations to compare**, for example `Brazil, USA, Japan`, and select **Check destinations**. You’ll see each selected passenger’s status for each matched destination. Names and destination codes are accepted. Put a name that contains a comma in double quotes, or use its code. Choose **View details** for actions and sources, or **Clear list** to start over. The **Multi-search** breadcrumb in a destination returns to the same list. Switching top-level tabs clears it.
+- **View Country** — type part of one destination's name and select it to open that country's requirements immediately.
+- **Browse Countries** — search destinations alphabetically and filter by **Visa-Free**, **eVisa / Authorization**, **Visa Required**, or **Needs Review**. Each section displays an actual country count; tap a section to expand or collapse it.
+- **Check Group Req** — compare all selected travelers using the most restrictive group classification. Group country lists start collapsed. When you open a country from this screen, the Group Summary starts expanded.
+- **Search Multiple** — enter countries individually, then use **Up**, **Down**, or **Remove** on the destination chips to arrange the trip. Select **Search** once to compare the complete itinerary. Tap a result section to expand each traveler's details.
 
-Under **Countries**, use **Search and filter**. Leave **Search destinations** empty to browse all groups, or type a country or territory. Use **Filter by visa result** to filter for visa-free, no conventional advance visa, or pending results. Open a destination to see each traveler’s status, any action they need to take, and source notes.
+For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
 
-| Result | What it means |
+## 3. Interpret results carefully
+
+Each country's result lists the requirements found for each selected traveler. Conditions, visa or authorization actions, known stay limits, fees when provided, and warnings appear inline. The mixed-group summary is expandable. Some outcomes depend on answers about a previously held visa, permit or special eligibility.
+
+**NO ISSUES** is deliberately conservative: the available rules found no known visa or authorization obstacle for **every** selected traveler. It does *not* verify passport expiry, blank pages, health, transit requirements, entry eligibility, or grant admission.
+
+| Category | Interpretation |
 | --- | --- |
-| **Visa-free for everyone** | The app found no visa requirement for the group. A traveler may still need an electronic travel authorization, registration, or other preparation. |
-| **E-visa or visa on arrival for everyone** | Every traveler has one or both of those routes available in the data. Open the destination to see who must apply before travel and who has an option on arrival. |
-| **1 issue**, **2 issues**, and higher | The number counts travelers flagged by the app. A mix of visa-free travelers and travelers needing an e-visa or visa on arrival can appear here. Read each traveler’s row to distinguish those cases from an advance visa requirement or entry ban. |
-| **Pending verification** | The app explains which rule or answer needs checking. Use the search terms provided and the official guidance link when available. A pending passenger keeps the group out of favorable results. |
-| **Existing visa covers this trip** | The app found a route using the existing travel document and the details you confirmed. |
-| **Citizen entry** | This traveler is entering on their own country’s passport. The other travelers’ requirements still apply. |
+| **Visa-Free** | The group has an unqualified visa-free classification in the available rules, without outstanding prerequisites identified by the classifier. |
+| **eVisa / Authorization** | At least one traveler needs an electronic visa, authorization, arrival visa or related action, and no traveler has a stricter visa requirement in the current classification. |
+| **Visa Required** | One or more travelers need an advance visa or permission or face a documented restriction. |
+| **Needs Review** | A source, exception, eligibility condition or other detail remains uncertain; do not assume visa-free travel. |
 
-Choose **Open Travel-Prep** at the bottom of the result to open the same destination in a new tab. TravelPrep displays a notice if it has no profile for that destination.
+The country lists use the most restrictive traveler, not an average. A status may change when a traveler changes their passport, visa or residence permit, or when fresh published rules become available.
 
-An asterisk marks a condition shown in the traveler’s result. **Update delayed** shows a source that could not be refreshed and the last successful refresh date, when available.
+At the bottom of every results screen, **Important Travel Requirements & Disclaimer** is collapsed by default. Expand it for the full reminder about passport validity, blank pages, visas and documents, health/vaccines, travel history, allowed stays, fees, transit and immigration discretion. Critical country-specific conditions remain visible above it.
 
-The shortlist also shows known stay limits, preparation steps, and conditions such as a waiver’s published end date. If a waiver needs a passport or itinerary detail, open **View details** to answer the question. A waiver past its last confirmed date displays **Pending verification** until the current rule can be confirmed.
+For destination preparation, choose **Open in Travel-Prep**. The link opens Travel-Prep in a separate tab for that specific country where supported.
 
-## Save and revisit a destination
+## 4. Copy or share a result
 
-Choose **Save destination** on a result page. Under **Saved destinations**, choose **Open** to revisit it. Use **Recalculate** to check against the latest data available to the app, or **Edit** under **Saved passengers** to change a traveler for that saved comparison. Saved groups are separate from the current passenger list.
+On a country result, select **Copy** to copy the current country and group report, or **Share** to use a mobile device's share sheet when supported. **Copy Itinerary** and **Share Itinerary** include the selected countries in travel order.
 
-Passengers and saved destinations are stored in the current browser. The local preview and the GitHub Pages site each have their own saved data.
+Shared reports include the travelers and their results, date checked, VisaBrowser attribution, country-specific Travel-Prep links and the complete disclaimer—even when the on-screen disclaimer was collapsed.
 
-Before booking, check current entry and transit requirements with the relevant immigration authority, embassy, or consulate. The app’s **Source notes** and **Wikipedia source** links explain the data behind each comparison.
+## 5. Save and reopen comparisons
 
-## Source dates and travel notes
+Search results are **not** saved automatically. Choose **Save destination** for a single-country result or **Save Search** for a multi-country itinerary. A suggested name can be edited, such as *Europe Trip 2027*.
 
-GitHub Actions is configured to try refreshing the mapped Wikipedia articles every Tuesday at 10:23 UTC once weekly refresh is enabled. Published updates reach the local Windows copy after **Update-Visa-Data.bat** succeeds and you restart. Check **Wikipedia source** for the relevant passport’s last successful refresh. Destination notes can also highlight itinerary details, such as the East Africa Tourist Visa or identification checks on ferries to Zanzibar.
+When leaving unsaved results inside the app, a prompt offers **Save Search**, **Discard** or **Cancel**. Closing a browser tab is different: browsers do not support reliable custom Save/Discard/Cancel prompts on closing, so explicitly save anything important.
 
-## Use VisaBrowser offline
+Choose **Saved Searches** from the dashboard to view saved records newest first. You can **Open**, **Rename** and **Delete** (with confirmation). Opening a saved comparison shows **the original saved result**, not a silently recalculated answer, together with its checked date.
 
-1. Open VisaBrowser while connected and select **Save offline** beside the version.
-2. Wait for **Saved offline**. The date below the header identifies the saved dataset. The complete download lets you use passports you haven’t opened before on this browser and device.
-3. Reopen the app online or reconnect while it is open to check for **Update available**. Select it to download the replacement. An interrupted update leaves the previous complete download available.
+**Refresh Results** asks permission before replacing the saved snapshot. A refresh checks all the required current rule sources and replaces the result only if successful; on failure the original saved result remains intact. The app reports changed requirements. A saved search is labeled **Needs Refresh** if it is over 30 days old or relevant details in the live traveler profile have changed. Searches have no version history.
 
-An **Offline** message means the app is using cached data. When a source is overdue, an otherwise favorable result may show **Pending verification**. Check the dataset date before relying on an offline result. Opening official sources and following the Travel-Prep link require a connection.
+Because storage is local to the current browser/profile, clearing website data or switching devices can remove saved searches. v0.4.0 does not provide cloud synchronization or import/export.
 
-You can use the offline feature from the HTTPS hosted site or from the local server described in the README. Browser storage limits or clearing site data can remove offline downloads.
+## 6. Use the app offline
+
+While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Update available** lets you replace it.
+
+An interrupted offline update preserves the previous complete pack. Always check the displayed data date and do not treat outdated or unavailable sources as travel clearance. Links to Travel-Prep or external sites require a connection.
+
+## 7. Optional Windows local version
+
+Only use these steps if you prefer a local server instead of the hosted website.
+
+1. Download **VisaBrowser-Windows.zip** from [GitHub Releases](https://github.com/kchorst/VisaBrowser/releases/latest) and extract all files.
+2. Open the extracted `VisaBrowser` folder and double-click **Start-VisaBrowser.bat**.
+3. Leave the command/status window open while browsing `http://localhost:8000`; stopping the command window stops the local server.
+4. To update local visa data, run **Update-Visa-Data.bat** and restart the local server. To update the application itself, download a new release ZIP.
+
+The local server requires Python 3.9+ and can also be started from PowerShell with `py -3 scripts/local.py`. Keep the local address/port and browser profile unchanged if you want to retain that local copy's saved profiles and results. Local data and hosted website data are separate.
+
+## Travel safety and limitations
+
+VisaBrowser is a planning aid, not an immigration authority. Before booking and again before departure, verify **every traveler's current rules** with the destination's consular or immigration authorities and applicable airlines. Confirm all relevant passports, visas and other documents, prior-country visits, vaccine/health rules, transit connections and maximum stay. Entry is always subject to immigration officials' final discretion.
+
+The visa data is compiled from Wikipedia-derived sources and reviewed exceptions; its source and refresh metadata is included in the published data files. See [README](README.md) for licensing and developer validation details.
