@@ -369,7 +369,7 @@ def real_country_journeys(browser, base):
     editor.get_by_label('Issuing country or area').select_option('US')
     editor.get_by_label('Visa or permit type').select_option('permit')
     editor.get_by_role('button', name='Add visa or permit').click()
-    editor.get_by_role('button', name='Save passenger').click()
+    editor.get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (
