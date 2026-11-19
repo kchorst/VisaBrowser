@@ -677,6 +677,8 @@ function passengerResult(row, placeId, saved, data) {
   const research = !known ? pendingResearch(row, placeId) : null;
   const routes = row.routes?.map(option => el('p', {},
     option.title, option.detail ? ` · ${option.detail}` : null));
+  const passportWarnings = (row.notes ?? []).filter(note =>
+    /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
   const notes = row.notes?.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
     row.notes.map(note => el('p', {}, note))) : null;
@@ -685,6 +687,7 @@ function passengerResult(row, placeId, saved, data) {
     el('div', { class: 'chips' }, chip(statuses(row), tone), row.issue ? chip('Issue', 'bad') : null,
       row.flags?.map(flag => chip(flag, 'warn')) ?? []),
     row.condition ? el('p', { class: 'condition' }, `* ${row.condition}`) : null,
+    passportWarnings.map(note => el('p', { class: 'condition' }, `Passport requirement: ${note}`)),
     row.reason ? el('p', {}, row.reason) : null,
     advice.length ? el('ul', {}, advice.map(text => el('li', {}, text))) : null,
     row.home ? muted('Travel on your passport for this destination.') : null,
