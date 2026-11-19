@@ -551,18 +551,30 @@ function countries(data, groupMode = false) {
       const entries = section.destinations.filter(({ id, name }) =>
         normalizeName(name).includes(term) || id.toLowerCase() === term);
       const expanded = viewState.expanded.includes(section.id);
-      const list = el('details', { class: 'panel country-section', ...(expanded ? { open: '' } : {}) },
-        el('summary', {}, `${section.heading} (${entries.length})`),
-        el('ul', { class: 'country-list' }, entries.map(({ id, name, result }) => {
+      const list = el('ul', { class: 'country-list', ...(expanded ? {} : { hidden: '' }) },
+        entries.map(({ id, name, result }) => {
           const control = button(name, () => go(`destination/${id}/${groupMode ? 'group' : 'countries'}`));
           if (result?.pending) control.append(chip(`${result.pending} pending verification`, 'warn'));
           return el('li', {}, control);
-        })));
-      list.addEventListener('toggle', () => {
-        viewState.expanded = sections.filter(s => s.id === section.id ? list.open :
-          viewState.expanded.includes(s.id)).map(s => s.id);
-      });
-      cards.push(list);
+        }));
+      const disclosure = button(expanded ? 'Hide countries' : 'Show countries', () => {
+        const nowOpen = disclosure.getAttribute('aria-expanded') !== 'true';
+        disclosure.setAttribute('aria-expanded', String(nowOpen));
+        disclosure.textContent = nowOpen ? 'Hide countries' : 'Show countries';
+        list.hidden = !nowOpen;
+        if (nowOpen) {
+          if (!viewState.expanded.includes(section.id)) viewState.expanded.push(section.id);
+        } else {
+          viewState.expanded = viewState.expanded.filter(id => id !== section.id);
+        }
+      }, 'country-toggle', { 'aria-expanded': String(expanded) });
+      const group = el('section', { class: 'panel country-section' },
+        el('div', { class: 'country-header' },
+          el('h2', {}, `${section.heading} (${entries.length})`), disclosure),
+        list);
+      disclosure.setAttribute('aria-controls', `country-list-${groupMode ? 'group' : 'browse'}-${section.id}`);
+      list.id = disclosure.getAttribute('aria-controls');
+      cards.push(group);
     }
     results.replaceChildren(...(cards.length ? cards : [panel(muted('No matching destinations.'))]));
   }
