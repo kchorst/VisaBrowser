@@ -649,6 +649,13 @@ function multiSearch(data) {
     // editable until Enter, list selection, or Search.
     if (picker.value.includes(',')) {
       const input = picker.value;
+      // A complete pasted/typed list becomes ordered chips immediately,
+      // including its final country, without requiring an Add Country click.
+      const fullList = input.split(',').map(term => term.trim()).filter(Boolean);
+      if (fullList.length > 1 && fullList.every(term => resolve(term))) {
+        addTerms(input);
+        return;
+      }
       const boundary = input.lastIndexOf(',');
       const complete = input.slice(0, boundary);
       const remainder = input.slice(boundary + 1).trimStart();
