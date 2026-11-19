@@ -29,7 +29,7 @@ test('Walkthroughs 1–4 and 6 classify and rank the group', () => {
   assert.equal(e.rows.filter(row => row.issue).length, 2);
   assert.equal(groupDetail(d), '1 visa-free · 1 pending verification');
   assert.equal(d.rows[1].questions[0].field, 'type');
-  for (const [type, group, issues] of [['permit', 'Visa-free for everyone', 0], ['visa', '', 1]]) {
+  for (const [type, group, issues] of [['permit', 'Visa-free with conditions', 0], ['visa', '', 1]]) {
     const person = { ...aline, documents: [{ ...aline.documents[0], type }] };
     const result = compare([alex, person], 'D', sample);
     assert.equal(result.group, group);
@@ -66,7 +66,7 @@ test('Pending, mixed groups, competing rules, territory rows, and preparation fl
   const noFree = compare([alex, { ...aline, passport: 'ZZ' }], 'C', sample);
   assert.equal(noFree.issues, 0);
   const territory = compare([alex, aline], 'AW', sample);
-  assert.equal(territory.group, 'Visa-free for everyone');
+  assert.equal(territory.group, 'Visa-free with conditions');
   assert.equal(territory.rows[0].flags[0], 'Tourist registration');
   assert.deepEqual(compare([alex], 'CONFLICT', sample).rows[0].notes, ['Visa required', 'Visa not required']);
   assert.equal(compare([alex], 'BAN', sample).issues, 1);
