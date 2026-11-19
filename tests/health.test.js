@@ -79,7 +79,7 @@ test('Nepal and Egypt polio notices follow the route across passports', () => {
     assert.deepEqual(healthNotices(destination, 'GH').find(({ text }) => /polio/i.test(text)), notice);
     assert.match(notice.text, /four weeks/);
   }
-  assert.match(healthNotices('SA', 'GH').at(-1).text, /COVID-19 vaccination or immunity/);
+  assert.doesNotMatch(healthNotices('SA', 'GH').map(item => item.text).join(' '), /Hajj|Umrah/);
   assert.match(healthNotices('WS', 'FR').at(-1).text, /American Samoa/);
 });
 
