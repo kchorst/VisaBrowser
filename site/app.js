@@ -4,12 +4,16 @@ import { offlineStatus, onlineManifest, saveOffline } from './offline.js';
 import { version } from './version.js';
 
 const main = document.querySelector('main');
-const reminder = document.querySelector('#reminder');
+const reminder = null;
 const storageKey = 'visabrowser.v1';
 const uid = () => crypto.randomUUID?.() ?? Array.from(crypto.getRandomValues(new Uint32Array(4))).join('-');
 const travelPrep = 'https://kchorst.github.io/Travel-Prep/';
 const alpha = ([, a], [, b]) => a.localeCompare(b, 'en');
 const tabs = [...document.querySelectorAll('[data-route]')];
+const disclaimerText = 'VisaBrowser provides general entry guidance, not a guarantee of admission. Confirm current requirements with the destination country’s immigration or consular authorities before departure. Check passport validity and blank pages, visas and supporting documents, vaccinations and health rules, prior-country visits, permitted stay, transit conditions and fees. Entry is always at the discretion of immigration authorities.';
+const disclaimer = () => el('details', { class: 'panel travel-disclaimer' }, el('summary', {}, '⚠ Important Travel Requirements & Disclaimer'), el('p', {}, disclaimerText));
+const checkedDate = () => new Date().toLocaleDateString();
+const noIssues = result => result.rows.length > 0 && result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' && !row.condition && !row.issue && !row.flags?.length && !row.questions?.length && !row.controls?.length && !row.source?.unavailable && !sourceDelayed(row.source, new Date(), catalog.overdueDays));
 
 function storageAlert() {
   const alert = document.querySelector('#storage-alert');
@@ -221,6 +225,22 @@ function passengerEditor(passenger, onSave) {
 }
 
 const route = () => location.hash.slice(1).split('/');
+function dashboard() {
+  const people = activePassengers();
+  const mixed = new Set(people.map(p => p.passport)).size > 1;
+  const items = [['View Country', 'view'], ['Browse Countries', 'countries'], ['Check Group Req', 'group'], ['Search Multiple', 'multi']];
+  if (mixed) items.unshift(items.splice(2, 1)[0]);
+  return [title('Plan your trip'), panel(el('div', { class: 'row' }, el('strong', {}, people.map(p => `${p.name} · ${places[p.passport] ?? p.passport}`).join(' | ') || 'No travelers yet'), button('Edit travelers', () => go('passengers'))),
+    el('div', { class: 'dashboard-actions stack' }, items.map(([label, path], i) => button(label, () => go(path), i === 0 ? 'primary' : ''))),
+    button('Saved Searches', () => go('saved')),
+    el('p', {}, link('Travel-Prep', travelPrep))];
+}
+function viewCountry() {
+  const picker = select('destination', destinations, '', 'Choose a country or territory');
+  picker.addEventListener('change', () => { if (picker.value) go(`destination/${picker.value}`); });
+  return [title('View Country'), panel(label('Destination', picker), muted('Select a destination to see its entry requirements.'))];
+}
+
 function go(path) {
   if (location.hash === `#${path}`) render(true);
   else location.hash = path;
@@ -583,11 +603,11 @@ function destinationDetails(placeId, saved, data) {
     el('p', {}, link('Open Travel-Prep', `${travelPrep}#country=${encodeURIComponent(placeId)}`)));
   return [title(places[placeId]), refreshNotice(people, data),
     el('div', { class: 'stack' }, el('div', { class: 'actions' }, controls), people.length ?
-      panel(el('div', { class: 'chips' }, summary.group ? chip(summary.group, 'good') : null,
+      panel(el('div', { class: 'chips' }, noIssues(summary) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
       muted(groupDetail(summary))) : invite(placeId),
-    summary.rows.map(row => passengerResult(row, placeId, saved, data)), notes, edits)];
+    summary.rows.map(row => passengerResult(row, placeId, saved, data)), notes, edits, disclaimer())];
 }
 
 function savedList() {
@@ -601,10 +621,9 @@ function savedList() {
 }
 
 let renderId = 0;
-const screenNames = { passengers: 'Passengers', countries: 'Countries', multi: 'Multi-search', saved: 'Saved destinations' };
+const screenNames = { home: 'Home', view: 'View Country', group: 'Check Group Req', passengers: 'Travelers', countries: 'Browse Countries', multi: 'Search Multiple', saved: 'Saved Searches' };
 function breadcrumbs(screen, id, parent, saved) {
-  const home = el('a', { href: '#passengers' }, 'Home');
-  home.addEventListener('click', clearShortlist);
+  const home = el('a', { href: '#home' }, 'Home');
   const items = [home];
   if (screen === 'destination' || saved) {
     items.push(el('a', { href: `#${parent}` }, screenNames[parent]));
@@ -625,11 +644,14 @@ async function render(focus = false) {
   main.replaceChildren(el('p', { class: 'panel', role: 'status' }, 'Loading comparison…'));
   try {
     const saved = screen === 'saved' && id ? state.saved.find(item => item.id === id) : undefined;
-    const data = ['countries', 'multi', 'destination'].includes(screen) || saved ?
+    const data = ['countries', 'group', 'multi', 'destination'].includes(screen) || saved ?
       await loadGroup(saved?.passengers ?? activePassengers()) : {};
     if (request !== renderId) return;
     let nodes;
-    if (screen === 'countries') nodes = countries(data);
+    if (screen === 'home' || !screen) nodes = dashboard();
+    else if (screen === 'view') nodes = viewCountry();
+    else if (screen === 'group') nodes = countries(data);
+    else if (screen === 'countries') nodes = countries(data);
     else if (screen === 'multi') nodes = multiSearch(data);
     else if (saved && places[saved.placeId]) nodes = destinationDetails(saved.placeId, saved, data);
     else if (screen === 'saved') nodes = savedList();
@@ -651,9 +673,7 @@ async function render(focus = false) {
 }
 
 document.querySelector('#version').textContent = `v${version}`;
-document.querySelector('#reminder-date').textContent =
-  `Six months from today is ${sixMonthsFrom(new Date()).toLocaleDateString(undefined, { dateStyle: 'long' })}.`;
-document.querySelector('#dismiss').addEventListener('click', () => { reminder.hidden = true; tabs[0].focus(); });
+
 
 async function readCatalog() {
   [catalog, places] = await Promise.all([json('./data/index.json'), json('./data/places.json')]);
@@ -728,6 +748,7 @@ async function start() {
       go(tab.dataset.route);
     });
     window.addEventListener('hashchange', () => render(true));
+    if (!location.hash) location.hash = state.passengers.length ? '#home' : '#passengers';
     await render();
     if (!navigator.onLine || cachedCatalog) await showOfflineStatus();
   } catch {
