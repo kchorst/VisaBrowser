@@ -366,6 +366,22 @@ function go(path) {
   if (location.hash === `#${path}`) render(true);
   else location.hash = path;
 }
+// A country deep link must retain its destination through first-run setup.
+function firstTravelerScreen(placeId = '') {
+  const onSave = passenger => {
+    state.passengers.push(passenger);
+    if (!state.selected.includes(passenger.id)) state.selected.push(passenger.id);
+    persist();
+    // Keep the original #country=XX URL and render its traveler result;
+    // without a destination, reveal the traveler list and next actions.
+    render(true);
+  };
+  return [title('Your first traveler'),
+    placeId ? panel(el('p', { class: 'linked-destination' },
+      el('strong', {}, `Destination: ${places[placeId]}`)),
+      muted('Enter your name and passport to see entry requirements for this destination.')) : null,
+    passengerEditor(null, onSave, true)];
+}
 function passengerList() {
   const firstTime = state.passengers.length === 0;
   const saveNew = passenger => {
@@ -381,10 +397,7 @@ function passengerList() {
       render(true);
     }
   };
-  if (firstTime) {
-    return [title('Your first traveler'),
-      passengerEditor(null, saveNew, true)];
-  }
+  if (firstTime) return firstTravelerScreen();
 
   const selection = el('span', { role: 'status' });
   const clearButton = button('Clear selection', () => {
@@ -755,6 +768,7 @@ function destinationTravelNotes(placeId) {
 }
 
 function destinationDetails(placeId, saved, data) {
+  if (!saved && !state.passengers.length) return firstTravelerScreen(placeId);
   const people = saved?.passengers ?? activePassengers();
   const freshSummary = compare(people, placeId, data);
   const summary = saved?.result ? structuredClone(saved.result) : freshSummary;
