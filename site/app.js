@@ -485,8 +485,8 @@ const destinationAliases = {
   'US': ['USA', 'United States of America'],
   'GB': ['UK', 'Great Britain'],
   'BR': ['Brasil'],
-  'CD': ['DRC', 'DR Congo', 'Democratic Republic of the Congo'],
-  'CG': ['Republic of the Congo'],
+  'CD': ['DRC', 'DR Congo', 'Democratic Republic of the Congo', 'Congo - Kinshasa', 'Congo Kinshasa'],
+  'CG': ['Republic of the Congo', 'Congo - Brazzaville', 'Congo Brazzaville'],
   'CI': ['Ivory Coast'],
   'CZ': ['Czech Republic'],
   'KN': ['Saint Kitts and Nevis'],
@@ -743,14 +743,10 @@ function multiSearch(data) {
       }, 'primary'), button('Copy Itinerary', () => copyOrShare(shareText)),
         button('Share Itinerary', () => copyOrShare(shareText, true))),
       countedList('Destination results', all.map(({ id, summary }, index) =>
-        el('details', { class: 'panel country-result' }, el('summary', { tabindex: '0' },
-          `${index + 1}. ${places[id]} · ${noIssues(summary) ? 'NO ISSUES' :
-            summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
-              summary.group || 'Check requirements'}`),
-          el('div', { class: 'stack' },
-            summary.rows.map(row => passengerResult(row, id, null, data)),
-            el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)),
-            button('View Country', () => go(`destination/${id}/multi`)))))),
+        countryResultCard(id, index, summary, [
+          summary.rows.map(row => passengerResult(row, id, null, data)),
+          button('View Country', () => go(`destination/${id}/multi`))
+        ]))),
       disclaimer());
   }
   paint();
@@ -945,6 +941,34 @@ function destinationDetails(placeId, saved, data) {
     notes, edits, disclaimer())];
 }
 
+function countryResultCard(id, index, summary, contents) {
+  const status = summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' :
+    summary.issues ? issueLabel(summary.issues) : summary.group || 'Check requirements';
+  const details = el('details', { class: 'country-result' },
+    el('summary', { class: 'country-result-summary' },
+      el('span', { class: 'country-result-name' }, `${index + 1}. ${places[id]}`),
+      el('span', { class: 'country-result-status' }, status),
+      el('span', { class: 'country-result-toggle' }, 'Show visa requirements')),
+    el('div', { class: 'stack country-result-body' }, contents));
+  details.addEventListener('toggle', () => {
+    details.querySelector('.country-result-toggle').textContent =
+      details.open ? 'Hide visa requirements' : 'Show visa requirements';
+  });
+  return el('section', { class: 'panel itinerary-country' },
+    details,
+    el('div', { class: 'country-result-links' },
+      link('Travel-Prep ↗', `${travelPrep}#country=${encodeURIComponent(id)}`)));
+}
+
+function displaySavedName(record) {
+  // Preserve user-chosen names, but improve labels in previously saved automatic names.
+  const raw = record.name ?? (record.itinerary?.map(id => places[id]).join(' → ') ||
+    places[record.placeId] || record.placeId);
+  const legacy = raw.replaceAll('Congo - Kinshasa', places.CD)
+    .replaceAll('Congo - Brazzaville', places.CG);
+  return legacy.replace(/\s*·\s*\d{1,2}\/\d{1,2}\/\d{4}\s*$/, '').trim();
+}
+
 function savedItineraryDetails(saved, data) {
   const checked = saved.checkedAt?.slice(0, 10) ?? 'Date unavailable';
   const report = saved.itinerary.map(id => reportText(id, saved.results[id], checked)).join('\n\n---\n\n');
@@ -974,7 +998,7 @@ function savedItineraryDetails(saved, data) {
       render(true);
     } catch (error) { alert('Refresh failed. Original saved results were preserved. ' + error.message); }
   });
-  return [title(saved.name || 'Saved itinerary'),
+  return [title(displaySavedName(saved)),
     muted(`Saved results · Checked ${checked}${savedNeedsRefresh(saved) ? ' · Needs Refresh' : ''}`),
     el('div', { class: 'actions' }, refresh,
       button('Copy', () => copyOrShare(report)),
@@ -985,13 +1009,10 @@ function savedItineraryDetails(saved, data) {
         go('saved');
       }), 'danger')),
     countedList('Destination results', saved.itinerary.map((id, index) =>
-      el('details', { class: 'panel country-result' },
-      el('summary', {}, `${index + 1}. ${places[id]} · ${saved.results[id].pending ? 'Needs Review' :
-        saved.results[id].group || issueLabel(saved.results[id].issues)}`),
-      el('div', { class: 'stack' },
+      countryResultCard(id, index, saved.results[id], [
         ...(saved.changes?.[id]?.length ? [muted(saved.changes[id].join(' · '))] : []),
-        saved.results[id].rows.map(row => passengerResult(row, id, saved, data)),
-        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)))))),
+        saved.results[id].rows.map(row => passengerResult(row, id, saved, data))
+      ]))),
     disclaimer()];
 }
 
@@ -1008,7 +1029,7 @@ function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
     countedList('Saved searches', [...state.saved].reverse().map(record =>
       panel(el('div', { class: 'row' },
-      el('div', {}, el('h2', {}, record.name ?? (record.itinerary?.map(id => places[id]).join(' → ') || places[record.placeId] || record.placeId)),
+      el('div', {}, el('h2', {}, displaySavedName(record)),
         muted(record.passengers.map(p => p.name).join(', ')),
         muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
         muted(savedNeedsRefresh(record) ? 'Needs Refresh' : '')),
@@ -1018,6 +1039,11 @@ function savedList() {
 }
 
 const scrollByRoute = new Map();
+function shouldRestoreListScroll(previous, next) {
+  if (next !== '#countries' && next !== '#group') return false;
+  return previous.startsWith('#destination/') &&
+    previous.endsWith(next === '#countries' ? '/countries' : '/group');
+}
 window.addEventListener('scroll', () => scrollByRoute.set(location.hash, window.scrollY), { passive: true });
 let renderId = 0;
 const screenNames = { home: 'Home', view: 'View Country', group: 'Check Group Req', passengers: 'Travelers', countries: 'Browse Countries', multi: 'Search Multiple', saved: 'Saved Searches' };
@@ -1028,14 +1054,14 @@ function breadcrumbs(screen, id, parent, saved) {
   const items = [home];
   if (screen === 'destination' || saved) {
     items.push(el('a', { href: `#${parent}` }, screenNames[parent]));
-    items.push(el('span', { 'aria-current': 'page' }, saved?.name ?? places[saved?.placeId ?? id] ?? 'Destination'));
+    items.push(el('span', { 'aria-current': 'page' }, saved ? displaySavedName(saved) : (places[id] ?? 'Destination')));
   } else {
     items.push(el('span', { 'aria-current': 'page' }, screenNames[parent]));
   }
   return el('nav', { 'aria-label': 'Breadcrumb', class: 'breadcrumb' },
     items.map((item, i) => i ? [el('span', { 'aria-hidden': 'true' }, '/'), item] : item));
 }
-async function render(focus = false) {
+async function render(focus = false, restoreScroll = false) {
   const request = ++renderId;
   const [screen, id, origin] = route();
   const current = screen === 'destination' ? (['multi','view','group','countries'].includes(origin) ? origin : 'view') :
@@ -1060,7 +1086,7 @@ async function render(focus = false) {
     else if (screen === 'destination' && destinations.some(([code]) => code === id)) nodes = destinationDetails(id, null, data);
     else nodes = passengerList();
     main.replaceChildren(breadcrumbs(screen, id, current, saved), ...nodes.filter(Boolean));
-    requestAnimationFrame(() => window.scrollTo(0, scrollByRoute.get(location.hash) ?? 0));
+    requestAnimationFrame(() => window.scrollTo({ top: restoreScroll ? (scrollByRoute.get(location.hash) ?? 0) : 0, left: 0, behavior: 'instant' }));
   } catch (error) {
     if (request !== renderId) return;
     console.error('VisaBrowser could not open the requested screen.', error);
@@ -1080,6 +1106,9 @@ document.querySelector('#version').textContent = `v${version}`;
 
 async function readCatalog() {
   [catalog, places] = await Promise.all([json('./data/index.json'), json('./data/places.json')]);
+  // Presentation labels only: retain canonical source JSON and offline hashes.
+  places.CD = 'Congo (Democratic Republic of the Congo)';
+  places.CG = 'Congo (Republic of the Congo)';
   const dataDate = document.querySelector('#visa-data-date');
   dataDate.hidden = !catalog.generated;
   dataDate.textContent = catalog.generated ? `Visa data · ${catalog.generated.slice(0, 10)}` : '';
@@ -1164,7 +1193,7 @@ async function start() {
       }
       lastRouteHash = nextHash;
       unsavedResult = null;
-      render(true);
+      render(true, shouldRestoreListScroll(previousHash, nextHash));
     });
     if (!location.hash) location.hash = state.passengers.length ? '#home' : '#passengers';
     await render();

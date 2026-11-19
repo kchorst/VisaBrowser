@@ -102,6 +102,25 @@ def fixture(browser, base):
     expect(page.get_by_role('button', name='Show countries')).to_have_attribute('aria-expanded', 'false')
     page.goto(base + '#home')
 
+    # Title is a Home link; a new screen starts at the top rather than
+    # inheriting the previous screen's scroll position.
+    page.goto(base + '#countries')
+    page.set_viewport_size({'width': 390, 'height': 440})
+    page.get_by_label('Filter requirements').select_option('all')
+    for toggle in page.locator('.country-section .country-toggle').all():
+        toggle.click()
+    page.evaluate('window.scrollTo(0, 900)')
+    assert page.evaluate('window.scrollY') > 0
+    page.locator('.brand-home').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
+    page.wait_for_function('window.scrollY === 0')
+    page.get_by_role('button', name='Browse Countries').click()
+    expect(page.get_by_role('heading', name='Browse Countries')).to_be_visible()
+    page.wait_for_function('window.scrollY === 0')
+    page.set_viewport_size({'width': 390, 'height': 844})
+    page.locator('.brand-home').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
+
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
@@ -152,9 +171,15 @@ def fixture(browser, base):
     page.get_by_role('button', name='Search Requirements', exact=True).click()
     expect(page.locator('.country-result')).to_have_count(3)
     expect(page.locator('.country-result').first).not_to_have_attribute('open', '')
-    page.locator('.country-result summary').first.click()
-    expect(page.get_by_role('link', name='Open in Travel-Prep').first).to_have_attribute(
+    first_card = page.locator('.itinerary-country').first
+    expect(first_card.get_by_text('Show visa requirements')).to_be_visible()
+    # Travel-Prep is visible even while visa requirements are still collapsed.
+    expect(first_card.get_by_role('link', name='Travel-Prep')).to_have_attribute(
         'href', 'https://kchorst.github.io/Travel-Prep/#country=A')
+    first_card.locator('.country-result summary').click()
+    expect(first_card.get_by_text('Hide visa requirements')).to_be_visible()
+    first_card.locator('.country-result summary').click()
+    expect(first_card.get_by_text('Show visa requirements')).to_be_visible()
     page.get_by_role('button', name='Copy Itinerary').click()
     report = page.evaluate('navigator.clipboard.readText()')
     assert report.index('Destination A') < report.index('Destination B') < report.index('Destination C')
@@ -189,6 +214,9 @@ def fixture(browser, base):
     page.get_by_role('button', name='Save Search').click()
     expect(page.get_by_role('heading', name='Autumn Itinerary')).to_be_visible()
     expect(page.locator('.country-result')).to_have_count(2)
+    # Saved searches keep each Travel-Prep link outside collapsed requirements.
+    expect(page.locator('.itinerary-country').first.get_by_role('link', name='Travel-Prep')).to_have_attribute(
+        'href', 'https://kchorst.github.io/Travel-Prep/#country=A')
     stored = json.loads(page.evaluate("localStorage.getItem('visabrowser.v1')"))['saved']
     assert stored[0]['itinerary'] == ['A', 'C']
     page.once('dialog', lambda dialog: dialog.accept())

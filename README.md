@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.4
+# VisaBrowser v0.4.5
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
@@ -10,6 +10,8 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 2. On the first screen, enter the **first traveler's name or initials and passport country** directly in the visible form. Optionally expand **Existing visas or residence permits**. Save the first traveler; then add another traveler below the traveler list or choose **Continue**.
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
+
+**Itinerary country cards** have a visible Show/Hide visa requirements hint and a separate always-visible Travel-Prep link for each destination, including saved searches. The title links Home; new screens start at the top, while returning to a filtered Browse/Group country list restores your previous position. The two Congos are labeled **Congo (Democratic Republic of the Congo)** and **Congo (Republic of the Congo)**, with their former names retained as search aliases.
 
 **Lists and counts:** Browse Countries and Check Group Req start with country lists hidden, displaying each category's real count and a clearly labeled **Show countries** button. Other collections—travelers, saved searches, itinerary destinations and result groups—also show their item counts and **Show/Hide** controls. Lists of more than five items start collapsed; shorter lists appear expanded to keep immediate actions discoverable. The **Hide** control works on every list.
 
