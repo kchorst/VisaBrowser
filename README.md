@@ -7,7 +7,7 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 ## Quick start
 
 1. Open **[VisaBrowser](https://kchorst.github.io/VisaBrowser/)** in the browser on your phone, tablet or PC.
-2. Add each traveler's name and passport country, plus existing visas or residence permits when relevant. Choose **Continue** or add another traveler.
+2. On the first screen, enter the **first traveler's name or initials and passport country** directly in the visible form. Optionally expand **Existing visas or residence permits**. Save the first traveler; then add another traveler below the traveler list or choose **Continue**.
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
 
