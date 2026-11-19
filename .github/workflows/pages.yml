@@ -2,6 +2,8 @@ name: Validate and deploy VisaBrowser
 on:
   pull_request:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -40,7 +42,7 @@ jobs:
       - run: python tests/browser_acceptance.py
 
   deploy:
-    if: ${{ github.repository == 'kchorst/VisaBrowser' && github.ref_name == github.event.repository.default_branch && (github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.VISABROWSER_ENABLE_REFRESH == 'true')) }}
+    if: ${{ github.repository == 'kchorst/VisaBrowser' && github.ref_name == github.event.repository.default_branch && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && vars.VISABROWSER_ENABLE_REFRESH == 'true')) }}
     needs: validate
     runs-on: ubuntu-latest
     permissions:
@@ -75,10 +77,25 @@ jobs:
           path: site
       - uses: actions/deploy-pages@v4
         id: deployment
+      - name: Verify deployed website and release version
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          url="${{ steps.deployment.outputs.page_url }}"
+          url="${url%/}/"
+          for attempt in $(seq 1 18); do
+            if curl -fsSL --max-time 15 "${url}version.js" | grep -Fx "export const version = '$version';" &&
+               curl -fsSL --max-time 15 "${url}index.html" | grep -q '<title>VisaBrowser</title>'; then
+              echo "Verified ${url} and v${version}"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Deployed website could not be verified with the expected version" >&2
+          exit 1
 
   release:
-    if: ${{ github.repository == 'kchorst/VisaBrowser' && github.ref_type == 'tag' }}
-    needs: validate
+    if: ${{ github.repository == 'kchorst/VisaBrowser' && github.ref_name == github.event.repository.default_branch && github.event_name == 'push' }}
+    needs: [validate, deploy]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -89,7 +106,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           version="$(node -p "require('./package.json').version")"
-          test "v$version" = "$GITHUB_REF_NAME"
           grep -Fx "export const version = '$version';" site/version.js
+          tag="v$version"
           git archive --format=zip --prefix=VisaBrowser/ --output=VisaBrowser-Windows.zip HEAD
-          gh release create "$GITHUB_REF_NAME" VisaBrowser-Windows.zip --verify-tag --generate-notes --title "VisaBrowser $GITHUB_REF_NAME"
+          unzip -t VisaBrowser-Windows.zip >/dev/null
+          unzip -Z1 VisaBrowser-Windows.zip | grep -Fx 'VisaBrowser/Start-VisaBrowser.bat'
+          unzip -Z1 VisaBrowser-Windows.zip | grep -Fx 'VisaBrowser/site/index.html'
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists; preserving existing published asset."
+            exit 0
+          fi
+          gh release create "$tag" VisaBrowser-Windows.zip --target "$GITHUB_SHA" --generate-notes --title "VisaBrowser $tag"
+          gh release view "$tag" --json tagName,assets --jq '{tag: .tagName, assets: [.assets[].name]}'
