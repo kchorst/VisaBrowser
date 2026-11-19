@@ -1,3 +1,4 @@
+import { currentHealthNotes, healthNotices } from './health.js';
 import { actions, compare, groupDetail, issueLabel, noAdvanceVisa, rank, requirementChange,
   resultSnapshot, sixMonthsFrom, sourceDelayed, statuses } from './rules.js';
 import { offlineStatus, onlineManifest, saveOffline } from './offline.js';
@@ -29,7 +30,9 @@ function reportText(placeId, summary, when = checkedDate()) {
   return ['VisaBrowser · ' + destination, 'Checked: ' + when,
     ...summary.rows.map(row => [row.passenger.name + ' (' + (places[row.passenger.passport] ?? row.passenger.passport) + ')',
       statuses(row), row.condition, row.reason, row.stay ? 'Stay: ' + row.stay : '',
-      ...(row.flags ?? [])].filter(Boolean).join(' · ')),
+      ...(row.flags ?? []),
+      ...healthNotices(placeId, row.passenger.passport).map(({ heading, text, url }) =>
+        heading + ' · ' + text + ' ' + url)].filter(Boolean).join(' · ')),
     'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
     'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
     'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
@@ -47,9 +50,10 @@ async function copyOrShare(text, nativeShare = false) {
 
 // A positive badge is intentionally narrower than a "Visa-Free" category.
 // Never infer passport validity, admission, or a waiver from third-country papers.
-const noIssues = result => result.rows.length > 0 && !result.pending &&
+const noIssues = (result, placeId) => result.rows.length > 0 && !result.pending &&
   result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
     !row.condition && !row.reason && !row.issue && !row.flags?.length &&
+    !healthNotices(placeId, row.passenger.passport).some(notice => notice.heading === 'Required health documents') &&
     !row.questions?.length && !row.controls?.length && !row.viaDocument &&
     !row.source?.unavailable && !row.source?.error &&
     (!row.source?.url || (row.source?.lastSuccess &&
@@ -527,7 +531,7 @@ function compareShortlist(value, people, data) {
     const summary = compare(people, id, data);
     const { rows } = summary;
     return el('details', { class: 'panel stack country-result' },
-      el('summary', {}, places[id], ' · ', noIssues(summary) ? 'NO ISSUES' :
+      el('summary', {}, places[id], ' · ', noIssues(summary, id) ? 'NO ISSUES' :
         summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
         summary.group || 'Check traveler requirements'),
       el('div', { class: 'stack' },
@@ -537,6 +541,7 @@ function compareShortlist(value, people, data) {
           el('p', {}, el('strong', {}, row.passenger.name), ` · ${statuses(row)}`,
             row.flags?.length ? ` · ${row.flags.join(' · ')}` : null),
           row.condition ? muted(row.condition) : null,
+          healthDetails(row, id),
           row.stay ? muted(`Stay limit · ${row.stay}`) : null,
           row.options.includes('pending') ? pendingResearch(row, id, true) : null)))));
   }) : [];
@@ -787,6 +792,13 @@ function pendingResearch(row, placeId, includeReason = false) {
     null];
 }
 
+function healthDetails(row, placeId) {
+  return healthNotices(placeId, row.passenger.passport).map(({ heading, text, url }) =>
+    el('div', { class: 'stack' },
+      el('p', {}, el('strong', {}, heading), '. ', text),
+      link('Official health guidance ↗', url)));
+}
+
 function passengerResult(row, placeId, saved, data) {
   const bad = row.options.includes('denied') || row.issue;
   const known = !row.options.includes('pending');
@@ -815,17 +827,19 @@ function passengerResult(row, placeId, saved, data) {
   const authority = row.official?.startsWith('https://') &&
     !row.routes?.some(option => option.url === row.official) ?
     el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
-  const passportWarnings = (row.notes ?? []).filter(note =>
+  const sourceNotes = currentHealthNotes(row.notes, placeId) ?? [];
+  const passportWarnings = sourceNotes.filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
-  const notes = row.notes?.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
-    row.notes.map(note => el('p', {}, note))) : null;
+  const notes = sourceNotes.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
+    sourceNotes.map(note => el('p', {}, note))) : null;
   return panel(
     el('div', { class: 'row' }, el('h2', {}, row.passenger.name), muted(`${places[row.passenger.passport]} passport`)),
     el('div', { class: 'chips' }, chip(statuses(row), tone), row.issue ? chip('Issue', 'bad') : null,
       row.flags?.map(flag => chip(flag, 'warn')) ?? []),
     row.condition ? el('p', { class: 'condition' }, `* ${row.condition}`) : null,
     passportWarnings.map(note => el('p', { class: 'condition' }, `Passport requirement: ${note}`)),
+    healthDetails(row, placeId),
     row.reason ? el('p', {}, row.reason) : null,
     advice.length ? el('ul', {}, advice.map(text => el('li', {}, text))) : null,
     row.home ? muted('Travel on your passport for this destination.') : null,
@@ -925,14 +939,14 @@ function destinationDetails(placeId, saved, data) {
   const mixed = new Set(people.map(p => p.passport)).size > 1;
   const summaryBox = people.length > 1 ?
     el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
-      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
+      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
         summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
       muted(groupDetail(summary))) :
     people.length ? panel(el('div', { class: 'chips' },
-      noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
+      noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
       chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
       summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
@@ -948,7 +962,7 @@ function destinationDetails(placeId, saved, data) {
 }
 
 function countryResultCard(id, index, summary, contents) {
-  const status = summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' :
+  const status = summary.pending ? 'Needs Review' : noIssues(summary, id) ? 'NO ISSUES' :
     summary.issues ? issueLabel(summary.issues) : summary.group || 'Check requirements';
   const details = el('details', { class: 'country-result' },
     el('summary', { class: 'country-result-summary' },
