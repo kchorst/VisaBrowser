@@ -6,7 +6,7 @@
 
 ## 1. Set up travelers
 
-On your first visit, choose **Add Another Traveler**. Enter a name or initials and choose the passport-issuing country. Optionally add existing visas or residence permits if you want them considered when checking a destination. Select **Save passenger**, then **Add Another Traveler** or **Continue**.
+On the first visit, the **Your first traveler** form is visible immediately. Enter a name or initials and choose the passport country; no opening dialog is needed. Expand **Existing visas or residence permits (optional)** only when applicable. Select **Save first traveler**. Your traveler then appears on the **Travelers** screen, with **Add Another Traveler** underneath and **Continue** after the list. The Add Another action is not shown before the first person is saved.
 
 The **Travelers** screen lets you change names, passport countries, and saved visas/permits or remove a traveler with confirmation. Checkboxes choose which travelers are included in the next search. The app does **not** ask for passport expiration dates: you must verify each traveler's validity and blank pages yourself.
 
