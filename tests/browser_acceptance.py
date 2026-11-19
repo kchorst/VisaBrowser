@@ -45,7 +45,7 @@ def add_traveler(page, name, passport, issuer=None):
         form.get_by_label('Issuing country or area').select_option(issuer)
         form.get_by_role('button', name='Add visa or permit').click()
     form.get_by_role('button', name='Save first traveler' if first else 'Save traveler').click()
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Travelers', exact=True)).to_be_visible()
     expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
     page.get_by_role('button', name='Continue').click()
 
@@ -91,24 +91,28 @@ def fixture(browser, base):
     # Browse Countries (not only Group Req) starts with every category collapsed.
     page.get_by_role('button', name='Browse Countries').click()
     expect(page.locator('.country-section')).to_have_count(4)
-    assert all(section.get_attribute('open') is None
+    assert all(section.locator('.country-list').is_hidden()
                for section in page.locator('.country-section').all())
     page.get_by_label('Filter requirements').select_option('review')
     assert page.locator('.country-list li:visible').count() == 0
-    page.locator('.country-section summary').first.click()
+    page.get_by_role('button', name='Show countries').first.click()
     assert page.locator('.country-list li:visible').count() > 0
+    page.get_by_role('button', name='Hide countries').click()
+    assert page.locator('.country-list li:visible').count() == 0
+    expect(page.get_by_role('button', name='Show countries')).to_have_attribute('aria-expanded', 'false')
     page.goto(base + '#home')
 
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
     expect(page.locator('.country-section')).to_have_count(4)
-    assert all(item.get_attribute('open') is None for item in page.locator('.country-section').all())
+    assert all(item.locator('.country-list').is_hidden()
+               for item in page.locator('.country-section').all())
     expect(page.get_by_text(re.compile(r'Visa-Free \(1\)'))).to_be_visible()
     page.get_by_label('Search destinations').fill('Destination B')
     expect(page.get_by_text(re.compile(r'eVisa / Authorization \(1\)'))).to_be_visible()
     page.get_by_label('Filter requirements').select_option('authorization')
-    page.locator('.country-section summary').click()
+    page.get_by_role('button', name='Show countries').click()
     page.get_by_role('button', name='Destination B').click()
     expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
     expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
@@ -157,6 +161,22 @@ def fixture(browser, base):
     page.get_by_role('button', name='Clear All').click()
     page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
     expect(page.locator('.itinerary-stop')).to_have_count(0)
+
+    # Every collection has an explicit count/toggle. Long lists start hidden.
+    destination.fill('Destination A, Destination B, Destination C, Destination D, Destination E, Aruba')
+    expect(page.get_by_role('heading', name='Destinations in order (6)')).to_be_visible()
+    assert page.locator('.itinerary-stop').first.is_hidden()
+    page.get_by_role('button', name='Show destinations in order').click()
+    expect(page.locator('.itinerary-stop').first).to_be_visible()
+    page.get_by_role('button', name='Search Requirements').click()
+    expect(page.get_by_role('heading', name='Destination results (6)')).to_be_visible()
+    assert page.locator('.country-result').first.is_hidden()
+    page.get_by_role('button', name='Show destination results').click()
+    expect(page.locator('.country-result').first).to_be_visible()
+    page.get_by_role('button', name='Hide destination results').click()
+    assert page.locator('.country-result').first.is_hidden()
+    page.get_by_role('button', name='Clear All').click()
+    page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
 
     # Itinerary searches are not auto-saved; explicit Save Search stores the order.
     page.goto(base + '#multi')
@@ -305,9 +325,10 @@ def real_country_journeys(browser, base):
     # Reproduce the five-country input provided during Windows acceptance.
     page.get_by_role('button', name='Search Multiple').click()
     example = page.get_by_label('Destinations — type or paste a country list')
-    example.fill('Mozambique, Brazil, Cape Verde, Portugal, China')
+    example.fill('mozambique, BRAZIL, cape verde, Portugal, china')
     expect(page.locator('.itinerary-stop strong')).to_have_text(
         ['1. Mozambique', '2. Brazil', '3. Cape Verde', '4. Portugal', '5. China'])
+    assert page.get_by_role('button', name='Add Country').count() == 0
     search = page.get_by_role('button', name='Search Requirements')
     expect(search).to_be_enabled()
     search.click()
@@ -345,7 +366,8 @@ def real_country_journeys(browser, base):
     expect(page.locator('.dashboard-actions button').first).to_have_text('Check Group Req')
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
-    assert all(item.get_attribute('open') is None for item in page.locator('.country-section').all())
+    assert all(item.locator('.country-list').is_hidden()
+               for item in page.locator('.country-section').all())
     page.goto(base + '#destination/JP/group')
     expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
     assert page.locator('details').filter(has_text='Group Summary').first.get_attribute('open') is not None
@@ -356,9 +378,9 @@ def real_country_journeys(browser, base):
     page.goto(base + '#countries')
     page.get_by_role('dialog').get_by_role('button', name='Discard').click()
     page.get_by_label('Filter requirements').select_option('free')
-    expect(page.locator('.country-section summary')).to_contain_text('Visa-Free')
+    expect(page.locator('.country-section h2')).to_contain_text('Visa-Free')
     page.get_by_label('Search destinations').fill('Japan')
-    expect(page.locator('.country-section summary')).to_contain_text('(1)')
+    expect(page.locator('.country-section h2')).to_contain_text('(1)')
 
     # France -> Italy -> Croatia itinerary, in exactly the selected order.
     page.goto(base + '#multi')

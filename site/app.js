@@ -91,6 +91,22 @@ function button(text, click, className = '', props = {}) {
   return control;
 }
 const panel = (...contents) => el('section', { class: 'panel stack' }, contents);
+function countedList(name, items, initiallyOpen = items.length <= 5) {
+  const content = el('div', { class: 'stack counted-list', ...(initiallyOpen ? {} : { hidden: '' }) }, items);
+  const toggle = button(initiallyOpen ? `Hide ${name.toLowerCase()}` : `Show ${name.toLowerCase()}`, () => {
+    const expanded = content.hidden;
+    content.hidden = !expanded;
+    toggle.textContent = expanded ? `Hide ${name.toLowerCase()}` : `Show ${name.toLowerCase()}`;
+    toggle.setAttribute('aria-expanded', String(expanded));
+  }, 'country-toggle', { 'aria-expanded': String(initiallyOpen) });
+  const controlId = `items-${++fieldId}`;
+  content.id = controlId;
+  toggle.setAttribute('aria-controls', controlId);
+  return el('section', { class: 'panel counted-section' },
+    el('div', { class: 'country-header' }, el('h2', {}, `${name} (${items.length})`), toggle),
+    content);
+}
+
 const title = (text, ...controls) => el('div', { class: 'section-head' }, el('h1', {}, text), controls);
 const muted = text => el('p', { class: 'muted' }, text);
 const chip = (text, tone = '') => el('span', { class: `chip ${tone}` }, text);
@@ -438,8 +454,8 @@ function passengerList() {
   });
   updateSelection();
   return [title('Travelers'),
-    el('div', { class: 'stack' }, selection, people,
-      // Add follows the existing traveler list, never precedes the first field.
+    el('div', { class: 'stack' }, selection,
+      countedList('Travelers', people),
       button('Add Another Traveler', () => passengerEditor(null, saveNew)),
       el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary')))];
 }
@@ -551,18 +567,30 @@ function countries(data, groupMode = false) {
       const entries = section.destinations.filter(({ id, name }) =>
         normalizeName(name).includes(term) || id.toLowerCase() === term);
       const expanded = viewState.expanded.includes(section.id);
-      const list = el('details', { class: 'panel country-section', ...(expanded ? { open: '' } : {}) },
-        el('summary', {}, `${section.heading} (${entries.length})`),
-        el('ul', { class: 'country-list' }, entries.map(({ id, name, result }) => {
+      const list = el('ul', { class: 'country-list', ...(expanded ? {} : { hidden: '' }) },
+        entries.map(({ id, name, result }) => {
           const control = button(name, () => go(`destination/${id}/${groupMode ? 'group' : 'countries'}`));
           if (result?.pending) control.append(chip(`${result.pending} pending verification`, 'warn'));
           return el('li', {}, control);
-        })));
-      list.addEventListener('toggle', () => {
-        viewState.expanded = sections.filter(s => s.id === section.id ? list.open :
-          viewState.expanded.includes(s.id)).map(s => s.id);
-      });
-      cards.push(list);
+        }));
+      const disclosure = button(expanded ? 'Hide countries' : 'Show countries', () => {
+        const nowOpen = disclosure.getAttribute('aria-expanded') !== 'true';
+        disclosure.setAttribute('aria-expanded', String(nowOpen));
+        disclosure.textContent = nowOpen ? 'Hide countries' : 'Show countries';
+        list.hidden = !nowOpen;
+        if (nowOpen) {
+          if (!viewState.expanded.includes(section.id)) viewState.expanded.push(section.id);
+        } else {
+          viewState.expanded = viewState.expanded.filter(id => id !== section.id);
+        }
+      }, 'country-toggle', { 'aria-expanded': String(expanded) });
+      const group = el('section', { class: 'panel country-section' },
+        el('div', { class: 'country-header' },
+          el('h2', {}, `${section.heading} (${entries.length})`), disclosure),
+        list);
+      disclosure.setAttribute('aria-controls', `country-list-${groupMode ? 'group' : 'browse'}-${section.id}`);
+      list.id = disclosure.getAttribute('aria-controls');
+      cards.push(group);
     }
     results.replaceChildren(...(cards.length ? cards : [panel(muted('No matching destinations.'))]));
   }
@@ -677,7 +705,7 @@ function multiSearch(data) {
     }
   });
   function paint() {
-    chips.replaceChildren(...itinerary.map((id, index) =>
+    const itineraryItems = itinerary.map((id, index) =>
       el('div', { class: 'itinerary-stop row' },
         el('strong', {}, `${index + 1}. ${places[id]}`),
         el('div', { class: 'actions' },
@@ -686,7 +714,9 @@ function multiSearch(data) {
           button('Down', () => { if (index < itinerary.length - 1) [itinerary[index + 1], itinerary[index]] = [itinerary[index], itinerary[index + 1]]; comparedItinerary = null; paint(); },
             '', { disabled: index === itinerary.length - 1 ? '' : undefined, 'aria-label': `Move ${places[id]} down` }),
           button('Remove', () => { itinerary.splice(index, 1); comparedItinerary = null; paint(); },
-            '', { 'aria-label': `Remove ${places[id]}` })))));
+            '', { 'aria-label': `Remove ${places[id]}` }))));
+    chips.replaceChildren(itinerary.length ? countedList('Destinations in order', itineraryItems) :
+      muted('No destinations selected yet.'));
     search.disabled = !people.length || (!itinerary.length && !picker.value.trim());
     search.classList.add('primary');
     clear.hidden = !itinerary.length;
@@ -712,7 +742,7 @@ function multiSearch(data) {
         go(`saved/${record.id}`);
       }, 'primary'), button('Copy Itinerary', () => copyOrShare(shareText)),
         button('Share Itinerary', () => copyOrShare(shareText, true))),
-      ...all.map(({ id, summary }, index) =>
+      countedList('Destination results', all.map(({ id, summary }, index) =>
         el('details', { class: 'panel country-result' }, el('summary', { tabindex: '0' },
           `${index + 1}. ${places[id]} · ${noIssues(summary) ? 'NO ISSUES' :
             summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
@@ -720,7 +750,7 @@ function multiSearch(data) {
           el('div', { class: 'stack' },
             summary.rows.map(row => passengerResult(row, id, null, data)),
             el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)),
-            button('View Country', () => go(`destination/${id}/multi`))))),
+            button('View Country', () => go(`destination/${id}/multi`)))))),
       disclaimer());
   }
   paint();
@@ -909,7 +939,9 @@ function destinationDetails(placeId, saved, data) {
       people.length ? button('Copy', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()))) : null,
       people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null),
     summaryBox,
-    summary.rows.map(row => passengerResult(row, placeId, saved, data)),
+    people.length > 1 ? countedList('Traveler requirements',
+      summary.rows.map(row => passengerResult(row, placeId, saved, data))) :
+      summary.rows.map(row => passengerResult(row, placeId, saved, data)),
     notes, edits, disclaimer())];
 }
 
@@ -952,13 +984,14 @@ function savedItineraryDetails(saved, data) {
         persist();
         go('saved');
       }), 'danger')),
-    ...saved.itinerary.map((id, index) => el('details', { class: 'panel country-result' },
+    countedList('Destination results', saved.itinerary.map((id, index) =>
+      el('details', { class: 'panel country-result' },
       el('summary', {}, `${index + 1}. ${places[id]} · ${saved.results[id].pending ? 'Needs Review' :
         saved.results[id].group || issueLabel(saved.results[id].issues)}`),
       el('div', { class: 'stack' },
         ...(saved.changes?.[id]?.length ? [muted(saved.changes[id].join(' · '))] : []),
         saved.results[id].rows.map(row => passengerResult(row, id, saved, data)),
-        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`))))),
+        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)))))),
     disclaimer()];
 }
 
@@ -973,14 +1006,15 @@ function savedNeedsRefresh(record) {
 
 function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
-    [...state.saved].reverse().map(record => panel(el('div', { class: 'row' },
+    countedList('Saved searches', [...state.saved].reverse().map(record =>
+      panel(el('div', { class: 'row' },
       el('div', {}, el('h2', {}, record.name ?? (record.itinerary?.map(id => places[id]).join(' → ') || places[record.placeId] || record.placeId)),
         muted(record.passengers.map(p => p.name).join(', ')),
         muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
         muted(savedNeedsRefresh(record) ? 'Needs Refresh' : '')),
       el('div', { class: 'actions' }, button('Open', () => go(`saved/${record.id}`)),
         button('Rename', () => { const name = prompt('Saved search name', record.name ?? places[record.placeId]); if (name?.trim()) { record.name = name.trim(); persist(); render(true); } }),
-        button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger'))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
+        button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger')))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
 }
 
 const scrollByRoute = new Map();
