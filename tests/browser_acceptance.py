@@ -162,6 +162,22 @@ def fixture(browser, base):
     page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
     expect(page.locator('.itinerary-stop')).to_have_count(0)
 
+    # Every collection has an explicit count/toggle. Long lists start hidden.
+    destination.fill('Destination A, Destination B, Destination C, Destination D, Destination E, Aruba')
+    expect(page.get_by_role('heading', name='Destinations in order (6)')).to_be_visible()
+    assert page.locator('.itinerary-stop').first.is_hidden()
+    page.get_by_role('button', name='Show destinations in order').click()
+    expect(page.locator('.itinerary-stop').first).to_be_visible()
+    page.get_by_role('button', name='Search Requirements').click()
+    expect(page.get_by_role('heading', name='Destination results (6)')).to_be_visible()
+    assert page.locator('.country-result').first.is_hidden()
+    page.get_by_role('button', name='Show destination results').click()
+    expect(page.locator('.country-result').first).to_be_visible()
+    page.get_by_role('button', name='Hide destination results').click()
+    assert page.locator('.country-result').first.is_hidden()
+    page.get_by_role('button', name='Clear All').click()
+    page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
+
     # Itinerary searches are not auto-saved; explicit Save Search stores the order.
     page.goto(base + '#multi')
     assert not json.loads(page.evaluate(
