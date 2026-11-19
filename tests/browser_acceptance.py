@@ -118,6 +118,8 @@ def fixture(browser, base):
     expect(page.get_by_role('heading', name='Browse Countries')).to_be_visible()
     page.wait_for_function('window.scrollY === 0')
     page.set_viewport_size({'width': 390, 'height': 844})
+    page.locator('.brand-home').click()
+    expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
 
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
