@@ -1,4 +1,6 @@
-# VisaBrowser v0.4.6 — User Guide
+# VisaBrowser v0.4.7 — User Guide
+
+In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
 ## Open the app on a phone or computer
 
