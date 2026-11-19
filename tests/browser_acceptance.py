@@ -206,8 +206,11 @@ def fixture(browser, base):
     page.get_by_role('button', name='Open', exact=True).first.click()
     page.once('dialog', lambda dialog: dialog.accept())
     page.get_by_role('button', name='Refresh Results').click()
+    page.wait_for_function(
+        "() => JSON.parse(localStorage.getItem('visabrowser.v1')).saved.at(-1).passengers[1].passport === 'US'",
+        timeout=15000)
     expect(page.get_by_role('heading', name='Aline')).to_be_visible()
-    assert json.loads(page.evaluate("localStorage.getItem('visabrowser.v1')"))['saved'][-1]['passengers'][1]['passport'] == 'US'
+    expect(page.get_by_text('United States passport', exact=True)).to_have_count(2)
 
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Mobile horizontal overflow'
     assert not failures, failures
