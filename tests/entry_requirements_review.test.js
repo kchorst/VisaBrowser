@@ -23,6 +23,7 @@ test('UK ETA uses reviewed nationalities, current fee, and a distinct additional
     assert(traveler.official.startsWith('https://www.gov.uk/'));
     assert(traveler.flags.some(f => f.includes('ETA')));
     assert(traveler.notes.some(n => n.includes('£20')));
+    assert.match(traveler.fee, /£20/);
     assert.equal(classify(result), 'steps');
     assert(!noAdvanceVisa(result) || traveler.flags.length);
   }
