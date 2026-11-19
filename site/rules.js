@@ -43,7 +43,7 @@ function evaluate(passenger, place, data) {
   const baseline = source?.rules?.[place];
   const rule = reviewedRule(passenger, place, baseline, data);
   const fromDocuments = Boolean(passenger.documents?.length &&
-    baseline?.options?.every(option => option !== 'free') && rule?.options?.includes('free'));
+    !baseline?.options?.includes('free') && rule?.options?.includes('free'));
   if (rule && (!Array.isArray(rule.options) || !rule.options.length)) {
     const { options, reason, ...details } = rule;
     return pending(reason || 'The source supplied no usable entry classification. Verify the applicable visa or admission rule.',
