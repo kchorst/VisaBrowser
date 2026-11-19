@@ -28,14 +28,26 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def add_traveler(page, name, passport, issuer=None):
-    page.get_by_role('button', name='Add Another Traveler').click()
-    form = page.get_by_role('dialog')
-    form.get_by_label('Name').fill(name)
-    form.get_by_label('Passport').select_option(passport)
+    first = page.get_by_role('heading', name='Your first traveler').is_visible()
+    if first:
+        assert page.get_by_role('button', name='Add Another Traveler').count() == 0
+        form = page.get_by_role('form', name='First traveler details')
+        expect(form.get_by_label('Traveler name or initials')).to_be_visible()
+        expect(form.get_by_label('Passport country')).to_be_visible()
+        assert form.get_by_label('Traveler name or initials').is_editable()
+    else:
+        page.get_by_role('button', name='Add Another Traveler').click()
+        form = page.get_by_role('dialog')
+    form.get_by_label('Traveler name or initials').fill(name)
+    form.get_by_label('Passport country').select_option(passport)
     if issuer:
+        form.locator('.optional-documents summary').click()
         form.get_by_label('Issuing country or area').select_option(issuer)
         form.get_by_role('button', name='Add visa or permit').click()
-    form.get_by_role('button', name='Save passenger').click()
+    form.get_by_role('button', name='Save first traveler' if first else 'Save traveler').click()
+    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
+    page.get_by_role('button', name='Continue').click()
 
 
 def fixture(browser, base):
@@ -65,7 +77,7 @@ def fixture(browser, base):
     page.goto(base)
 
     # First-time setup and the four focus actions.
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
     add_traveler(page, 'Alex', 'US')
     expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
     for action in ['View Country', 'Browse Countries', 'Check Group Req',
@@ -199,8 +211,8 @@ def fixture(browser, base):
     # Traveler updates mark saved snapshots Needs Refresh; refreshing applies new passport.
     page.goto(base + '#passengers')
     page.get_by_role('button', name='Edit Aline').click()
-    page.get_by_role('dialog').get_by_label('Passport').select_option('US')
-    page.get_by_role('dialog').get_by_role('button', name='Save passenger').click()
+    page.get_by_role('dialog').get_by_label('Passport country').select_option('US')
+    page.get_by_role('dialog').get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
     page.get_by_role('button', name='Open', exact=True).first.click()
@@ -225,13 +237,15 @@ def production(browser, base):
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.goto(base)
     expect(page.get_by_text('VisaBrowser', exact=True).first).to_be_visible()
-    expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
+    expect(page.get_by_label('Traveler name or initials')).to_be_visible()
+    assert page.get_by_role('button', name='Add Another Traveler').count() == 0
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
     page.get_by_role('button', name='Save offline').click()
     expect(page.locator('#offline-status')).to_contain_text('Saved offline', timeout=60000)
     context.set_offline(True)
     page.reload()
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
     expect(page.locator('#offline-status')).to_contain_text('Offline')
     context.set_offline(False)
     assert not errors, errors
