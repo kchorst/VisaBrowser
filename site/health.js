@@ -243,18 +243,12 @@ export function healthNotices(destination, passport, now = Date.now()) {
   if (destination !== 'PK' && passport === 'PK') notices.push(notice('Departure health documents',
     'If leaving Pakistan, check whether you must show polio vaccination proof at departure.',
     'https://www.poliofreepakistan.gov.pk/certificate/vaccination-certificate'));
-  if (destination === 'SA') notices.push(notice(check,
-    'For Hajj or Umrah, check the current Saudi season’s rules for meningococcal ACWY proof and origin-based polio and yellow fever proof. The published 2026 rules also require COVID-19 vaccination or immunity evidence for specified groups. Check the rules for your travel date.',
-    'https://www.moh.gov.sa/en/healthawareness/pilgrims-health/pages/default.aspx'));
   if (destination === 'JM' && (jamaicaVaccineWithVisa.has(passport) || jamaicaVaccineOnly.has(passport))) {
     const visa = jamaicaVaccineWithVisa.has(passport) ? ' Carry a qualifying U.S., Canadian, UK or Schengen visa as well.' : '';
     notices.push(notice(documents,
       'If using Jamaica’s listed tourist visa waiver for up to 30 days, carry proof of measles, rubella and polio vaccination.' + visa,
       'https://www.pica.gov.jm/immigration/entry-visa-requirements'));
   }
-  if (destination === 'GB') notices.push(notice(check,
-    'Check whether your visa application needs a TB test. The UK uses visa type, length of stay and residence history.',
-    'https://www.gov.uk/tb-test-visa'));
   if (destination === 'KE') notices.push(notice(screening,
     'If arriving with flu-like symptoms, Kenya Port Health requires a passenger locator form.',
     'https://porthealth.health.go.ke/entry-requirements'));
