@@ -31,8 +31,9 @@ test('Polio and Jamaica visa-waiver checks are scoped to the covered pathway', (
 test('Symptom screening remains separate and an expiring order drops off', () => {
   const notices = date => healthNotices('US', 'UG', Date.parse(date));
   assert.match(notices('2026-11-19T12:00:00Z')[0].text, /fever with persistent cough/);
-  assert.match(notices('2026-11-19T12:00:00Z')[1].text, /Ebola/);
-  assert.equal(notices('2026-12-11T12:00:00Z').length, 1);
+  assert.match(notices('2026-11-19T12:00:00Z').at(-1).text, /temporary U.S. Ebola order/);
+  assert.equal(notices('2026-12-11T12:00:00Z').length, 2);
+  assert.equal(notices('2026-12-19T12:00:00Z').length, 1);
 });
 
 test('Remove obsolete U.S. vaccine instructions without removing unrelated notes', () => {
@@ -100,4 +101,18 @@ test('Both Congos show yellow fever proof and separate Ebola screening', () => {
   assert.match(healthNotices('CD', 'FR')[1].text, /Polio/);
   assert.match(healthNotices('BT', 'FR')[0].text, /while CDC lists no entry requirement/);
   assert.deepEqual(healthNotices('VN', 'FR'), []);
+});
+
+
+test('U.S. Ebola attestation follows air travel and DRC presence across passports', () => {
+  const time = Date.parse('2026-11-19T12:00:00Z');
+  const find = passport => healthNotices('US', passport, time).find(({ url }) => url.endsWith('/attestation-order.html'));
+  const form = find('US');
+  assert.deepEqual(find('FR'), form);
+  assert.deepEqual(find('CG'), form);
+  assert.match(form.text, /Democratic Republic of the Congo \(Kinshasa\)/);
+  assert.match(form.text, /previous 21 days/);
+  assert.match(form.text, /airport connection counts/);
+  assert.equal(healthNotices('US', 'US', Date.parse('2026-11-03T12:00:00Z'))
+    .some(({ url }) => url.endsWith('/attestation-order.html')), false);
 });
