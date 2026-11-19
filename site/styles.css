@@ -92,3 +92,25 @@ dialog::backdrop { background: #020617bd; }
 .travel-disclaimer { margin-top: 1rem; }
 .travel-disclaimer summary { font-weight: 700; }
 .travel-disclaimer p { margin-top: .8rem; }
+
+/* v0.4.0 interaction and readability refinements */
+.country-section > summary, .country-result > summary { min-height: 48px; display: flex; align-items: center; font-weight: 700; }
+.country-section[open] > summary, .country-result[open] > summary { margin-bottom: .75rem; border-bottom: 1px solid var(--line); }
+.itinerary-stop { padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .6rem; min-width: 0; }
+.itinerary-stop strong { min-width: 0; flex: 1 1 11rem; overflow-wrap: anywhere; }
+.itinerary-stop .actions { justify-content: flex-end; }
+.itinerary-stop button { min-width: 44px; }
+.country-result { min-width: 0; }
+.country-result > div { min-width: 0; }
+main { min-width: 0; }
+@media (max-width: 400px) {
+  .brand { gap: .4rem; }
+  .panel { padding: .8rem; }
+  .row, .actions { gap: .4rem; }
+  .itinerary-stop .actions { width: 100%; }
+  .itinerary-stop .actions button { flex: 1; }
+  .section-head { align-items: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0s !important; }
+}
