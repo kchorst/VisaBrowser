@@ -135,6 +135,25 @@ def fixture(browser, base):
     page.get_by_role('dialog').get_by_role('button', name='Clear All').click()
     expect(page.locator('.itinerary-stop')).to_have_count(0)
 
+    # Itinerary searches are not auto-saved; explicit Save Search stores the order.
+    page.goto(base + '#multi')
+    assert not json.loads(page.evaluate(
+        "localStorage.getItem('visabrowser.v1')"))['saved']
+    destination = page.get_by_label('Add destinations')
+    for country in ['Destination A', 'Destination C']:
+        destination.fill(country)
+        page.get_by_role('button', name='Add Country').click()
+    page.get_by_role('button', name='Search', exact=True).click()
+    page.once('dialog', lambda dialog: dialog.accept('Autumn Itinerary'))
+    page.get_by_role('button', name='Save Search').click()
+    expect(page.get_by_role('heading', name='Autumn Itinerary')).to_be_visible()
+    expect(page.locator('.country-result')).to_have_count(2)
+    stored = json.loads(page.evaluate("localStorage.getItem('visabrowser.v1')"))['saved']
+    assert stored[0]['itinerary'] == ['A', 'C']
+    page.once('dialog', lambda dialog: dialog.accept())
+    page.get_by_role('button', name='Refresh Results').click()
+    expect(page.get_by_role('heading', name='Autumn Itinerary')).to_be_visible()
+
     # Save exact original snapshot. The saved record is the only persisted search.
     page.goto(base + '#destination/D/view')
     expect(page.get_by_role('heading', name='Destination D')).to_be_visible()
@@ -142,7 +161,7 @@ def fixture(browser, base):
     page.get_by_role('button', name='Save destination').click()
     expect(page.get_by_text('This is the original saved result', exact=False)).to_be_visible()
     assert 'Europe Trip 2027' in json.loads(page.evaluate(
-        "localStorage.getItem('visabrowser.v1')"))['saved'][0]['name']
+        "localStorage.getItem('visabrowser.v1')"))['saved'][-1]['name']
     sample['RW']['rules']['D'].pop('exceptions')
     sample['RW']['lastSuccess'] = '2026-11-18T12:00:00+00:00'
     catalog['sources']['RW']['lastSuccess'] = sample['RW']['lastSuccess']
@@ -154,7 +173,7 @@ def fixture(browser, base):
 
     # Offline refresh fails without erasing the previous saved result.
     record_before = json.loads(page.evaluate(
-        "localStorage.getItem('visabrowser.v1')"))['saved'][0]['result']
+        "localStorage.getItem('visabrowser.v1')"))['saved'][-1]['result']
     context.set_offline(True)
     dialogs = []
     def handle_dialog(dialog):
