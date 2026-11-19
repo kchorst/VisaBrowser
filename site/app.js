@@ -768,7 +768,7 @@ function destinationDetails(placeId, saved, data) {
   const mixed = new Set(people.map(p => p.passport)).size > 1;
   const summaryBox = people.length > 1 ?
     el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
-      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : issueLabel(summary.issues)),
+      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
         noIssues(summary) ? chip('NO ISSUES — check passport and entry conditions', 'good') : null,
         summary.group ? chip(summary.group, 'warn') : null,
