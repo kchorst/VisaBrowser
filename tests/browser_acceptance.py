@@ -253,6 +253,30 @@ def production(browser, base):
 
 
 
+def deep_link_first_visit(browser, base):
+    # Fresh browser, linked destination, no saved travelers: do not lose context.
+    context = browser.new_context(viewport={'width': 360, 'height': 740},
+                                  is_mobile=True, has_touch=True, service_workers='block')
+    page = context.new_page()
+    errors = []
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    page.goto(base + '#country=jp')
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
+    expect(page.get_by_text('Destination: Japan')).to_be_visible()
+    assert page.get_by_role('button', name='Add Another Traveler').count() == 0
+    form = page.get_by_role('form', name='First traveler details')
+    expect(form.get_by_label('Traveler name or initials')).to_be_visible()
+    form.get_by_label('Traveler name or initials').fill('Visitor')
+    form.get_by_label('Passport country').select_option('US')
+    form.get_by_role('button', name='Save first traveler').click()
+    expect(page.get_by_role('heading', name='Japan')).to_be_visible()
+    expect(page.get_by_role('heading', name='Visitor')).to_be_visible()
+    assert page.evaluate('location.hash') == '#country=jp'
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    assert not errors, errors
+    context.close()
+
+
 def real_country_journeys(browser, base):
     """User-specified countries on the shipped data, beyond synthetic fixtures.
 
@@ -366,6 +390,7 @@ def run():
             try:
                 base = f'http://127.0.0.1:{server.server_port}/VisaBrowser/'
                 fixture(browser, base)
+                deep_link_first_visit(browser, base)
                 real_country_journeys(browser, base)
                 production(browser, base)
             finally:
