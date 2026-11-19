@@ -23,6 +23,14 @@ There are four ways to browse requirements:
 
 For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
 
+### Expand itinerary cards and open Travel-Prep
+
+Each destination card in **Search Multiple** and a reopened **Saved Search** has a clearly labeled **Show visa requirements** disclosure, which changes to **Hide visa requirements** after expansion. A separate **Travel-Prep ↗** link is always visible on the card, even while VisaBrowser requirements are collapsed; it opens that exact country in a new tab. Longer collections of destinations remain behind a counted Show/Hide control.
+
+The two countries sometimes called "Congo" are explicitly distinguished as **Congo (Democratic Republic of the Congo)** and **Congo (Republic of the Congo)**. Older terms such as "Congo - Kinshasa" still work in destination search, and old automatically named saved searches display their clearer country names.
+
+The **VisaBrowser** title at the top of the website links to Home. A new screen begins at the top, while returning from a country detail to its Browse Countries or Check Group Req list restores the earlier list position and filter. Saved itinerary headings wrap normally and show their check date separately.
+
 ### Open a specific destination from another app
 
 Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. **On a first visit, a country link retains the destination and shows “Destination: Japan” above the first-traveler form. Once you save the first name and passport, the linked country's result opens immediately, without another country selection.** If existing travelers are deselected, select one to compare. Unknown codes return to the country picker with a notice.
