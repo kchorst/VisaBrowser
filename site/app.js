@@ -383,7 +383,7 @@ function compareShortlist(value, people, data) {
   return { message: message.join(' '), cards };
 }
 
-function countries(data) {
+function countries(data, groupMode = false) {
   const query = el('input', { type: 'search', placeholder: 'Search by country or territory', autocomplete: 'off' });
   const results = el('div', { class: 'stack' });
   const people = activePassengers();
@@ -405,7 +405,7 @@ function countries(data) {
         return result.pending > 0;
       });
       if (!entries.length) continue;
-      cards.push(el('section', { class: 'panel country-section' }, el('h2', {}, section.heading),
+      cards.push(el('section', { class: 'panel country-section' }, el('h2', {}, `${section.heading} (${entries.length})`),
         el('ul', { class: 'country-list' }, entries.map(({ id, name, result }) => {
           const control = button(name, () => go(`destination/${id}`));
           if (result?.pending) control.append(chip(`${result.pending} pending verification`, 'warn'));
@@ -418,7 +418,7 @@ function countries(data) {
   filter.addEventListener('change', paint);
   paint();
 
-  return [title('Countries'), refreshNotice(people, data), el('div', { class: 'stack' },
+  return [title(groupMode ? 'Check Group Requirements' : 'Browse Countries'), refreshNotice(people, data), el('div', { class: 'stack' },
     people.length ? null : invite(), panel(el('h2', {}, 'Search and filter'), label('Search destinations', query),
       people.length ? label('Filter by visa result', filter) : null), results)];
 }
@@ -562,17 +562,29 @@ function destinationDetails(placeId, saved, data) {
   const people = saved?.passengers ?? activePassengers();
   const summary = compare(people, placeId, data);
   const save = () => {
-    const record = { id: uid(), placeId, passengers: structuredClone(people), snapshot: resultSnapshot(summary) };
+    const record = { id: uid(), placeId, name: `${places[placeId]} · ${new Date().toLocaleDateString()}`, checkedAt: new Date().toISOString(), passengers: structuredClone(people), snapshot: resultSnapshot(summary) };
+    const chosen = prompt('Name this saved search', record.name);
+    if (chosen === null) return;
+    record.name = chosen.trim() || record.name;
     state.saved.push(record);
     persist();
     go(`saved/${record.id}`);
   };
   const controls = saved ? [
-    button('Recalculate', async event => {
+    button('Refresh Results', async event => {
+      if (!confirm('Refresh and replace the saved results? The previous version will not be retained.')) return;
       event.currentTarget.disabled = true;
       try { await readCatalog(); }
       catch { /* the current catalog is available */ }
       for (const p of people) cache.delete(p.passport);
+      try {
+        const fresh = await loadGroup(people);
+        const refreshed = compare(people, placeId, fresh);
+        if (refreshed.rows.some(row => row.source?.unavailable)) throw new Error('Some sources are unavailable');
+        saved.snapshot = resultSnapshot(refreshed);
+        saved.checkedAt = new Date().toISOString();
+        persist();
+      } catch { alert('Refresh failed. Your saved results remain unchanged.'); }
       render(true);
     }),
     button('Delete saved destination', () => confirmAction(`Delete saved ${places[placeId]}?`, 'Delete', () => {
@@ -618,12 +630,14 @@ function destinationDetails(placeId, saved, data) {
 
 function savedList() {
   return [title('Saved destinations'), el('div', { class: 'stack' }, state.saved.length ?
-    state.saved.map(record => panel(el('div', { class: 'row' },
-      el('div', {}, el('h2', {}, places[record.placeId] ?? record.placeId),
-        muted(record.passengers.map(p => p.name).join(', '))),
-      button('Open', () => go(`saved/${record.id}`), '', {
-        'aria-label': `Open saved ${places[record.placeId] ?? record.placeId}`
-      })))) : panel(muted('Open a destination comparison and choose Save destination.')))];
+    [...state.saved].reverse().map(record => panel(el('div', { class: 'row' },
+      el('div', {}, el('h2', {}, record.name ?? places[record.placeId] ?? record.placeId),
+        muted(record.passengers.map(p => p.name).join(', ')),
+        muted(record.checkedAt ? `Checked ${new Date(record.checkedAt).toLocaleDateString()}` : 'Older saved result'),
+        muted(record.checkedAt && Date.now() - Date.parse(record.checkedAt) > 30 * 86400000 ? 'Needs Refresh' : '')),
+      el('div', { class: 'actions' }, button('Open', () => go(`saved/${record.id}`)),
+        button('Rename', () => { const name = prompt('Saved search name', record.name ?? places[record.placeId]); if (name?.trim()) { record.name = name.trim(); persist(); render(true); } }),
+        button('Delete', () => confirmAction('Delete this saved search?', 'Delete', () => { state.saved = state.saved.filter(item => item.id !== record.id); persist(); render(true); }), 'danger'))))) : panel(muted('Open a destination comparison and choose Save destination.')))];
 }
 
 let renderId = 0;
@@ -656,7 +670,7 @@ async function render(focus = false) {
     let nodes;
     if (screen === 'home' || !screen) nodes = dashboard();
     else if (screen === 'view') nodes = viewCountry();
-    else if (screen === 'group') nodes = countries(data);
+    else if (screen === 'group') nodes = countries(data, true);
     else if (screen === 'countries') nodes = countries(data);
     else if (screen === 'multi') nodes = multiSearch(data);
     else if (saved && places[saved.placeId]) nodes = destinationDetails(saved.placeId, saved, data);
