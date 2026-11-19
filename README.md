@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.2
+# VisaBrowser v0.4.3
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
@@ -10,6 +10,10 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 2. On the first screen, enter the **first traveler's name or initials and passport country** directly in the visible form. Optionally expand **Existing visas or residence permits**. Save the first traveler; then add another traveler below the traveler list or choose **Continue**.
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
+
+**Browse Countries** starts with every category collapsed, even if a prior filter is retained. Select a category heading to expand its country list.
+
+**Search Multiple** accepts a comma-separated itinerary in one entry, including a pasted list such as `Mozambique, Brazil, Cape Verde, Portugal, China`. Recognized destinations appear automatically in travel order, and **Search Requirements** compares the list. Unknown names remain in the field for correction. You can also select a single destination from suggestions or press Enter.
 
 **View Country** supports a searchable destination picker; **Browse Countries** filters by visa-free, eVisa/authorization, visa required or needs review; **Check Group Req** uses the most restrictive group status; **Search Multiple** builds an ordered itinerary with editable country chips. Results can be copied or shared with destination-specific links to [Travel-Prep](https://kchorst.github.io/Travel-Prep/).
 
