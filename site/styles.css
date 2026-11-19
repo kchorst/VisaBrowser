@@ -123,3 +123,11 @@ main { min-width: 0; }
 .country-list[hidden] { display: none !important; }
 .country-header + .country-list:not([hidden]) { margin-top: .5rem; border-top: 1px solid var(--line); }
 @media (max-width: 400px) { .country-header .country-toggle { min-width: 7.5rem; } }
+
+/* All collection views expose a visible count and Show/Hide control. */
+.counted-section { display: grid; gap: .65rem; min-width: 0; }
+.counted-section .country-header { padding-bottom: .35rem; }
+.counted-list { min-width: 0; }
+.counted-list[hidden] { display: none !important; }
+.counted-list > .panel { min-width: 0; }
+.counted-list .itinerary-stop { width: 100%; }
