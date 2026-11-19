@@ -991,7 +991,9 @@ async function start() {
       const previousHash = lastRouteHash;
       if (unsavedResult && nextHash !== previousHash &&
           (previousHash.startsWith('#destination/') || previousHash === '#multi')) {
-        history.replaceState(null, '', previousHash);
+        // Restore the unsaved screen without deleting the browser Back target.
+        // Pushing the prior URL preserves Back semantics after Cancel.
+        history.pushState(null, '', previousHash);
         leaveUnsaved(nextHash);
         return;
       }
