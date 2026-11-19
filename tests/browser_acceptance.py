@@ -112,7 +112,7 @@ def fixture(browser, base):
     page.get_by_label('Search destinations').fill('Destination B')
     expect(page.get_by_text(re.compile(r'eVisa / Authorization \(1\)'))).to_be_visible()
     page.get_by_label('Filter requirements').select_option('authorization')
-    page.locator('.country-section h2').click()
+    page.get_by_role('button', name='Show countries').click()
     page.get_by_role('button', name='Destination B').click()
     expect(page.get_by_role('heading', name='Destination B')).to_be_visible()
     expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
