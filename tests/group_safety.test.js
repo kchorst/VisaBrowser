@@ -35,7 +35,7 @@ test('Mixed groups always use the most restrictive requirement and include actua
   assert.equal(classify(unknown), 'review');
   const supported = { ...aline, documents: [{ id: 'permit', issuer: 'US', type: 'permit' }] };
   const conditionalFree = compare([alex, supported], 'D', sample);
-  assert.equal(conditionalFree.group, 'Visa-free for everyone');
+  assert.equal(conditionalFree.group, 'Visa-free with conditions');
   assert.equal(conditionalFree.rows[1].viaDocument, true);
   assert.equal(classify(conditionalFree), 'review');
   assert.equal(sourceDelayed({ lastSuccess: '2000-01-01T00:00:00Z' }), true);
