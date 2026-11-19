@@ -17,7 +17,8 @@ on:
 
 concurrency:
   group: visabrowser-${{ github.event_name == 'pull_request' && github.ref || 'pages' }}
-  cancel-in-progress: false
+  # A new main commit supersedes an unshipped build; avoid a queue of stale releases.
+  cancel-in-progress: ${{ github.event_name == 'push' && github.ref_name == github.event.repository.default_branch }}
 
 permissions:
   contents: read
