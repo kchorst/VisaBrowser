@@ -737,14 +737,17 @@ function destinationDetails(placeId, saved, data) {
       try {
         if (!navigator.onLine) throw new Error('Offline');
         await readCatalog();
-        for (const p of people) cache.delete(p.passport);
-        const fresh = await loadGroup(people);
-        const refreshed = compare(people, placeId, fresh);
+        const refreshedPeople = people.map(savedPerson =>
+          structuredClone(state.passengers.find(person => person.id === savedPerson.id) ?? savedPerson));
+        for (const p of refreshedPeople) cache.delete(p.passport);
+        const fresh = await loadGroup(refreshedPeople);
+        const refreshed = compare(refreshedPeople, placeId, fresh);
         if (refreshed.rows.some(row => row.source?.unavailable ||
             (row.source?.url && sourceDelayed(row.source, new Date(), catalog.overdueDays))))
           throw new Error('One or more sources are unavailable or stale');
         const changes = Object.fromEntries(refreshed.rows.map(row => [row.passenger.id,
           requirementChange(row, saved)]).filter(([, change]) => change));
+        saved.passengers = refreshedPeople;
         saved.snapshot = resultSnapshot(refreshed);
         saved.result = compactResult(refreshed);
         saved.changes = changes;
@@ -810,9 +813,11 @@ function savedItineraryDetails(saved, data) {
     try {
       if (!navigator.onLine) throw new Error('Offline');
       await readCatalog();
-      for (const person of saved.passengers) cache.delete(person.passport);
-      const fresh = await loadGroup(saved.passengers);
-      const results = Object.fromEntries(saved.itinerary.map(id => [id, compare(saved.passengers, id, fresh)]));
+      const refreshedPeople = saved.passengers.map(savedPerson =>
+        structuredClone(state.passengers.find(person => person.id === savedPerson.id) ?? savedPerson));
+      for (const person of refreshedPeople) cache.delete(person.passport);
+      const fresh = await loadGroup(refreshedPeople);
+      const results = Object.fromEntries(saved.itinerary.map(id => [id, compare(refreshedPeople, id, fresh)]));
       if (Object.values(results).some(result => result.rows.some(row =>
         row.source?.unavailable || (row.source?.url &&
           sourceDelayed(row.source, new Date(), catalog.overdueDays)))))
@@ -822,6 +827,7 @@ function savedItineraryDetails(saved, data) {
         const changes = results[id].rows.map(row => requirementChange(row, previous)).filter(Boolean);
         return [id, changes];
       }));
+      saved.passengers = refreshedPeople;
       saved.results = Object.fromEntries(Object.entries(results).map(([id, result]) => [id, compactResult(result)]));
       saved.checkedAt = new Date().toISOString();
       persist();
