@@ -90,7 +90,7 @@ def fixture(browser, base):
 
     # Browse Countries (not only Group Req) starts with every category collapsed.
     page.get_by_role('button', name='Browse Countries').click()
-    expect(page.locator('.country-section')).to_have_count(4)
+    expect(page.locator('.country-section')).to_have_count(5)
     assert all(section.locator('.country-list').is_hidden()
                for section in page.locator('.country-section').all())
     page.get_by_label('Filter requirements').select_option('review')
@@ -124,12 +124,12 @@ def fixture(browser, base):
     # Browse categories and live filters; group mode has counts and collapsed lists.
     page.get_by_role('button', name='Check Group Req').click()
     expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
-    expect(page.locator('.country-section')).to_have_count(4)
+    expect(page.locator('.country-section')).to_have_count(5)
     assert all(item.locator('.country-list').is_hidden()
                for item in page.locator('.country-section').all())
-    expect(page.get_by_text(re.compile(r'Visa-Free \(1\)'))).to_be_visible()
+    expect(page.get_by_text(re.compile(r'Visa-Free · No additional steps identified \(1\)'))).to_be_visible()
     page.get_by_label('Search destinations').fill('Destination B')
-    expect(page.get_by_text(re.compile(r'eVisa / Authorization \(1\)'))).to_be_visible()
+    expect(page.get_by_text(re.compile(r'Electronic Visa / Visa on Arrival \(1\)'))).to_be_visible()
     page.get_by_label('Filter requirements').select_option('authorization')
     page.get_by_role('button', name='Show countries').click()
     page.get_by_role('button', name='Destination B').click()
