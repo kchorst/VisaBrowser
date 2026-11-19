@@ -365,14 +365,20 @@ function compareShortlist(value, people, data) {
   }
   const cards = people.length ? [...matched].map(id => {
     const { rows } = compare(people, id, data);
-    return panel(el('div', { class: 'row' }, el('h3', {}, places[id]),
-      el('a', { href: `#destination/${id}/multi`, 'aria-label': `View details for ${places[id]}` }, 'View details')),
-    el('ul', { class: 'shortlist-passengers' }, rows.map(row => el('li', {},
-      el('p', {}, el('strong', {}, row.passenger.name), ` · ${statuses(row)}`,
-        row.flags?.length ? ` · ${row.flags.join(' · ')}` : null),
-      row.condition ? muted(row.condition) : null,
-      row.stay ? muted(`Stay limit · ${row.stay}`) : null,
-      row.options.includes('pending') ? pendingResearch(row, id, true) : null))));
+    const summary = compare(people, id, data);
+    return el('details', { class: 'panel stack country-result' },
+      el('summary', {}, places[id], ' · ', noIssues(summary) ? 'NO ISSUES' :
+        summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
+        summary.group || 'Check traveler requirements'),
+      el('div', { class: 'stack' },
+        el('a', { href: `#destination/${id}/multi`, 'aria-label': `View details for ${places[id]}` }, 'View full details'),
+        el('p', {}, link('Open in Travel-Prep', `${travelPrep}#country=${encodeURIComponent(id)}`)),
+        el('ul', { class: 'shortlist-passengers' }, rows.map(row => el('li', {},
+          el('p', {}, el('strong', {}, row.passenger.name), ` · ${statuses(row)}`,
+            row.flags?.length ? ` · ${row.flags.join(' · ')}` : null),
+          row.condition ? muted(row.condition) : null,
+          row.stay ? muted(`Stay limit · ${row.stay}`) : null,
+          row.options.includes('pending') ? pendingResearch(row, id, true) : null)))));
   }) : [];
   return { message: message.join(' '), cards };
 }
@@ -425,12 +431,12 @@ function multiSearch(data) {
   const feedback = el('p', { role: 'status', class: 'muted' });
   const shortlist = el('section', { class: 'stack', 'aria-labelledby': 'shortlist-heading' });
   const submit = el('button', { type: 'submit', class: 'primary' }, 'Check destinations');
-  const clear = button('Clear list', () => {
+  const clear = button('Clear All', () => confirmAction('Clear all selected destinations?', 'Clear All', () => {
     clearShortlist();
     input.value = '';
     paintShortlist();
     input.focus();
-  });
+  }));
   input.addEventListener('input', () => {
     destinationDraft = input.value;
     if (submittedDestinations !== null && input.value !== submittedDestinations) submittedDestinations = null;
