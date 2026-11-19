@@ -184,7 +184,7 @@ def fixture(browser, base):
     page.on('dialog', handle_dialog)
     page.get_by_role('button', name='Refresh Results').click()
     record_after = json.loads(page.evaluate(
-        "localStorage.getItem('visabrowser.v1')"))['saved'][0]['result']
+        "localStorage.getItem('visabrowser.v1')"))['saved'][-1]['result']
     assert record_after == record_before
     assert any('Original saved results were preserved' in message for message in dialogs)
     context.set_offline(False)
