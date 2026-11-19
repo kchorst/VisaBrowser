@@ -42,6 +42,8 @@ function evaluate(passenger, place, data) {
   if (source?.unavailable) return pending('The rules could not be loaded. Reopen the comparison when connected.');
   const baseline = source?.rules?.[place];
   const rule = reviewedRule(passenger, place, baseline, data);
+  const fromDocuments = Boolean(passenger.documents?.length &&
+    baseline?.options?.every(option => option !== 'free') && rule?.options?.includes('free'));
   if (rule && (!Array.isArray(rule.options) || !rule.options.length)) {
     const { options, reason, ...details } = rule;
     return pending(reason || 'The source supplied no usable entry classification. Verify the applicable visa or admission rule.',
@@ -52,7 +54,7 @@ function evaluate(passenger, place, data) {
     return pending('The source snapshot is overdue. Confirm the current conditions before using this route.',
       { notes: rule.notes, search: rule.sourceText, controls: rule.controls });
   }
-  if (rule && rule !== baseline && (rule.official || rule.reason)) return rule;
+  if (rule && rule !== baseline && (rule.official || rule.reason)) return fromDocuments ? { ...rule, viaDocument: true } : rule;
   if (!source?.lastSuccess) return pending('No usable Wikipedia entry rules have been verified for this passport.');
   if (!rule) return pending('The source has no verified rule for this destination.');
   if (rule.reason) return pending(rule.reason, { notes: rule.notes, search: rule.sourceText, controls: rule.controls });
@@ -83,6 +85,7 @@ function evaluate(passenger, place, data) {
       }
       return {
         ...exception.result,
+        viaDocument: true,
         flags: exception.result.flags ?? rule.flags,
         notes: exception.result.notes ?? rule.notes
       };
@@ -95,7 +98,7 @@ function evaluate(passenger, place, data) {
     passenger.documents?.some(document => exception.issuers.includes(document.issuer) || exception.issuers.includes('*')));
   if (unreviewed) return pending('The source lists a document exception that needs individual review.',
     { notes: rule.notes, search: unreviewed.note, controls: rule.controls });
-  return rule;
+  return fromDocuments ? { ...rule, viaDocument: true } : rule;
 }
 
 export function compare(passengers, destination, data) {
@@ -139,7 +142,7 @@ export function classify(result) {
   if (result.rows.some(row => row.options.some(option => ['evisa', 'arrival', 'residentArrival', 'transit'].includes(option))))
     return 'authorization';
   if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
-    !row.condition && !row.flags?.length && !row.controls?.length && !row.questions?.length &&
+    !row.condition && !row.flags?.length && !row.controls?.length && !row.questions?.length && !row.viaDocument &&
     !row.reason && !row.source?.error &&
     (!row.source?.url || !sourceDelayed(row.source)))) return 'free';
   return 'review';
@@ -166,7 +169,7 @@ export function resultSnapshot(result) {
     status: statuses(row),
     successful: row.source?.lastSuccess,
     requirement: JSON.stringify([
-      row.options, row.condition, row.stay, row.fee, row.flags, row.entry, row.reason, row.notes,
+      row.options, row.condition, row.stay, row.fee, row.flags, row.entry, row.reason, row.notes, row.viaDocument,
       ...(row.home ? [row.home] : [])
     ])
   }]));
