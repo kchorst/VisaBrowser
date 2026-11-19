@@ -810,7 +810,10 @@ function passengerResult(row, placeId, saved, data) {
   });
   const research = !known ? pendingResearch(row, placeId) : null;
   const routes = row.routes?.map(option => el('p', {},
-    option.title, option.detail ? ` · ${option.detail}` : null));
+    option.url?.startsWith('https://') ? link(option.title, option.url) : option.title,
+    option.detail ? ` · ${option.detail}` : null));
+  const authority = row.official?.startsWith('https://') ?
+    el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
   const passportWarnings = (row.notes ?? []).filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
@@ -830,7 +833,7 @@ function passengerResult(row, placeId, saved, data) {
     requiresVisa ? muted(row.fee ? `Fee · ${row.fee}` : 'Fee unknown') : null,
     row.entry ? el('p', {}, row.entry) : null,
     saved?.changes?.[row.passenger.id] ? el('p', { class: 'condition' }, saved.changes[row.passenger.id]) : null,
-    saved ? null : controls, research, routes, notes,
+    saved ? null : controls, research, authority, routes, notes,
     null);
 }
 
