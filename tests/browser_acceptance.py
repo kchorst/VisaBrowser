@@ -445,6 +445,9 @@ def real_country_journeys(browser, base):
     # requirements: it offers Save/Discard and respects the user's choice.
     page.goto(base + '#destination/GB/view')
     expect(page.get_by_role('heading', name='United Kingdom')).to_be_visible()
+    expect(page.get_by_role('link', name='Official UK ETA eligibility and application').first).to_have_attribute(
+        'href', 'https://www.gov.uk/eta')
+    expect(page.get_by_text('£20', exact=False).first).to_be_visible()
     page.get_by_role('link', name='VisaBrowser — go to Home').click()
     expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
     page.get_by_role('dialog').get_by_role('button', name='Discard').click()
