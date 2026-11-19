@@ -1104,6 +1104,8 @@ async function render(focus = false, restoreScroll = false) {
     Object.hasOwn(screenNames, screen) ? screen : 'passengers';
   for (const tab of tabs) tab.setAttribute('aria-current', tab.dataset.route === current ? 'page' : 'false');
   main.setAttribute('aria-busy', 'true');
+  const breadcrumbSlot = document.querySelector('#page-breadcrumbs');
+  breadcrumbSlot.replaceChildren();
   main.replaceChildren(el('p', { class: 'panel', role: 'status' }, 'Loading comparison…'));
   try {
     const saved = screen === 'saved' && id ? state.saved.find(item => item.id === id) : undefined;
@@ -1121,7 +1123,8 @@ async function render(focus = false, restoreScroll = false) {
     else if (screen === 'saved') nodes = savedList();
     else if (screen === 'destination' && destinations.some(([code]) => code === id)) nodes = destinationDetails(id, null, data);
     else nodes = passengerList();
-    main.replaceChildren(breadcrumbs(screen, id, current, saved), ...nodes.filter(Boolean));
+    breadcrumbSlot.replaceChildren(breadcrumbs(screen, id, current, saved));
+    main.replaceChildren(...nodes.filter(Boolean));
     requestAnimationFrame(() => window.scrollTo({ top: restoreScroll ? (scrollByRoute.get(location.hash) ?? 0) : 0, left: 0, behavior: 'instant' }));
   } catch (error) {
     if (request !== renderId) return;
@@ -1145,9 +1148,22 @@ async function readCatalog() {
   // Presentation labels only: retain canonical source JSON and offline hashes.
   places.CD = 'Congo (Democratic Republic of the Congo)';
   places.CG = 'Congo (Republic of the Congo)';
-  const dataDate = document.querySelector('#visa-data-date');
-  dataDate.hidden = !catalog.generated;
-  dataDate.textContent = catalog.generated ? `Visa data · ${catalog.generated.slice(0, 10)}` : '';
+  const generated = new Date(catalog.generated ?? NaN);
+  const hasDate = Number.isFinite(generated.getTime());
+  document.querySelector('#visa-data-dates').hidden = !hasDate;
+  if (hasDate) {
+    const datasetDate = generated.toISOString().slice(0, 10);
+    // The published dataset refresh is scheduled for Tuesdays (UTC).
+    const nextUpdate = new Date(datasetDate);
+    const tuesday = 2;
+    const daysToTuesday = (tuesday - nextUpdate.getUTCDay() + 7) % 7 || 7;
+    nextUpdate.setUTCDate(nextUpdate.getUTCDate() + daysToTuesday);
+    const expectedDate = nextUpdate.toISOString().slice(0, 10);
+    const label = new Date().toISOString().slice(0, 10) > expectedDate
+      ? 'Scheduled update overdue' : 'Next scheduled update';
+    document.querySelector('#visa-data-date').textContent = `Visa data · ${datasetDate}`;
+    document.querySelector('#visa-next-update').textContent = `${label} · ${expectedDate}`;
+  }
   destinations = catalog.destinations.filter(code => places[code]).map(code => [code, places[code]]).sort(alpha);
   passports = Object.entries(places).filter(([code]) => catalog.passports.includes(code)).sort(alpha);
   issuers = Object.entries(places).filter(([code]) => !['BNO', 'BOC', 'BOTC'].includes(code)).sort(alpha);

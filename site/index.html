@@ -22,7 +22,19 @@
     </div>
   </header>
   <div class="layout">
-    <p class="muted" id="visa-data-date" hidden></p>
+    <div class="page-meta">
+      <div>
+        <div class="data-dates muted" id="visa-data-dates" hidden>
+          <span id="visa-data-date"></span>
+          <span id="visa-next-update"></span>
+        </div>
+        <div id="page-breadcrumbs"></div>
+      </div>
+      <nav class="travel-tools" aria-label="Travel tools">
+        <a href="https://kchorst.github.io/Travel-Prep/" target="_blank" rel="noopener">Travel-Prep</a>
+        <span class="muted">TravelAgent</span>
+      </nav>
+    </div>
     <p class="muted" id="offline-status" role="status" hidden></p>
     <section class="panel" id="app-update" aria-label="VisaBrowser update" hidden>
       <p role="status">VisaBrowser update available.</p>
