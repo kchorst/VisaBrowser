@@ -131,24 +131,34 @@ export function groupDetail(result) {
   return [...counts].map(([label, count]) => `${count} ${label}`).join(' · ');
 }
 
+export function classify(result) {
+  if (!result.rows.length || result.pending || result.rows.some(row => row.options.includes('pending') || row.source?.unavailable))
+    return 'review';
+  if (result.rows.some(row => row.options.some(option => ['denied', 'advance', 'permit'].includes(option))))
+    return 'required';
+  if (result.rows.some(row => row.options.some(option => ['evisa', 'arrival', 'residentArrival', 'transit'].includes(option))))
+    return 'authorization';
+  if (result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
+    !row.condition && !row.flags?.length && !row.controls?.length && !row.questions?.length &&
+    !row.reason && !row.source?.error &&
+    (!row.source?.url || !sourceDelayed(row.source)))) return 'free';
+  return 'review';
+}
+
 export function rank(destinations, passengers, data, include = () => true) {
-  const sections = new Map();
+  const buckets = [
+    { id: 'free', heading: 'Visa-Free', destinations: [] },
+    { id: 'authorization', heading: 'eVisa / Authorization', destinations: [] },
+    { id: 'required', heading: 'Visa Required', destinations: [] },
+    { id: 'review', heading: 'Needs Review', destinations: [] }
+  ];
   for (const [id, name] of destinations) {
     const result = compare(passengers, id, data);
     if (!include(result)) continue;
-    const covered = noAdvanceVisa(result) && !result.issues;
-    const transit = !result.issues && !result.pending &&
-      result.rows.some(row => row.options.includes('transit'));
-    const order = result.group.startsWith('Visa-free') ? 0 : result.group ? 1 :
-      covered ? 2 : transit ? 3 : result.issues ? result.issues + 3 : Number.MAX_SAFE_INTEGER;
-    const heading = result.group || (covered ? 'No conventional advance visa needed' :
-      transit ? 'Transit-only conditions' : result.issues ? issueLabel(result.issues) : 'Pending verification');
-    if (!sections.has(order)) sections.set(order, { heading, destinations: [] });
-    sections.get(order).destinations.push({ id, name, result });
+    buckets.find(section => section.id === classify(result)).destinations.push({ id, name, result });
   }
-  return [...sections].sort(([a], [b]) => a - b).map(([, section]) => ({
-    ...section, destinations: section.destinations.sort((a, b) => a.name.localeCompare(b.name, 'en'))
-  }));
+  for (const section of buckets) section.destinations.sort((a, b) => a.name.localeCompare(b.name, 'en'));
+  return buckets;
 }
 
 export function resultSnapshot(result) {
