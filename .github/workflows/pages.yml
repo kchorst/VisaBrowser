@@ -100,6 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      statuses: write
     steps:
       - uses: actions/checkout@v6
       - name: Package and publish release
@@ -119,3 +120,15 @@ jobs:
           fi
           gh release create "$tag" VisaBrowser-Windows.zip --target "$GITHUB_SHA" --generate-notes --title "VisaBrowser $tag"
           gh release view "$tag" --json tagName,assets --jq '{tag: .tagName, assets: [.assets[].name]}'
+      - name: Confirm release asset and publish verified status
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="v$version"
+          gh release view "$tag" --json assets --jq '.assets[].name' | grep -Fx 'VisaBrowser-Windows.zip'
+          gh api -X POST "repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
+            -f state=success \
+            -f context="VisaBrowser/v$version-release" \
+            -f description="Pages deployment verified; Windows ZIP release published" \
+            -f target_url="https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag"
