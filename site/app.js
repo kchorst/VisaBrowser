@@ -161,11 +161,12 @@ function uniqueDocuments(documents) {
   return [...new Map(documents.map(doc => [documentKey(doc), doc])).values()];
 }
 
-function passengerEditor(passenger, onSave) {
+function passengerEditor(passenger, onSave, inline = false) {
   const draft = passenger ? structuredClone(passenger) : { id: uid(), name: '', passport: '', documents: [] };
   draft.documents = uniqueDocuments(draft.documents);
-  const form = el('form', { class: 'stack' });
-  const name = el('input', { name: 'name', value: draft.name, maxlength: '80', required: '', autofocus: '' });
+  const form = el('form', { class: 'stack traveler-form', ...(inline ? { 'aria-label': 'First traveler details' } : {}) });
+  const name = el('input', { name: 'name', type: 'text', placeholder: 'Name or initials',
+    value: draft.name, maxlength: '80', required: '', autocomplete: 'name', autofocus: '' });
   const passport = select('passport', passports, draft.passport, 'Select a passport');
   passport.required = true;
   const issuer = select('issuer', issuers, '', 'Select an issuing country or area');
@@ -233,20 +234,26 @@ function passengerEditor(passenger, onSave) {
     paint();
     return true;
   };
-  const documents = el('fieldset', { class: 'stack visa-section' }, el('legend', {}, 'Visas and residence permits'),
-    list, label('Issuing country or area', issuer), label('Visa or permit type', type),
-    label('Label (optional)', nickname), button('Add visa or permit', addDocument), message);
+  const documents = el('details', { class: 'optional-documents' },
+    el('summary', {}, 'Existing visas or residence permits (optional)'),
+    el('div', { class: 'stack' },
+      muted('Only add documents you already hold. You can do this later.'),
+      list, label('Issuing country or area', issuer), label('Visa or permit type', type),
+      label('Label (optional)', nickname), button('Add visa or permit', addDocument), message));
+  if (draft.documents.length) documents.open = true;
   paint();
-  form.append(el('h2', { id: 'dialog-title' }, passenger ? 'Edit passenger' : 'Add passenger'),
-    label('Name', name), label('Passport', passport), documents);
+  form.append(inline ? muted('Start with your name and passport. No account or passport expiry date is needed.') :
+    el('h2', { id: 'dialog-title' }, passenger ? 'Edit traveler' : 'Add traveler'),
+    label('Traveler name or initials', name), label('Passport country', passport), documents);
   if (Object.keys(draft.facts ?? {}).length) form.append(button('Reset entry answers', event => {
     delete draft.facts;
     event.currentTarget.textContent = 'Entry answers reset';
     event.currentTarget.disabled = true;
   }));
-  form.append(el('div', { class: 'actions' }, el('button', { type: 'submit', class: 'primary' }, 'Save passenger'),
-    button('Cancel', () => dialog.close())));
-  const dialog = modal(form);
+  form.append(el('div', { class: 'actions' }, el('button', { type: 'submit', class: 'primary' },
+    inline ? 'Save first traveler' : 'Save traveler'),
+    inline ? null : button('Cancel', () => dialog.close())));
+  const dialog = inline ? null : modal(form);
   name.addEventListener('input', () => name.setCustomValidity(''));
   form.addEventListener('submit', event => {
     event.preventDefault();
@@ -259,12 +266,23 @@ function passengerEditor(passenger, onSave) {
     draft.name = name.value.trim();
     if (draft.passport !== passport.value) delete draft.facts;
     draft.passport = passport.value;
-    dialog.close();
+    dialog?.close();
     onSave(draft);
   });
+  if (inline) return panel(form);
 }
 
-const route = () => location.hash.slice(1).split('/');
+// Compatible with Travel-Prep's public #country=XX deep-link convention.
+// Unknown codes return to the country picker rather than displaying a wrong result.
+function route() {
+  const hash = location.hash.slice(1);
+  if (/^country=/i.test(hash)) {
+    const code = new URLSearchParams(hash).get('country')?.trim().toUpperCase();
+    return destinations?.some(([id]) => id === code) ?
+      ['destination', code, 'view'] : ['view'];
+  }
+  return hash.split('/');
+}
 let unsavedResult = null;
 let lastRouteHash = location.hash;
 function leaveUnsaved(nextHash) {
@@ -317,7 +335,10 @@ function viewCountry() {
     list: 'country-picker-suggestions', autocomplete: 'off', autofocus: '' });
   const options = el('datalist', { id: 'country-picker-suggestions' },
     destinations.map(([, name]) => el('option', { value: name })));
-  const feedback = el('p', { class: 'muted', role: 'status' }, 'Start typing a destination.');
+  const linkedCode = /^country=/i.test(location.hash.slice(1)) ?
+    new URLSearchParams(location.hash.slice(1)).get('country') : null;
+  const feedback = el('p', { class: 'muted', role: 'status' },
+    linkedCode ? 'The linked country was not found. Choose a country below.' : 'Start typing a destination.');
   const matches = el('div', { class: 'stack' });
   const paint = () => {
     const term = normalizeName(picker.value.trim());
@@ -345,17 +366,39 @@ function go(path) {
   if (location.hash === `#${path}`) render(true);
   else location.hash = path;
 }
-function passengerList() {
-  const add = button('Add Another Traveler', () => passengerEditor(null, passenger => {
+// A country deep link must retain its destination through first-run setup.
+function firstTravelerScreen(placeId = '') {
+  const onSave = passenger => {
     state.passengers.push(passenger);
-    state.selected.push(passenger.id);
+    if (!state.selected.includes(passenger.id)) state.selected.push(passenger.id);
+    persist();
+    // Keep the original #country=XX URL and render its traveler result;
+    // without a destination, reveal the traveler list and next actions.
+    render(true);
+  };
+  return [title('Your first traveler'),
+    placeId ? panel(el('p', { class: 'linked-destination' },
+      el('strong', {}, `Destination: ${places[placeId]}`)),
+      muted('Enter your name and passport to see entry requirements for this destination.')) : null,
+    passengerEditor(null, onSave, true)];
+}
+function passengerList() {
+  const firstTime = state.passengers.length === 0;
+  const saveNew = passenger => {
+    state.passengers.push(passenger);
+    if (!state.selected.includes(passenger.id)) state.selected.push(passenger.id);
     persist();
     if (pendingDestination) {
       const id = pendingDestination;
       pendingDestination = '';
       go(`destination/${id}`);
-    } else go('home');
-  }), state.passengers.length ? '' : 'primary');
+    } else {
+      // Show the completed traveler before offering the next one.
+      render(true);
+    }
+  };
+  if (firstTime) return firstTravelerScreen();
+
   const selection = el('span', { role: 'status' });
   const clearButton = button('Clear selection', () => {
     state.selected = [];
@@ -385,7 +428,7 @@ function passengerList() {
           persist();
           render(true);
         }), '', { 'aria-label': `Edit ${passenger.name}` }),
-        button('Remove', () => confirmAction(`Remove ${passenger.name}?`, 'Remove passenger', () => {
+        button('Remove', () => confirmAction(`Remove ${passenger.name}?`, 'Remove traveler', () => {
           state.passengers = state.passengers.filter(p => p.id !== passenger.id);
           state.selected = state.selected.filter(id => id !== passenger.id);
           persist();
@@ -394,15 +437,16 @@ function passengerList() {
       passenger.documents.length ? muted(`Document issuers · ${[...new Set(passenger.documents.map(d => places[d.issuer]))].join(', ')}`) : null);
   });
   updateSelection();
-  return [title('Travelers', add),
-    el('div', { class: 'stack' }, people.length ? [selection, people,
-      el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary'))] :
-      panel(muted('Add a passenger to compare tourist entry requirements.')))];
+  return [title('Travelers'),
+    el('div', { class: 'stack' }, selection, people,
+      // Add follows the existing traveler list, never precedes the first field.
+      button('Add Another Traveler', () => passengerEditor(null, saveNew)),
+      el('div', { class: 'actions' }, clearButton, button('Continue', () => go('home'), 'primary')))];
 }
 let pendingDestination = '';
 function invite(id = '') {
-  return panel(muted('Select passengers to see entry requirements for your group.'),
-    el('div', {}, button(state.passengers.length ? 'Select passengers' : 'Add passengers', () => {
+  return panel(muted('Choose your travelers to see entry requirements for your group.'),
+    el('div', {}, button(state.passengers.length ? 'Select travelers' : 'Set up first traveler', () => {
       pendingDestination = id;
       go('passengers');
     }, 'primary')));
@@ -724,6 +768,7 @@ function destinationTravelNotes(placeId) {
 }
 
 function destinationDetails(placeId, saved, data) {
+  if (!saved && !state.passengers.length) return firstTravelerScreen(placeId);
   const people = saved?.passengers ?? activePassengers();
   const freshSummary = compare(people, placeId, data);
   const summary = saved?.result ? structuredClone(saved.result) : freshSummary;
@@ -1019,7 +1064,7 @@ async function start() {
       const nextHash = location.hash;
       const previousHash = lastRouteHash;
       if (unsavedResult && nextHash !== previousHash &&
-          (previousHash.startsWith('#destination/') || previousHash === '#multi')) {
+          (previousHash.startsWith('#destination/') || /^#country=/i.test(previousHash) || previousHash === '#multi')) {
         // Restore the unsaved screen without deleting the browser Back target.
         // Pushing the prior URL preserves Back semantics after Cancel.
         history.pushState(null, '', previousHash);

@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.1 — User Guide
+# VisaBrowser v0.4.2 — User Guide
 
 ## Open the app on a phone or computer
 
@@ -6,7 +6,7 @@
 
 ## 1. Set up travelers
 
-On your first visit, choose **Add Another Traveler**. Enter a name or initials and choose the passport-issuing country. Optionally add existing visas or residence permits if you want them considered when checking a destination. Select **Save passenger**, then **Add Another Traveler** or **Continue**.
+On the first visit, the **Your first traveler** form is visible immediately. Enter a name or initials and choose the passport country; no opening dialog is needed. Expand **Existing visas or residence permits (optional)** only when applicable. Select **Save first traveler**. Your traveler then appears on the **Travelers** screen, with **Add Another Traveler** underneath and **Continue** after the list. The Add Another action is not shown before the first person is saved.
 
 The **Travelers** screen lets you change names, passport countries, and saved visas/permits or remove a traveler with confirmation. Checkboxes choose which travelers are included in the next search. The app does **not** ask for passport expiration dates: you must verify each traveler's validity and blank pages yourself.
 
@@ -22,6 +22,10 @@ There are four ways to browse requirements:
 - **Search Multiple** — enter countries individually, then use **Up**, **Down**, or **Remove** on the destination chips to arrange the trip. Select **Search** once to compare the complete itinerary. Tap a result section to expand each traveler's details.
 
 For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
+
+### Open a specific destination from another app
+
+Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. **On a first visit, a country link retains the destination and shows “Destination: Japan” above the first-traveler form. Once you save the first name and passport, the linked country's result opens immediately, without another country selection.** If existing travelers are deselected, select one to compare. Unknown codes return to the country picker with a notice.
 
 ## 3. Interpret results carefully
 

@@ -28,14 +28,26 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def add_traveler(page, name, passport, issuer=None):
-    page.get_by_role('button', name='Add Another Traveler').click()
-    form = page.get_by_role('dialog')
-    form.get_by_label('Name').fill(name)
-    form.get_by_label('Passport').select_option(passport)
+    first = page.get_by_role('heading', name='Your first traveler').is_visible()
+    if first:
+        assert page.get_by_role('button', name='Add Another Traveler').count() == 0
+        form = page.get_by_role('form', name='First traveler details')
+        expect(form.get_by_label('Traveler name or initials')).to_be_visible()
+        expect(form.get_by_label('Passport country')).to_be_visible()
+        assert form.get_by_label('Traveler name or initials').is_editable()
+    else:
+        page.get_by_role('button', name='Add Another Traveler').click()
+        form = page.get_by_role('dialog')
+    form.get_by_label('Traveler name or initials').fill(name)
+    form.get_by_label('Passport country').select_option(passport)
     if issuer:
+        form.locator('.optional-documents summary').click()
         form.get_by_label('Issuing country or area').select_option(issuer)
         form.get_by_role('button', name='Add visa or permit').click()
-    form.get_by_role('button', name='Save passenger').click()
+    form.get_by_role('button', name='Save first traveler' if first else 'Save traveler').click()
+    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
+    page.get_by_role('button', name='Continue').click()
 
 
 def fixture(browser, base):
@@ -65,7 +77,7 @@ def fixture(browser, base):
     page.goto(base)
 
     # First-time setup and the four focus actions.
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
     add_traveler(page, 'Alex', 'US')
     expect(page.get_by_role('heading', name='Plan your trip')).to_be_visible()
     for action in ['View Country', 'Browse Countries', 'Check Group Req',
@@ -199,8 +211,8 @@ def fixture(browser, base):
     # Traveler updates mark saved snapshots Needs Refresh; refreshing applies new passport.
     page.goto(base + '#passengers')
     page.get_by_role('button', name='Edit Aline').click()
-    page.get_by_role('dialog').get_by_label('Passport').select_option('US')
-    page.get_by_role('dialog').get_by_role('button', name='Save passenger').click()
+    page.get_by_role('dialog').get_by_label('Passport country').select_option('US')
+    page.get_by_role('dialog').get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
     page.get_by_role('button', name='Open', exact=True).first.click()
@@ -225,18 +237,44 @@ def production(browser, base):
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.goto(base)
     expect(page.get_by_text('VisaBrowser', exact=True).first).to_be_visible()
-    expect(page.get_by_role('button', name='Add Another Traveler')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
+    expect(page.get_by_label('Traveler name or initials')).to_be_visible()
+    assert page.get_by_role('button', name='Add Another Traveler').count() == 0
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
     page.get_by_role('button', name='Save offline').click()
     expect(page.locator('#offline-status')).to_contain_text('Saved offline', timeout=60000)
     context.set_offline(True)
     page.reload()
-    expect(page.get_by_role('heading', name='Travelers')).to_be_visible()
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
     expect(page.locator('#offline-status')).to_contain_text('Offline')
     context.set_offline(False)
     assert not errors, errors
     context.close()
 
+
+
+def deep_link_first_visit(browser, base):
+    # Fresh browser, linked destination, no saved travelers: do not lose context.
+    context = browser.new_context(viewport={'width': 360, 'height': 740},
+                                  is_mobile=True, has_touch=True, service_workers='block')
+    page = context.new_page()
+    errors = []
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    page.goto(base + '#country=jp')
+    expect(page.get_by_role('heading', name='Your first traveler')).to_be_visible()
+    expect(page.get_by_text('Destination: Japan')).to_be_visible()
+    assert page.get_by_role('button', name='Add Another Traveler').count() == 0
+    form = page.get_by_role('form', name='First traveler details')
+    expect(form.get_by_label('Traveler name or initials')).to_be_visible()
+    form.get_by_label('Traveler name or initials').fill('Visitor')
+    form.get_by_label('Passport country').select_option('US')
+    form.get_by_role('button', name='Save first traveler').click()
+    expect(page.get_by_role('heading', name='Japan')).to_be_visible()
+    expect(page.get_by_role('heading', name='Visitor')).to_be_visible()
+    assert page.evaluate('location.hash') == '#country=jp'
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    assert not errors, errors
+    context.close()
 
 
 def real_country_journeys(browser, base):
@@ -256,6 +294,16 @@ def real_country_journeys(browser, base):
     page.goto(base)
     add_traveler(page, 'Sam', 'US')
     expect(page.locator('.dashboard-actions button').first).to_have_text('View Country')
+
+    # Other apps can deep-link with the same #country=ISO format as Travel-Prep.
+    page.goto(base + '#country=jp')
+    expect(page.get_by_role('heading', name='Japan')).to_be_visible()
+    expect(page.get_by_role('heading', name='Sam')).to_be_visible()
+    page.goto(base + '#country=ZZZ')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    expect(page.get_by_role('heading', name='View Country')).to_be_visible()
+    expect(page.get_by_text('The linked country was not found.')).to_be_visible()
+    page.goto(base + '#home')
 
     # One U.S. passport visiting Japan.
     page.get_by_role('button', name='View Country', exact=True).click()
@@ -317,10 +365,11 @@ def real_country_journeys(browser, base):
     page.goto(base + '#passengers')
     page.get_by_role('button', name='Edit Pat').click()
     editor = page.get_by_role('dialog')
+    editor.locator('.optional-documents summary').click()
     editor.get_by_label('Issuing country or area').select_option('US')
     editor.get_by_label('Visa or permit type').select_option('permit')
     editor.get_by_role('button', name='Add visa or permit').click()
-    editor.get_by_role('button', name='Save passenger').click()
+    editor.get_by_role('button', name='Save traveler').click()
     page.goto(base + '#saved')
     expect(page.get_by_text('Needs Refresh').first).to_be_visible()
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (
@@ -341,6 +390,7 @@ def run():
             try:
                 base = f'http://127.0.0.1:{server.server_port}/VisaBrowser/'
                 fixture(browser, base)
+                deep_link_first_visit(browser, base)
                 real_country_journeys(browser, base)
                 production(browser, base)
             finally:

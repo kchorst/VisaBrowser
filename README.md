@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.1
+# VisaBrowser v0.4.2
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
@@ -7,11 +7,13 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 ## Quick start
 
 1. Open **[VisaBrowser](https://kchorst.github.io/VisaBrowser/)** in the browser on your phone, tablet or PC.
-2. Add each traveler's name and passport country, plus existing visas or residence permits when relevant. Choose **Continue** or add another traveler.
+2. On the first screen, enter the **first traveler's name or initials and passport country** directly in the visible form. Optionally expand **Existing visas or residence permits**. Save the first traveler; then add another traveler below the traveler list or choose **Continue**.
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
 4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
 
 **View Country** supports a searchable destination picker; **Browse Countries** filters by visa-free, eVisa/authorization, visa required or needs review; **Check Group Req** uses the most restrictive group status; **Search Multiple** builds an ordered itinerary with editable country chips. Results can be copied or shared with destination-specific links to [Travel-Prep](https://kchorst.github.io/Travel-Prep/).
+
+**Direct country links from other apps:** `https://kchorst.github.io/VisaBrowser/#country=JP` opens Japan's result. Replace `JP` with the uppercase ISO destination code; lowercase codes also work. Unknown codes open the destination picker with a notice. Existing `#destination/JP/view` links remain supported. A linked result uses travelers already selected in that browser. **On a first visit with no travelers, VisaBrowser retains the linked destination, displays the first-traveler form with “Destination: [country],” and automatically shows that country's requirements once the name and passport are saved.** If existing travelers are all deselected, the app prompts the user to select travelers.
 
 Travelers persist in local browser storage. **Search results persist only when you explicitly choose Save Search**. Saved single destinations and itineraries retain their original snapshots; refreshing results is a confirmed, all-or-nothing action. A relevant traveler-profile change or an older result produces **Needs Refresh**. Saved data is not synchronized between browsers, devices or the optional local server.
 
