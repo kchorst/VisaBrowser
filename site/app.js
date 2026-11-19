@@ -45,7 +45,15 @@ async function copyOrShare(text, nativeShare = false) {
   catch { prompt('Copy your report', text); }
 }
 
-const noIssues = result => result.rows.length > 0 && result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' && !row.condition && !row.issue && !row.flags?.length && !row.questions?.length && !row.controls?.length && !row.viaDocument && !row.source?.unavailable && !sourceDelayed(row.source, new Date(), catalog.overdueDays));
+// A positive badge is intentionally narrower than a "Visa-Free" category.
+// Never infer passport validity, admission, or a waiver from third-country papers.
+const noIssues = result => result.rows.length > 0 && !result.pending &&
+  result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
+    !row.condition && !row.reason && !row.issue && !row.flags?.length &&
+    !row.questions?.length && !row.controls?.length && !row.viaDocument &&
+    !row.source?.unavailable && !row.source?.error &&
+    (!row.source?.url || (row.source?.lastSuccess &&
+      !sourceDelayed(row.source, new Date(), catalog.overdueDays))));
 
 function storageAlert() {
   const alert = document.querySelector('#storage-alert');
@@ -456,8 +464,8 @@ function compareShortlist(value, people, data) {
     message.push(`Could not match ${[...unresolved].map(term => `“${term}”`).join(', ')}. Use the full destination name or its code.`);
   }
   const cards = people.length ? [...matched].map(id => {
-    const { rows } = compare(people, id, data);
     const summary = compare(people, id, data);
+    const { rows } = summary;
     return el('details', { class: 'panel stack country-result' },
       el('summary', {}, places[id], ' · ', noIssues(summary) ? 'NO ISSUES' :
         summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
@@ -785,14 +793,14 @@ function destinationDetails(placeId, saved, data) {
   const mixed = new Set(people.map(p => p.passport)).size > 1;
   const summaryBox = people.length > 1 ?
     el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
-      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
+      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
         summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
       muted(groupDetail(summary))) :
     people.length ? panel(el('div', { class: 'chips' },
-      noIssues(summary) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
+      noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
       chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
       summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
@@ -835,7 +843,7 @@ function savedItineraryDetails(saved, data) {
     } catch (error) { alert('Refresh failed. Original saved results were preserved. ' + error.message); }
   });
   return [title(saved.name || 'Saved itinerary'),
-    muted(`Saved results · Checked ${checked}`),
+    muted(`Saved results · Checked ${checked}${savedNeedsRefresh(saved) ? ' · Needs Refresh' : ''}`),
     el('div', { class: 'actions' }, refresh,
       button('Copy', () => copyOrShare(report)),
       button('Share', () => copyOrShare(report, true)),

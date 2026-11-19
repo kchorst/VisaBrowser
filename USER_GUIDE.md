@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.0 — User Guide
+# VisaBrowser v0.4.1 — User Guide
 
 ## Open the app on a phone or computer
 

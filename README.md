@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.0
+# VisaBrowser v0.4.1
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
@@ -15,7 +15,7 @@ VisaBrowser is a mobile-first browser app for comparing tourist entry requiremen
 
 Travelers persist in local browser storage. **Search results persist only when you explicitly choose Save Search**. Saved single destinations and itineraries retain their original snapshots; refreshing results is a confirmed, all-or-nothing action. A relevant traveler-profile change or an older result produces **Needs Refresh**. Saved data is not synchronized between browsers, devices or the optional local server.
 
-For screens, examples and limitations, see the [User Guide](USER_GUIDE.md) and the approved [v0.4.0 specification](docs/VisaBrowser-UX-Spec-v0.4.0.md).
+For screens, examples and limitations, see the [User Guide](USER_GUIDE.md) and the approved [v0.4.0 UX specification](docs/VisaBrowser-UX-Spec-v0.4.0.md).
 
 ## Data confidence and offline use
 

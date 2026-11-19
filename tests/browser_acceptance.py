@@ -1,4 +1,4 @@
-"""End-to-end acceptance for the v0.4.0 mobile-first user journeys.
+"""End-to-end acceptance for the v0.4.x mobile-first user journeys.
 
 Runs in CI against the actual site JS and real Chromium, serving on the GitHub
 Pages subpath. Test data is deterministic and intentionally independent of
@@ -238,6 +238,97 @@ def production(browser, base):
     context.close()
 
 
+
+def real_country_journeys(browser, base):
+    """User-specified countries on the shipped data, beyond synthetic fixtures.
+
+    The rules are intentionally not hard-coded: changing source data may change
+    visa status, but navigation, snapshots, group ordering, and warnings must
+    remain usable.
+    """
+    context = browser.new_context(
+        viewport={'width': 360, 'height': 780}, is_mobile=True,
+        has_touch=True, service_workers='block',
+        permissions=['clipboard-read', 'clipboard-write'])
+    page = context.new_page()
+    errors = []
+    page.on('pageerror', lambda error: errors.append(str(error)))
+    page.goto(base)
+    add_traveler(page, 'Sam', 'US')
+    expect(page.locator('.dashboard-actions button').first).to_have_text('View Country')
+
+    # One U.S. passport visiting Japan.
+    page.get_by_role('button', name='View Country', exact=True).click()
+    page.get_by_label('Destination').fill('Japan')
+    expect(page.get_by_role('heading', name='Japan')).to_be_visible()
+    expect(page.get_by_role('heading', name='Sam')).to_be_visible()
+    expect(page.get_by_text('Important Travel Requirements & Disclaimer')).to_be_visible()
+    page.get_by_role('button', name='Copy', exact=True).click()
+    report = page.evaluate('navigator.clipboard.readText()')
+    assert 'Sam' in report and 'country=JP' in report
+    assert 'passport validity and blank pages' in report.lower()
+
+    # Mixed U.S./Canadian passports. Group mode is the primary dashboard path.
+    page.goto(base + '#home')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    page.get_by_role('button', name='Edit travelers').click()
+    add_traveler(page, 'Pat', 'CA')
+    expect(page.locator('.dashboard-actions button').first).to_have_text('Check Group Req')
+    page.get_by_role('button', name='Check Group Req').click()
+    expect(page.get_by_role('heading', name='Check Group Requirements')).to_be_visible()
+    assert all(item.get_attribute('open') is None for item in page.locator('.country-section').all())
+    page.goto(base + '#destination/JP/group')
+    expect(page.get_by_text('Group Summary', exact=False)).to_be_visible()
+    assert page.locator('details').filter(has_text='Group Summary').first.get_attribute('open') is not None
+    expect(page.get_by_role('heading', name='Sam')).to_be_visible()
+    expect(page.get_by_role('heading', name='Pat')).to_be_visible()
+
+    # Browse visa-free destinations with an alphabetic filter.
+    page.goto(base + '#countries')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    page.get_by_label('Filter requirements').select_option('free')
+    expect(page.locator('.country-section summary')).to_contain_text('Visa-Free')
+    page.get_by_label('Search destinations').fill('Japan')
+    expect(page.locator('.country-section summary')).to_contain_text('(1)')
+
+    # France -> Italy -> Croatia itinerary, in exactly the selected order.
+    page.goto(base + '#multi')
+    picker = page.get_by_label('Add destinations')
+    for country in ['France', 'Italy', 'Croatia']:
+        picker.fill(country)
+        page.get_by_role('button', name='Add Country').click()
+    expect(page.locator('.itinerary-stop strong')).to_have_text(
+        ['1. France', '2. Italy', '3. Croatia'])
+    page.get_by_role('button', name='Search', exact=True).click()
+    page.get_by_role('button', name='Copy Itinerary').click()
+    report = page.evaluate('navigator.clipboard.readText()')
+    assert report.index('France') < report.index('Italy') < report.index('Croatia')
+    assert all('country=' + code in report for code in ['FR', 'IT', 'HR'])
+    page.once('dialog', lambda dialog: dialog.accept('Europe Trip 2027'))
+    page.get_by_role('button', name='Save Search').click()
+    expect(page.get_by_role('heading', name='Europe Trip 2027')).to_be_visible()
+    expect(page.locator('.country-result')).to_have_count(3)
+
+    # Reopen a saved itinerary; changing a traveler's permit flags Needs Refresh.
+    page.goto(base + '#saved')
+    expect(page.get_by_text('Europe Trip 2027')).to_be_visible()
+    page.get_by_role('button', name='Open').first.click()
+    expect(page.get_by_role('heading', name='Europe Trip 2027')).to_be_visible()
+    page.goto(base + '#passengers')
+    page.get_by_role('button', name='Edit Pat').click()
+    editor = page.get_by_role('dialog')
+    editor.get_by_label('Issuing country or area').select_option('US')
+    editor.get_by_label('Visa or permit type').select_option('permit')
+    editor.get_by_role('button', name='Add visa or permit').click()
+    editor.get_by_role('button', name='Save passenger').click()
+    page.goto(base + '#saved')
+    expect(page.get_by_text('Needs Refresh').first).to_be_visible()
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (
+        'Shipped country workflows overflow the mobile viewport')
+    assert not errors, errors
+    context.close()
+
+
 def run():
     with TemporaryDirectory() as folder, sync_playwright() as playwright:
         shutil.copytree(ROOT / 'site', Path(folder) / 'VisaBrowser')
@@ -250,11 +341,12 @@ def run():
             try:
                 base = f'http://127.0.0.1:{server.server_port}/VisaBrowser/'
                 fixture(browser, base)
+                real_country_journeys(browser, base)
                 production(browser, base)
             finally:
                 browser.close()
                 server.shutdown()
-    print('Mobile-first VisaBrowser v0.4.0 acceptance walkthroughs passed.')
+    print('Mobile-first VisaBrowser v0.4.x acceptance walkthroughs passed.')
 
 
 if __name__ == '__main__':
