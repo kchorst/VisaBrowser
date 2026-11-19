@@ -254,7 +254,7 @@ function passengerList() {
       const id = pendingDestination;
       pendingDestination = '';
       go(`destination/${id}`);
-    } else render(true);
+    } else go('home');
   }), 'primary');
   const selection = el('span', { role: 'status' });
   const clearButton = button('Clear selection', () => {
