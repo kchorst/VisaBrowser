@@ -1,3 +1,5 @@
+import { touristDetails, touristEntryTerms } from './tourist.js';
+import { currentHealthNotes, healthNotices } from './health.js';
 import { actions, compare, groupDetail, issueLabel, noAdvanceVisa, rank, requirementChange,
   resultSnapshot, sixMonthsFrom, sourceDelayed, statuses } from './rules.js';
 import { offlineStatus, onlineManifest, saveOffline } from './offline.js';
@@ -29,7 +31,10 @@ function reportText(placeId, summary, when = checkedDate()) {
   return ['VisaBrowser · ' + destination, 'Checked: ' + when,
     ...summary.rows.map(row => [row.passenger.name + ' (' + (places[row.passenger.passport] ?? row.passenger.passport) + ')',
       statuses(row), row.condition, row.reason, row.stay ? 'Stay: ' + row.stay : '',
-      ...(row.flags ?? [])].filter(Boolean).join(' · ')),
+      ...(row.flags ?? []),
+      ...Object.entries(touristEntryTerms(placeId, row) ?? {}).map(([label, value]) => label + ' · ' + value),
+      ...[...healthNotices(placeId, row.passenger.passport), ...touristDetails(placeId, row)]
+        .map(({ heading, text, url, more = [] }) => [heading, text, url, ...more].join(' · '))].filter(Boolean).join(' · ')),
     'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
     'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
     'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
@@ -47,9 +52,11 @@ async function copyOrShare(text, nativeShare = false) {
 
 // A positive badge is intentionally narrower than a "Visa-Free" category.
 // Never infer passport validity, admission, or a waiver from third-country papers.
-const noIssues = result => result.rows.length > 0 && !result.pending &&
+const noIssues = (result, placeId) => result.rows.length > 0 && !result.pending &&
   result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
     !row.condition && !row.reason && !row.issue && !row.flags?.length &&
+    !healthNotices(placeId, row.passenger.passport).some(notice => notice.heading === 'Required health documents') &&
+    !touristDetails(placeId, row).some(notice => notice.heading === 'Confirm entry details' || notice.heading === 'Proof of onward travel' || notice.heading === 'Arrival forms and documents') &&
     !row.questions?.length && !row.controls?.length && !row.viaDocument &&
     !row.source?.unavailable && !row.source?.error &&
     (!row.source?.url || (row.source?.lastSuccess &&
@@ -301,10 +308,10 @@ function route() {
 }
 let unsavedResult = null;
 let lastRouteHash = location.hash;
-function leaveUnsaved(nextHash) {
+function leaveUnsaved(nextHash, onLeave = () => { lastRouteHash = nextHash; location.hash = nextHash; }) {
   const form = el('div', { class: 'stack' });
   const dialog = modal(form);
-  const continueTo = () => { unsavedResult = null; dialog.close(); lastRouteHash = nextHash; location.hash = nextHash; };
+  const continueTo = () => { unsavedResult = null; dialog.close(); onLeave(); };
   const saveAndLeave = () => {
     const draft = unsavedResult;
     if (!draft) return continueTo();
@@ -527,7 +534,7 @@ function compareShortlist(value, people, data) {
     const summary = compare(people, id, data);
     const { rows } = summary;
     return el('details', { class: 'panel stack country-result' },
-      el('summary', {}, places[id], ' · ', noIssues(summary) ? 'NO ISSUES' :
+      el('summary', {}, places[id], ' · ', noIssues(summary, id) ? 'NO ISSUES' :
         summary.pending ? 'Needs Review' : summary.issues ? issueLabel(summary.issues) :
         summary.group || 'Check traveler requirements'),
       el('div', { class: 'stack' },
@@ -537,6 +544,8 @@ function compareShortlist(value, people, data) {
           el('p', {}, el('strong', {}, row.passenger.name), ` · ${statuses(row)}`,
             row.flags?.length ? ` · ${row.flags.join(' · ')}` : null),
           row.condition ? muted(row.condition) : null,
+          healthDetails(row, id),
+          travelDetails(row, id),
           row.stay ? muted(`Stay limit · ${row.stay}`) : null,
           row.options.includes('pending') ? pendingResearch(row, id, true) : null)))));
   }) : [];
@@ -787,6 +796,21 @@ function pendingResearch(row, placeId, includeReason = false) {
     null];
 }
 
+function healthDetails(row, placeId) {
+  return healthNotices(placeId, row.passenger.passport).map(({ heading, text, url }) =>
+    el('div', { class: 'stack' },
+      el('p', {}, el('strong', {}, heading), '. ', text),
+      link('Official health guidance ↗', url)));
+}
+
+function travelDetails(row, placeId) {
+  return touristDetails(placeId, row).map(({ heading, text, url, more = [] }) =>
+    el('div', { class: 'stack' },
+      el('p', {}, el('strong', {}, heading), '. ', text),
+      el('p', {}, link('Source guidance ↗', url),
+        more.map((source, index) => [' · ', link(`Related source ${index + 1} ↗`, source)]))));
+}
+
 function passengerResult(row, placeId, saved, data) {
   const bad = row.options.includes('denied') || row.issue;
   const known = !row.options.includes('pending');
@@ -815,17 +839,23 @@ function passengerResult(row, placeId, saved, data) {
   const authority = row.official?.startsWith('https://') &&
     !row.routes?.some(option => option.url === row.official) ?
     el('p', { class: 'official-source' }, link('Official entry requirements ↗', row.official)) : null;
-  const passportWarnings = (row.notes ?? []).filter(note =>
+  const sourceNotes = currentHealthNotes(row.notes, placeId) ?? [];
+  const terms = touristEntryTerms(placeId, row);
+  const passportWarnings = sourceNotes.filter(note =>
     /passport (?:valid|validity|expiry|expiration|blank|page)|blank pages|valid (?:for|at least) (?:3|6|three|six) months/i.test(note));
   const requiresVisa = row.options.some(option => ['evisa', 'arrival', 'advance'].includes(option));
-  const notes = row.notes?.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
-    row.notes.map(note => el('p', {}, note))) : null;
+  const notes = sourceNotes.length ? el('details', { class: 'detail-notes' }, el('summary', {}, 'Source notes'),
+    sourceNotes.map(note => el('p', {}, note))) : null;
   return panel(
     el('div', { class: 'row' }, el('h2', {}, row.passenger.name), muted(`${places[row.passenger.passport]} passport`)),
     el('div', { class: 'chips' }, chip(statuses(row), tone), row.issue ? chip('Issue', 'bad') : null,
       row.flags?.map(flag => chip(flag, 'warn')) ?? []),
     row.condition ? el('p', { class: 'condition' }, `* ${row.condition}`) : null,
     passportWarnings.map(note => el('p', { class: 'condition' }, `Passport requirement: ${note}`)),
+    healthDetails(row, placeId),
+    travelDetails(row, placeId),
+    terms ? el('dl', {}, Object.entries(terms).map(([key, value]) =>
+      [el('dt', {}, { entries: 'Number of entries', validity: 'Visa validity', stay: 'Permitted stay' }[key]), el('dd', {}, value)])) : null,
     row.reason ? el('p', {}, row.reason) : null,
     advice.length ? el('ul', {}, advice.map(text => el('li', {}, text))) : null,
     row.home ? muted('Travel on your passport for this destination.') : null,
@@ -925,14 +955,14 @@ function destinationDetails(placeId, saved, data) {
   const mixed = new Set(people.map(p => p.passport)).size > 1;
   const summaryBox = people.length > 1 ?
     el('details', { class: 'panel stack', ...(origin === 'group' ? { open: '' } : {}) },
-      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
+      el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
         summary.group ? chip(summary.group, 'warn') : null,
         chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
       muted(groupDetail(summary))) :
     people.length ? panel(el('div', { class: 'chips' },
-      noIssues(summary) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
+      noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
       chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
       summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
@@ -948,7 +978,7 @@ function destinationDetails(placeId, saved, data) {
 }
 
 function countryResultCard(id, index, summary, contents) {
-  const status = summary.pending ? 'Needs Review' : noIssues(summary) ? 'NO ISSUES' :
+  const status = summary.pending ? 'Needs Review' : noIssues(summary, id) ? 'NO ISSUES' :
     summary.issues ? issueLabel(summary.issues) : summary.group || 'Check requirements';
   const details = el('details', { class: 'country-result' },
     el('summary', { class: 'country-result-summary' },
@@ -1125,6 +1155,7 @@ async function readCatalog() {
 }
 
 const offlineButton = document.querySelector('#save-offline');
+const updateButton = document.querySelector('#update-app');
 const offlineMessage = document.querySelector('#offline-status');
 let savingPack = false;
 let packCheck = 0;
@@ -1136,7 +1167,7 @@ async function showOfflineStatus(message) {
     ? await onlineManifest().catch(() => null) : null;
   if (request !== packCheck || savingPack) return;
   offlineButton.textContent = saved && latest && saved.version !== latest.version
-    ? 'Update available' : saved ? 'Refresh offline data' : 'Save offline';
+    ? 'Offline data update available' : saved ? 'Refresh offline data' : 'Save offline';
   offlineButton.disabled = !navigator.onLine || !navigator.serviceWorker?.controller;
   const connectivity = !navigator.onLine || cachedCatalog ? 'Offline' : '';
   const copy = saved ? `Offline dataset · ${saved.generated.slice(0, 10)}` :
@@ -1149,6 +1180,7 @@ offlineButton.addEventListener('click', async () => {
   if (savingPack) return;
   savingPack = true;
   offlineButton.disabled = true;
+  updateButton.disabled = true;
   offlineMessage.hidden = false;
   let notice = 'Download interrupted. Any previous complete offline dataset is still available.';
   offlineMessage.textContent = 'Preparing offline download…';
@@ -1163,6 +1195,7 @@ offlineButton.addEventListener('click', async () => {
     // The active dataset remains untouched on download or integrity failure.
   } finally {
     savingPack = false;
+    updateButton.disabled = false;
     await showOfflineStatus(notice);
   }
 });
@@ -1222,9 +1255,51 @@ async function start() {
 start();
 
 if ('serviceWorker' in navigator && 'caches' in window) {
-  navigator.serviceWorker.register('./sw.js', { type: 'module', updateViaCache: 'none' }).then(() => {
-    navigator.serviceWorker.addEventListener('controllerchange', () => showOfflineStatus());
-    return navigator.serviceWorker.ready;
+  const workers = navigator.serviceWorker;
+  const updateNotice = document.querySelector('#app-update');
+  let controller = workers.controller;
+  let reloadForUpdate = false;
+  workers.addEventListener('controllerchange', () => {
+    if (reloadForUpdate) {
+      location.reload();
+      return;
+    }
+    if (controller && workers.controller !== controller) updateNotice.hidden = false;
+    controller = workers.controller;
+    showOfflineStatus();
+  });
+
+  workers.register('./sw.js', { type: 'module', updateViaCache: 'none' }).then(registration => {
+    const showWaiting = () => {
+      if (registration.waiting && workers.controller) updateNotice.hidden = false;
+    };
+    const watchInstall = () => registration.installing?.addEventListener('statechange', showWaiting);
+    registration.addEventListener('updatefound', watchInstall);
+    watchInstall();
+    showWaiting();
+
+    const checkForUpdate = () => {
+      if (!document.hidden && navigator.onLine) registration.update().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', checkForUpdate);
+    window.addEventListener('online', checkForUpdate);
+    window.setInterval(checkForUpdate, 30 * 60 * 1000);
+
+    updateButton.addEventListener('click', () => {
+      const applyUpdate = () => {
+        if (!registration.waiting) {
+          location.reload();
+          return;
+        }
+        updateButton.disabled = true;
+        offlineButton.disabled = true;
+        reloadForUpdate = true;
+        registration.waiting.postMessage('activate-update');
+      };
+      if (unsavedResult) leaveUnsaved(location.hash, applyUpdate);
+      else applyUpdate();
+    });
+    return workers.ready;
   }).then(() => {
     offlineButton.hidden = false;
     return showOfflineStatus();

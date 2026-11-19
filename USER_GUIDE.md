@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.7 — User Guide
+# VisaBrowser v0.4.8 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -60,6 +60,12 @@ Each country's result lists the requirements found for each selected traveler. C
 
 The country lists use the most restrictive traveler, not an average. A status may change when a traveler changes their passport, visa or residence permit, or when fresh published rules become available.
 
+### Tourist documents and itinerary checks
+
+Open a country result or expand a destination in a multi-country itinerary. The traveler cards show any reviewed onward ticket, arrival form, transit, and health requirements with source links. Check each entry after a side trip. For supported visas, compare **Number of entries**, **Visa validity**, and **Permitted stay** with the actual visa grant.
+
+A requirement can depend on where you are coming from, how long you were there, your connections, or whether you need to collect bags and clear immigration. Use the displayed trigger to check your route. VisaBrowser does not collect the traveler’s full route or determine whether they can board. When a reviewed source leaves a question open, use the linked authority to confirm it. Date-limited notices describe rules known when the draft was prepared, so verify the current rule for the date of travel.
+
 At the bottom of every results screen, **Important Travel Requirements & Disclaimer** is collapsed by default. Expand it for the full reminder about passport validity, blank pages, visas and documents, health/vaccines, travel history, allowed stays, fees, transit and immigration discretion. Critical country-specific conditions remain visible above it.
 
 For destination preparation, choose **Open in Travel-Prep**. The link opens Travel-Prep in a separate tab for that specific country where supported.
@@ -84,7 +90,9 @@ Because storage is local to the current browser/profile, clearing website data o
 
 ## 6. Use the app offline
 
-While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Update available** lets you replace it.
+While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Offline data update available** lets you replace it.
+
+When **VisaBrowser update available** appears, choose **Update VisaBrowser** to reload with the new app version. You can save or discard an open comparison first. If you are upgrading from v0.4.7, close all VisaBrowser tabs and any installed app window, then reopen while online to load v0.4.8.
 
 An interrupted offline update preserves the previous complete pack. Always check the displayed data date and do not treat outdated or unavailable sources as travel clearance. Links to Travel-Prep or external sites require a connection.
 

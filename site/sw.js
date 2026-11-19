@@ -2,14 +2,18 @@ import { version } from './version.js';
 import { readOffline } from './offline.js';
 
 const prefix = 'visabrowser-shell:' + encodeURIComponent(self.registration.scope);
-const shell = prefix + ':' + version + '';
-const assets = ['./', './index.html', './app.js', './rules.js', './reviewed.js', './offline.js', './version.js',
+const shell = prefix + ':' + version + ':tourist-checklist';
+const assets = ['./', './index.html', './app.js', './rules.js', './reviewed.js', './health.js', './tourist.js', './tourist-audit.js', './offline.js', './version.js',
   './styles.css', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(shell).then(cache => cache.addAll(
     assets.map(asset => new Request(new URL(asset, self.registration.scope), { cache: 'reload' })))));
 });
+self.addEventListener('message', event => {
+  if (event.data === 'activate-update') event.waitUntil(self.skipWaiting());
+});
+
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();

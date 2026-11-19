@@ -462,9 +462,77 @@ def real_country_journeys(browser, base):
     context.close()
 
 
+def ghana_health_notice(browser, base):
+    page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+    try:
+        page.goto(base)
+        add_traveler(page, 'France traveler', 'FR')
+        page.goto(base + '#country=GH')
+        expect(page.get_by_role('heading', name='Ghana', exact=True)).to_be_visible()
+        expect(page.get_by_text('Ghana requires a yellow fever vaccination certificate', exact=False)).to_be_visible()
+        expect(page.get_by_role('link', name='Official health guidance ↗')).to_have_attribute(
+            'href', 'https://evisa.immigration.gov.gh/applicant-guide.html')
+    finally:
+        page.close()
+
+
+def tourist_document_notices(browser, base):
+    page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+    try:
+        page.goto(base)
+        add_traveler(page, 'Romania traveler', 'RO')
+        page.goto(base + '#country=US')
+        expect(page.get_by_text('Visa required before travel', exact=True)).to_be_visible()
+        expect(page.get_by_text('$30', exact=False)).to_have_count(0)
+        page.reload()
+        page.goto(base + '#country=TH')
+        expect(page.get_by_text('Proof of onward travel', exact=True).first).to_be_visible()
+        expect(page.get_by_text('Submit the Thailand Digital Arrival Card', exact=False)).to_be_visible()
+    finally:
+        page.close()
+
+
+def app_update(browser, base, site):
+    page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+    version_file = site / 'version.js'
+    published_version = version_file.read_text()
+    try:
+        page.goto(base)
+        page.wait_for_function('navigator.serviceWorker.controller !== null')
+        expect(page.get_by_role('button', name='Update VisaBrowser')).to_be_hidden()
+        add_traveler(page, 'Update traveler', 'US')
+        page.goto(base + '#country=GH')
+        expect(page.get_by_role('heading', name='Ghana', exact=True)).to_be_visible()
+
+        # A new release changes the version imported by the worker and app.
+        version_file.write_text("export const version = '9.9.9';\n")
+        page.evaluate('async () => (await navigator.serviceWorker.ready).update().then(() => null)')
+        expect(page.get_by_role('status').filter(has_text='VisaBrowser update available.')).to_be_visible()
+        update = page.get_by_role('button', name='Update VisaBrowser')
+        update.click()
+        dialog = page.get_by_role('dialog')
+        expect(dialog.get_by_role('button', name='Save Search', exact=True)).to_be_visible()
+        dialog.get_by_role('button', name='Cancel', exact=True).click()
+        expect(update).to_be_visible()
+        expect(page.locator('#version')).not_to_have_text('v9.9.9')
+
+        update.click()
+        page.once('dialog', lambda dialog: dialog.accept('Before app update'))
+        page.get_by_role('dialog').get_by_role('button', name='Save Search').click()
+        expect(page.locator('#version')).to_have_text('v9.9.9')
+        expect(page.get_by_role('heading', name='Ghana', exact=True)).to_be_visible()
+        expect(update).to_be_hidden()
+        page.goto(base + '?verify-saved=1#saved')
+        expect(page.get_by_role('heading', name='Before app update', exact=True)).to_be_visible()
+    finally:
+        page.close()
+        version_file.write_text(published_version)
+
+
 def run():
     with TemporaryDirectory() as folder, sync_playwright() as playwright:
-        shutil.copytree(ROOT / 'site', Path(folder) / 'VisaBrowser')
+        site = Path(folder) / 'VisaBrowser'
+        shutil.copytree(ROOT / 'site', site)
         with ThreadingHTTPServer(('127.0.0.1', 0),
                                  partial(QuietHandler, directory=folder)) as server:
             thread = Thread(target=server.serve_forever, daemon=True)
@@ -477,6 +545,9 @@ def run():
                 deep_link_first_visit(browser, base)
                 real_country_journeys(browser, base)
                 production(browser, base)
+                ghana_health_notice(browser, base)
+                tourist_document_notices(browser, base)
+                app_update(browser, base, site)
             finally:
                 browser.close()
                 server.shutdown()

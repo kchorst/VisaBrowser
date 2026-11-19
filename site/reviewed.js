@@ -71,6 +71,11 @@ const kenyaEtaExemptDays = new Map([
   ['BI', 180], ['CD', 180], ['SS', 180], ['TZ', 180]
 ]);
 
+// Ordinary passports on the State Department's Visa Waiver Program list.
+const usaWaiverPassports = codes('AD AT AU BE BN CH CL CZ DE DK EE ES FI FR GR HR HU IE IL IS IT JP KR LI LT LU LV MC MT NL NO NZ PL PT QA SE SG SI SK SM');
+const australiaEVisitorPassports = codes('AD AT BE BG CH CY CZ DE DK EE ES FI FR GB GR HR HU IE IS IT LI LT LU LV MC MT NL NO PL PT RO SE SI SK SM');
+const australiaEtaPassports = codes('BN CA HK JP KR MY SG TW US');
+
 const usRestricted = codes('AF PS IR CG HT SN');
 const tmReviewed = codes('HT PS IR CN AF RU BY US SN CD CG XK');
 const chinaTransit = codes('AL AT BY BE BA BG HR CY CZ DK EE FI FR DE GR HU IS IE IT LV LT LU MT MC ME NL MK NO PL PT RO RU RS SK SI ES SE CH UA GB CA US AR BR CL MX AU NZ BN ID JP KG QA SG KR AE VN');
@@ -548,6 +553,45 @@ export function reviewedRule(passenger, destination, base, data) {
   if (destination === 'BR' && nationality === 'CN') return brazilChinaWaiver(destination);
   if (destination === 'BR' && nationality === 'US') return rule('evisa', official.brEvisa, {
     stay: 'Up to 90 days per visit', notes: ['Obtain the e-visa before travel and carry a printed copy of the approved e-visa.']
+  });
+  if (destination === 'AU' && australiaEVisitorPassports.has(nationality)) {
+    return rule('evisa', 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/evisitor-651/', {
+      status: 'eVisitor visa (subclass 651)',
+      stay: 'Up to three months per visit',
+      notes: ['Apply before traveling. Check the grant notice for validity, permitted stay and entry conditions.']
+    });
+  }
+  if (destination === 'AU' && australiaEtaPassports.has(nationality)) {
+    return rule('evisa', official.australiaUs, {
+      status: 'Electronic Travel Authority visa (subclass 601)',
+      stay: 'Up to three months per visit',
+      notes: ['Check ETA passport eligibility and apply via the official Australian ETA app before travel.']
+    });
+  }
+  if (destination === 'US' && nationality === 'CA') return rule('free',
+    'https://travel.state.gov/content/travel/en/us-visas/tourism-visit.html', {
+      viaDocument: false,
+      notes: ['Canadian citizens generally do not need a nonimmigrant visa for ordinary tourism. Confirm the travel document and admission conditions for your route.']
+    });
+  if (destination === 'US' && (usaWaiverPassports.has(nationality) || ['GB', 'TW'].includes(nationality))) {
+    const waiverSource = 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visa-waiver-program.html';
+    const passportConditions = {
+      GB: 'Use a qualifying British citizen passport with the right of permanent abode in the United Kingdom.',
+      TW: 'Use a qualifying Taiwan passport that includes the personal identification number.'
+    };
+    return rule('free', waiverSource, {
+      sourceText: 'Visa Waiver Program',
+      viaDocument: false,
+      stay: 'Up to 90 days under the Visa Waiver Program',
+      condition: passportConditions[nationality],
+      flags: ['Obtain ESTA before travel if using the Visa Waiver Program'],
+      notes: ['The waiver requires an eligible biometric passport and an approved ESTA. Check the State Department’s travel-history, dual-nationality and carrier conditions before relying on ESTA.'],
+      routes: [{ title: 'Official ESTA application', url: 'https://esta.cbp.dhs.gov/' }]
+    });
+  }
+  if (destination === 'US' && ['BG', 'RO'].includes(nationality)) return rule('advance', official.usVisitor, {
+    notes: ['Apply for a U.S. visitor visa for ordinary tourism. Check your issued visa for validity and number of entries.'],
+    routes: [{ title: 'U.S. Visa Waiver Program eligible countries', url: 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visa-waiver-program.html' }]
   });
   if (destination === 'US' && nationality === 'BR') return rule('advance', official.usVisitor, {
     notes: ['A B-2 or combined B-1/B-2 visitor visa is the ordinary tourist route. The visa’s validity and the period granted at the border are separate.']

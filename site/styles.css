@@ -77,6 +77,8 @@ summary { cursor: pointer; padding-block: .35rem; }
 footer { display: flex; flex-wrap: wrap; gap: .35rem; color: var(--muted); margin-top: 1.5rem; font-size: .82rem; }
 dialog { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; color: inherit; background: var(--panel); border: 1px solid var(--line); border-radius: .85rem; padding: 1rem; }
 dialog::backdrop { background: #020617bd; }
+#app-update { margin-bottom: .8rem; }
+#app-update button { margin-top: .45rem; }
 #storage-alert { color: var(--gold); margin-bottom: 1rem; }
 
 .passenger-identity { display: flex; align-items: center; gap: .7rem; }
