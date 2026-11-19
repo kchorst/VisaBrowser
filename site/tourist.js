@@ -94,8 +94,15 @@ const schengenEntries = {
   stay: 'Check “Duration of stay” and the overall 90 days in any 180 days ceiling.'
 };
 
+const australianEntries = {
+  entries: 'Multiple entries are allowed while the visa is valid, subject to the grant conditions.',
+  validity: 'Check the expiry date in your visa grant notice.',
+  stay: 'Up to three months per visit. Check the conditions of the visa grant.'
+};
+
 export function touristEntryTerms(destination, row) {
   if (row.home) return null;
+  if (destination === 'AU' && /subclass (601|651)/.test(row.status ?? '')) return australianEntries;
   if (destination === 'VN' && row.options.includes('evisa')) return vietnamEntries;
   if (schengen.has(destination) && row.options.includes('advance')) return schengenEntries;
   return null;
@@ -118,6 +125,12 @@ export function touristDetails(destination, row) {
     usWaiver));
   const referral = onwardReferral(destination);
   if (referral) notices.push(referral);
+  else if (!notices.some(item => item.heading === onward) && (row.notes ?? []).some(text =>
+    /(?:onward|return|round[ -]trip|departure) (?:airline |flight )?(?:ticket|reservation)|(?:proof|evidence) of onward travel/i.test(text))) {
+    notices.push(notice(onward,
+      'The imported notes mention departure proof. Confirm whether a paid ticket is required, when it is checked and which forms of proof are accepted for your tourist route.',
+      row.official ?? 'https://www.gov.uk/government/publications/foreign-embassies-in-the-uk'));
+  }
   const audit = auditFindings[destination]?.[row.passenger.passport];
   if (audit) notices.push(audit);
   return notices;
