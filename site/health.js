@@ -179,7 +179,10 @@ const yellowFever = {
 };
 
 const romaniaPolio = new Set(['AF', 'MG', 'PK', 'YE']);
-const datedPolioChecks = new Set(['BD', 'BN', 'EG', 'GE', 'IR', 'KN', 'MA', 'MV', 'NP', 'PE', 'QA']);
+const datedPolioChecks = new Set(['BD', 'BN', 'GE', 'IR', 'KN', 'MA', 'MV', 'PE', 'QA']);
+
+const jamaicaVaccineWithVisa = new Set('AL BA BG BY HR KZ MD ME MK RO RS'.split(' '));
+const jamaicaVaccineOnly = new Set('EE LT LV SI'.split(' '));
 
 export function healthNotices(destination, passport, now = Date.now()) {
   const notices = [];
@@ -206,15 +209,33 @@ export function healthNotices(destination, passport, now = Date.now()) {
   if (datedPolioChecks.has(destination)) notices.push(notice(check,
     'WHO’s country list reports a polio rule for certain travelers. Confirm the current affected origins, age or trip purpose and accepted proof with the destination authority.',
     whoYellowFever));
+  if (destination === 'NP') notices.push(notice(check,
+    'Nepal publishes a polio certificate requirement for arrivals from listed origins, including Afghanistan, Pakistan, Kenya, Nigeria and South Sudan. Check the full origin list and timing for residents, stays over four weeks and urgent travel in section GEN 1.3.',
+    'https://e-aip.caanepal.gov.np/_uploads/_pdf/41e27dcc2352870eeac952cbdf61f042.pdf'));
+  if (destination === 'EG') notices.push(notice(check,
+    'If you live in or spent over four weeks in a polio-risk country, check Egypt’s international polio vaccination certificate requirement. EgyptAir’s published notice lists Afghanistan, Malawi, Mozambique, Pakistan, Madagascar and DRC. Confirm the latest list before travel.',
+    'https://www.egyptair.com/en/about-egyptair/news-and-press/Pages/Yellow%20Fever%20Requirements%20for%20passengers%20.aspx'));
+  if (destination === 'PK') notices.push(notice(check,
+    'Check whether your recent travel triggers polio vaccination proof on arrival. Also check Pakistan’s departure certificate rule if leaving after residence or a longer stay.',
+    'https://www.gov.uk/foreign-travel-advice/pakistan/entry-requirements'));
+  if (destination === 'WS') notices.push(notice(check,
+    'If arriving from American Samoa, ask Samoa’s Ministry of Health whether its special measles certificate rule still applies. The later advisory for all arrivals advises carrying proof and describes screening for travelers with symptoms.',
+    'https://www.health.gov.ws/wp-content/uploads/2025/11/Travel-Advisory-Measles-3-October-2025-002_SS-inputs-1.pdf-DG-endorsedcopy.pdf'));
+  if (destination === 'IQ') notices.push(notice(check,
+    'If arriving from a country in the African meningitis belt, ask the Iraqi consulate whether it still requires meningococcal ACWY vaccination proof. The older WHO list reports a rule for those arrivals.',
+    'https://cdn.who.int/media/docs/default-source/documents/emergencies/travel-advice/ith2021_countrylist.pdf'));
   if (destination !== 'PK' && passport === 'PK') notices.push(notice('Departure health documents',
     'If leaving Pakistan, check whether you must show polio vaccination proof at departure.',
     'https://www.poliofreepakistan.gov.pk/certificate/vaccination-certificate'));
   if (destination === 'SA') notices.push(notice(check,
-    'For Hajj, Umrah or other covered travel, check the current Saudi Ministry of Health rules for meningococcal, polio, yellow fever or other vaccination proof.',
+    'For Hajj or Umrah, check the current Saudi season’s rules for meningococcal ACWY proof and origin-based polio and yellow fever proof. The published 2026 rules also require COVID-19 vaccination or immunity evidence for specified groups. Check the rules for your travel date.',
     'https://www.moh.gov.sa/en/healthawareness/pilgrims-health/pages/default.aspx'));
-  if (destination === 'JM' && passport === 'KZ') notices.push(notice(documents,
-    'If using Jamaica’s listed tourist visa waiver with a qualifying foreign visa, carry proof of measles, rubella and polio vaccination.',
-    'https://www.pica.gov.jm/immigration/entry-visa-requirements'));
+  if (destination === 'JM' && (jamaicaVaccineWithVisa.has(passport) || jamaicaVaccineOnly.has(passport))) {
+    const visa = jamaicaVaccineWithVisa.has(passport) ? ' Carry a qualifying U.S., Canadian, UK or Schengen visa as well.' : '';
+    notices.push(notice(documents,
+      'If using Jamaica’s listed tourist visa waiver for up to 30 days, carry proof of measles, rubella and polio vaccination.' + visa,
+      'https://www.pica.gov.jm/immigration/entry-visa-requirements'));
+  }
   if (destination === 'GB') notices.push(notice(check,
     'Check whether your visa application needs a TB test. The UK uses visa type, length of stay and residence history.',
     'https://www.gov.uk/tb-test-visa'));
