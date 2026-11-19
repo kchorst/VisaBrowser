@@ -42,7 +42,7 @@ function evaluate(passenger, place, data) {
   if (source?.unavailable) return pending('The rules could not be loaded. Reopen the comparison when connected.');
   const baseline = source?.rules?.[place];
   const rule = reviewedRule(passenger, place, baseline, data);
-  const fromDocuments = Boolean(passenger.documents?.length &&
+  const fromDocuments = rule?.viaDocument ?? Boolean(passenger.documents?.length &&
     !baseline?.options?.includes('free') && rule?.options?.includes('free'));
   if (rule && (!Array.isArray(rule.options) || !rule.options.length)) {
     const { options, reason, ...details } = rule;

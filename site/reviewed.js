@@ -14,6 +14,9 @@ const official = {
   usVisitor: 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visitor.html',
   kwNz: 'https://www.immigration.govt.nz/about-us/news-centre/visa-waiver-travel-changes-for-kuwait-nationals/',
   ukEta: 'https://www.gov.uk/eta',
+  ukBno: 'https://www.gov.uk/guidance/check-when-you-can-get-an-electronic-travel-authorisation-eta',
+  kenyaEta: 'https://etakenya.go.ke/general-information',
+  kenyaHealth: 'https://health.go.ke/incoming-travellers',
   koreaUs: 'https://travel.state.gov/en/international-travel/travel-advisories/south-korea.html',
   mexicoUs: 'https://travel.state.gov/en/international-travel/travel-advisories/mexico.html',
   australiaUs: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/electronic-travel-authority-601',
@@ -60,6 +63,13 @@ const nzReviewed = codes('XK PS AF SN CD CG IR RU BY HT TM CN');
    an identification number in its passport and is handled separately. */
 const ukEtaEligible = codes('AD AG AR AU AT BS BH BB BE BZ BR BN BG CA CL CR HR CY CZ DK EE FI FR DE GR GD GT GY HK HU IS IT IL JP KI KW LV LI LT LU MO MY MV MT MH MU MX FM MC NL NZ NO OM PW PA PG PY PE PL PT QA RO WS SM SA SC SG SB KR SK SI ES KN VC SE CH TO TV AE US UY VA');
 const ukEtaNotEligible = codes('NI LC NR BW TT CO');
+
+// Nationality exemptions verified in the November 2026 audit.
+const kenyaEtaExemptDays = new Map([
+  ['CM', 60], ['CV', 60], ['SC', 60], ['SN', 60], ['ST', 60],
+  ['CG', 90], ['GM', 90], ['LC', 90], ['MZ', 90],
+  ['BI', 180], ['CD', 180], ['SS', 180], ['TZ', 180]
+]);
 
 const usRestricted = codes('AF PS IR CG HT SN');
 const tmReviewed = codes('HT PS IR CN AF RU BY US SN CD CG XK');
@@ -424,6 +434,12 @@ function mutualVisa(passenger, destination, base) {
 export function reviewedRule(passenger, destination, base, data) {
   const nationality = passenger.passport;
   if (destination === 'GB') {
+    if (nationality === 'BNO') return rule('free', official.ukBno, {
+      stay: 'Up to six months per visit',
+      viaDocument: false,
+      notes: ['Travel with a valid British National (Overseas) passport. No visitor visa or ETA is required for a standard tourist visit.'],
+      routes: [{ title: 'UK Standard Visitor rules', url: 'https://www.gov.uk/standard-visitor' }]
+    });
     if (nationality === 'IE') return rule('free', official.ukEta, {
       notes: ['Irish citizens generally do not need a UK ETA or visitor visa; check other travel-document and Common Travel Area conditions.']
     });
@@ -442,6 +458,19 @@ export function reviewedRule(passenger, destination, base, data) {
       notes: ['UK ETA application fee: £20 (verified November 2026). The UK lists specific exemptions and eligibility conditions.',
         'An ETA is permission to travel, not guaranteed admission.'],
       routes: [{ title: 'Official UK ETA eligibility and application', url: official.ukEta }]
+    });
+  }
+  if (destination === 'KE' && kenyaEtaExemptDays.has(nationality)) {
+    const days = kenyaEtaExemptDays.get(nationality);
+    return rule('free', official.kenyaEta, {
+      stay: `Confirm on arrival · eTA exemption up to ${days} days`,
+      viaDocument: false,
+      flags: (base?.flags ?? []).filter(flag => flag !== authorization),
+      notes: [
+        `Kenya exempts this nationality from the eTA for visits of up to ${days} days. Kenyan immigration determines admission and the actual stay permitted.`,
+        'Check route-specific health requirements. Kenya requires a valid yellow fever certificate when arriving from an endemic country.'
+      ],
+      routes: [{ title: 'Kenya Ministry of Health requirements', url: official.kenyaHealth }]
     });
   }
   // An emergency immigration direction applies independently of a wiki snapshot.
