@@ -780,6 +780,7 @@ function destinationDetails(placeId, saved, data) {
       chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
       summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
+    saved ? muted(`Original saved snapshot · Checked ${saved.checkedAt?.slice(0, 10) ?? 'date unavailable'}${savedNeedsRefresh(saved) ? ' · Needs Refresh' : ''}`) : null,
     el('div', { class: 'stack' }, el('div', { class: 'actions' }, controls,
       people.length ? button('Copy', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()))) : null,
       people.length ? button('Share', () => copyOrShare(reportText(placeId, summary, saved?.checkedAt?.slice(0, 10) ?? checkedDate()), true)) : null),
