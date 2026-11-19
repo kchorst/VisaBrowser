@@ -107,7 +107,7 @@ def fixture(browser, base):
     page.goto(base + '#countries')
     page.set_viewport_size({'width': 390, 'height': 440})
     page.get_by_label('Filter requirements').select_option('all')
-    for toggle in page.get_by_role('button', name='Show countries').all():
+    for toggle in page.locator('.country-section .country-toggle').all():
         toggle.click()
     page.evaluate('window.scrollTo(0, 900)')
     assert page.evaluate('window.scrollY') > 0
