@@ -549,6 +549,17 @@ export function reviewedRule(passenger, destination, base, data) {
   if (destination === 'BR' && nationality === 'US') return rule('evisa', official.brEvisa, {
     stay: 'Up to 90 days per visit', notes: ['Obtain the e-visa before travel and carry a printed copy of the approved e-visa.']
   });
+  if (destination === 'AU' && ['BG', 'RO'].includes(nationality)) {
+    return rule('evisa', 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/evisitor-651/', {
+      status: 'eVisitor visa (subclass 651)',
+      stay: 'Up to three months per visit',
+      notes: ['Apply for the eVisitor visa before traveling. Check the grant notice for validity, entry conditions and permitted stay.']
+    });
+  }
+  if (destination === 'US' && ['BG', 'RO'].includes(nationality)) return rule('advance', official.usVisitor, {
+    notes: ['Apply for a U.S. visitor visa for ordinary tourism. Check your issued visa for validity and number of entries.'],
+    routes: [{ title: 'U.S. Visa Waiver Program eligible countries', url: 'https://travel.state.gov/content/travel/en/us-visas/tourism-visit/visa-waiver-program.html' }]
+  });
   if (destination === 'US' && nationality === 'BR') return rule('advance', official.usVisitor, {
     notes: ['A B-2 or combined B-1/B-2 visitor visa is the ordinary tourist route. The visa’s validity and the period granted at the border are separate.']
   });
