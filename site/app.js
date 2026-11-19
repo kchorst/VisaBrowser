@@ -264,7 +264,17 @@ function passengerEditor(passenger, onSave) {
   });
 }
 
-const route = () => location.hash.slice(1).split('/');
+// Compatible with Travel-Prep's public #country=XX deep-link convention.
+// Unknown codes return to the country picker rather than displaying a wrong result.
+function route() {
+  const hash = location.hash.slice(1);
+  if (/^country=/i.test(hash)) {
+    const code = new URLSearchParams(hash).get('country')?.trim().toUpperCase();
+    return destinations?.some(([id]) => id === code) ?
+      ['destination', code, 'view'] : ['view'];
+  }
+  return hash.split('/');
+}
 let unsavedResult = null;
 let lastRouteHash = location.hash;
 function leaveUnsaved(nextHash) {
@@ -317,7 +327,10 @@ function viewCountry() {
     list: 'country-picker-suggestions', autocomplete: 'off', autofocus: '' });
   const options = el('datalist', { id: 'country-picker-suggestions' },
     destinations.map(([, name]) => el('option', { value: name })));
-  const feedback = el('p', { class: 'muted', role: 'status' }, 'Start typing a destination.');
+  const linkedCode = /^country=/i.test(location.hash.slice(1)) ?
+    new URLSearchParams(location.hash.slice(1)).get('country') : null;
+  const feedback = el('p', { class: 'muted', role: 'status' },
+    linkedCode ? 'The linked country was not found. Choose a country below.' : 'Start typing a destination.');
   const matches = el('div', { class: 'stack' });
   const paint = () => {
     const term = normalizeName(picker.value.trim());
