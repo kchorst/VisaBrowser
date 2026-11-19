@@ -81,3 +81,23 @@ test('Nepal and Egypt polio notices follow the route across passports', () => {
   assert.match(healthNotices('SA', 'GH').at(-1).text, /COVID-19 vaccination or immunity/);
   assert.match(healthNotices('WS', 'FR').at(-1).text, /American Samoa/);
 });
+
+test('India lists separate route-based yellow fever and polio checks', () => {
+  const [yellow, polio] = healthNotices('IN', 'FR');
+  assert.match(yellow.text, /six days/);
+  assert.match(polio.text, /both Congos/);
+  assert.deepEqual(healthNotices('IN', 'CD'), [yellow, polio]);
+});
+
+test('Both Congos show yellow fever proof and separate Ebola screening', () => {
+  for (const destination of ['CG', 'CD']) {
+    const notices = healthNotices(destination, 'US');
+    assert.equal(notices[0].heading, 'Required health documents');
+    assert.match(notices[0].text, /arrivals from any country/);
+    assert.match(notices.at(-1).heading, /screening/);
+    assert.match(notices.at(-1).text, /Ebola/);
+  }
+  assert.match(healthNotices('CD', 'FR')[1].text, /Polio/);
+  assert.match(healthNotices('BT', 'FR')[0].text, /while CDC lists no entry requirement/);
+  assert.deepEqual(healthNotices('VN', 'FR'), []);
+});
