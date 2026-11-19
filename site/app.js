@@ -1106,6 +1106,9 @@ document.querySelector('#version').textContent = `v${version}`;
 
 async function readCatalog() {
   [catalog, places] = await Promise.all([json('./data/index.json'), json('./data/places.json')]);
+  // Presentation labels only: retain canonical source JSON and offline hashes.
+  places.CD = 'Congo (Democratic Republic of the Congo)';
+  places.CG = 'Congo (Republic of the Congo)';
   const dataDate = document.querySelector('#visa-data-date');
   dataDate.hidden = !catalog.generated;
   dataDate.textContent = catalog.generated ? `Visa data · ${catalog.generated.slice(0, 10)}` : '';
