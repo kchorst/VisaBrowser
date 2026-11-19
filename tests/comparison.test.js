@@ -10,12 +10,12 @@ mock.method(Date, 'now', () => Date.parse(stamp));
 test('Walkthroughs 1–4 and 6 classify and rank the group', () => {
   const data = rank(['E', 'D', 'C', 'B', 'A'].map(id => [id, id]), [alex, aline], sample);
   assert.deepEqual(data.map(({ id, destinations }) => [id, destinations.map(d => d.id)]), [
-    ['free', ['A']], ['authorization', ['C']], ['required', ['B', 'E']], ['review', ['D']]
+    ['free', ['A']], ['authorization', ['B', 'C']], ['required', ['E']], ['review', ['D']]
   ]);
   const a = data[0].destinations[0].result;
-  const c = data[1].destinations[0].result;
-  const b = data[2].destinations[0].result;
-  const e = data[2].destinations[1].result;
+  const b = data[1].destinations[0].result;
+  const c = data[1].destinations[1].result;
+  const e = data[2].destinations[0].result;
   const d = data[3].destinations[0].result;
   assert.equal(a.issues, 0);
   assert(!a.rows.some(row => row.questions));
