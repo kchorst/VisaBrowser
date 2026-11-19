@@ -35,6 +35,14 @@ The **VisaBrowser** title at the top of the website links to Home. A new screen 
 
 Use the same country-code deep-link convention as Travel-Prep: `https://kchorst.github.io/VisaBrowser/#country=JP` for Japan. Use a supported ISO destination code in place of `JP`; existing `#destination/JP/view` links also work. VisaBrowser uses travelers selected in this browser. **On a first visit, a country link retains the destination and shows “Destination: Japan” above the first-traveler form. Once you save the first name and passport, the linked country's result opens immediately, without another country selection.** If existing travelers are deselected, select one to compare. Unknown codes return to the country picker with a notice.
 
+### Visa-free travel versus entry paperwork
+
+VisaBrowser distinguishes **Visa-Free · No additional steps identified** from **Visa-Free · Entry Steps Required**, **Electronic Visa / Visa on Arrival**, **Visa Required**, and **Needs Review**. A visa-free route may still require an ETA, arrival card, FMM form, health document, or other action. Such steps appear separately from the visa classification, and do not qualify for the strict **NO ISSUES** badge. When a passport's electronic-authorization eligibility is not officially verified, VisaBrowser retains **Needs Review** rather than inventing authorization eligibility.
+
+Reviewed exceptions include New Zealand's temporary Kuwait-passport visa-waiver suspension, the current UK ETA nationality list/£20 fee, and US-passport tourist routes for Mexico, South Korea, Australia, and New Zealand. These are **specific reviewed rules**: a current source-date on an imported Wikipedia rule is not proof that every destination's entry requirements are current. In the expanded traveler detail, links marked **Official entry requirements** or application-specific links open an immigration authority's website for independent confirmation.
+
+Clicking the VisaBrowser masthead navigates Home. If a country result or multi-country result has not been saved, choose **Save Search** or **Discard** in the confirmation dialog to complete the navigation; **Cancel** stays on the current results.
+
 ## 3. Interpret results carefully
 
 Each country's result lists the requirements found for each selected traveler. Conditions, visa or authorization actions, known stay limits, fees when provided, and warnings appear inline. The mixed-group summary is expandable. Some outcomes depend on answers about a previously held visa, permit or special eligibility.
