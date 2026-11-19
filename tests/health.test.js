@@ -116,3 +116,15 @@ test('U.S. Ebola attestation follows air travel and DRC presence across passport
   assert.equal(healthNotices('US', 'US', Date.parse('2026-11-03T12:00:00Z'))
     .some(({ url }) => url.endsWith('/attestation-order.html')), false);
 });
+
+
+test('Other Ebola measures retain the destination-specific trigger', () => {
+  const time = Date.parse('2026-11-19T12:00:00Z');
+  const screening = (destination, date = time) => healthNotices(destination, 'FR', date)
+    .find(({ heading }) => heading === 'Health screening and temporary restrictions');
+  assert.match(screening('CA').text, /foreign nationals.*21 days/);
+  assert.equal(screening('CA', Date.parse('2026-11-28T06:00:00Z')), undefined);
+  assert.match(screening('RW').text, /30 days/);
+  assert.match(screening('UG').text, /passenger registration/);
+  assert.match(screening('CN').text, /symptoms or known contact/);
+});
