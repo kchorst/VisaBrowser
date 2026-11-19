@@ -111,8 +111,10 @@ def fixture(browser, base):
     assert 'country=A' in report and 'Important Travel Requirements & Disclaimer' in report
     assert 'passport validity and blank pages' in report.lower()
 
-    # Search Multiple chips, explicit ordering, expand/collapse and country links.
+    # Leaving an unsaved country for the itinerary prompts before navigation.
     page.goto(base + '#multi')
+    expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
     destination = page.get_by_label('Add destinations')
     for name in ['Destination A', 'Destination C', 'Destination B']:
         destination.fill(name)
