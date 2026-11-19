@@ -233,7 +233,7 @@ function dashboard() {
   return [title('Plan your trip'), panel(el('div', { class: 'row' }, el('strong', {}, people.map(p => `${p.name} · ${places[p.passport] ?? p.passport}`).join(' | ') || 'No travelers yet'), button('Edit travelers', () => go('passengers'))),
     el('div', { class: 'dashboard-actions stack' }, items.map(([label, path], i) => button(label, () => go(path), i === 0 ? 'primary' : ''))),
     button('Saved Searches', () => go('saved')),
-    el('p', {}, link('Travel-Prep', travelPrep))];
+    el('p', {}, link('Travel-Prep', travelPrep)))];
 }
 function viewCountry() {
   const picker = select('destination', destinations, '', 'Choose a country or territory');
