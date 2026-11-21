@@ -65,7 +65,13 @@ jobs:
       - if: ${{ github.event_name == 'schedule' || inputs.refresh }}
         run: |
           pip install -r scripts/requirements.txt
+          before="$(python -c 'import json; print(json.load(open("site/data/index.json"))["generated"])')"
           python scripts/refresh.py
+          after="$(python -c 'import json; print(json.load(open("site/data/index.json"))["generated"])')"
+          if [[ "$before" == "$after" ]]; then
+            echo "No visa source refreshed. Keeping the published dataset." >&2
+            exit 1
+          fi
           python scripts/build_offline.py
           python scripts/validate.py
           git config user.name 'github-actions[bot]'
@@ -87,13 +93,15 @@ jobs:
           url="${url%/}/"
           for attempt in $(seq 1 18); do
             if curl -fsSL --max-time 15 "${url}version.js" | grep -Fx "export const version = '$version';" &&
-               curl -fsSL --max-time 15 "${url}index.html" | grep -q '<title>VisaBrowser</title>'; then
+               curl -fsSL --max-time 15 "${url}index.html" | grep -q '<title>VisaBrowser</title>' &&
+               curl -fsSL --max-time 20 "${url}data/index.json?run=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}" |
+                 cmp -s site/data/index.json -; then
               echo "Verified ${url} and v${version}"
               exit 0
             fi
             sleep 10
           done
-          echo "Deployed website could not be verified with the expected version" >&2
+          echo "Deployed website could not be verified with the expected version and visa dataset" >&2
           exit 1
 
   release:

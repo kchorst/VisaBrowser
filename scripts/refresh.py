@@ -430,10 +430,12 @@ def refresh(args):
         except (ValueError, OSError, IndexError) as exc:
             return code, {**current, 'url': url, 'lastAttempt': stamp, 'error': str(exc)}, None
 
+    refreshed = False
     with ThreadPoolExecutor(max_workers=3) as pool:
         for code, meta, shard in pool.map(update, cfg['sources'].items()):
             sources[code] = meta
             if shard is not None:
+                refreshed = True
                 seen_rules[code] = shard
                 write_json(pass_dir / f'{code}.json', shard)
 
@@ -443,7 +445,11 @@ def refresh(args):
     passports = sorted((standard | set(cfg['sources'])) - {'X-SCH'})
     index = {'schema': 1, 'overdueDays': OVERDUE_DAYS, 'destinations': destinations,
              'passports': passports, 'homeCountries': home_countries(cfg),
-             'sources': sources, 'generated': stamp}
+             'sources': sources}
+    if refreshed:
+        index['generated'] = stamp
+    elif old.get('generated'):
+        index['generated'] = old['generated']
     issues = []
     for code in passports:
         source = sources.get(code, {})

@@ -70,7 +70,8 @@ class ImportTests(unittest.TestCase):
                 },
                 scripts / 'document-exceptions.json': {},
                 data / 'places.json': {'FR': 'France', 'US': 'United States'},
-                data / 'index.json': {'destinations': ['FR'], 'sources': {'US': {'url': url, 'lastSuccess': old_success}}},
+                data / 'index.json': {'generated': old_success, 'destinations': ['FR'],
+                                      'sources': {'US': {'url': url, 'lastSuccess': old_success}}},
                 data / 'passports' / 'US.json': last_good,
             }
             for path, value in starting_files.items():
@@ -78,7 +79,9 @@ class ImportTests(unittest.TestCase):
             with patch.object(refresh, 'ROOT', root), patch.object(refresh, 'DATA', data), patch.object(
                     refresh, 'load_url', side_effect=ValueError('Missing requirement column')):
                 refresh.refresh(argparse.Namespace(seed_html=None))
-            meta = refresh.read_json(data / 'index.json')['sources']['US']
+            index = refresh.read_json(data / 'index.json')
+            self.assertEqual(index['generated'], old_success)
+            meta = index['sources']['US']
             self.assertEqual(meta['lastSuccess'], old_success)
             self.assertEqual(meta['error'], 'Missing requirement column')
             self.assertEqual(refresh.read_json(data / 'passports' / 'US.json'), last_good)

@@ -1,5 +1,6 @@
 // Pair-specific findings and referrals from the November 2026 P1 ledgers.
 // Keep published visa classifications separate from scope-limited audit evidence.
+const auditDate = '2026-11-19';
 const auditGroups = {
   "AD": [
     ["BW BZ FJ", "Confirm entry details", "Confirm which visa, waiver or permit applies and check the arrival route or residency condition. Ask the consular mission serving your place of residence for the document requirements for Andorra and your itinerary.", ["https://www.gov.uk/government/publications/foreign-embassies-in-the-uk"]],
@@ -588,4 +589,4 @@ const auditGroups = {
 
 export const auditFindings = Object.fromEntries(Object.entries(auditGroups).map(([destination, groups]) =>
   [destination, Object.fromEntries(groups.flatMap(([passports, heading, text, urls]) =>
-    passports.split(' ').map(passport => [passport, { heading, text, url: urls[0], more: urls.slice(1) }])))]));
+    passports.split(' ').map(passport => [passport, { heading, text, url: urls[0], more: urls.slice(1), auditDate }])))]));

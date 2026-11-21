@@ -26,6 +26,7 @@ test('All 2,930 P1 pairs are represented and scoped to the passport', () => {
   assert.equal(Object.values(auditFindings).reduce((n, map) => n + Object.keys(map).length, 0), 2930);
   assert.match(touristDetails('IL', traveler('AL')).at(-1).text, /ETA-IL/);
   assert.equal(auditFindings.IL.AE.heading, 'Confirm entry details');
+  assert.equal(auditFindings.IL.AE.auditDate, '2026-11-19');
   assert.ok(auditFindings.IL.AL.more.length);
 });
 
