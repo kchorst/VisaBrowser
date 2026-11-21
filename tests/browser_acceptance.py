@@ -77,7 +77,7 @@ def fixture(browser, base):
     page.goto(base)
 
     # The data dates and travel shortcuts stay visible in the mobile header.
-    expect(page.locator('#visa-data-date')).to_have_text('Visa data · 2026-11-17')
+    expect(page.locator('#visa-data-date')).to_have_text('Visa dataset · 2026-11-17')
     expect(page.locator('#visa-next-update')).to_have_text('Next scheduled update · 2026-11-24')
     tools = page.get_by_role('navigation', name='Travel tools')
     expect(tools.get_by_role('link', name='Travel-Prep')).to_have_attribute(
@@ -501,6 +501,9 @@ def tourist_document_notices(browser, base):
         page.goto(base + '#country=TH')
         expect(page.get_by_text('Proof of onward travel', exact=True).first).to_be_visible()
         expect(page.get_by_text('Submit the Thailand Digital Arrival Card', exact=False)).to_be_visible()
+        page.reload()
+        page.goto(base + '#country=AU')
+        expect(page.locator('time[datetime="2026-11-19"]')).to_have_text('Audit logged Nov 19, 2026')
     finally:
         page.close()
 

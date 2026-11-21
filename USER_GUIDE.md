@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.10 — User Guide
+# VisaBrowser v0.4.11 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -27,7 +27,7 @@ For mixed-passport groups, **Check Group Req** appears first. Otherwise **View C
 
 ### Expand itinerary cards and open Travel-Prep
 
-The top of the app links to Travel-Prep. The data line shows when the current visa dataset was generated and the next scheduled Tuesday refresh. If that date passes before a fresh dataset arrives, the app marks the update overdue.
+The top of the app links to Travel-Prep. **Visa dataset** shows when the current snapshot was generated, alongside the next scheduled Tuesday refresh. If that date passes before a fresh dataset arrives, the app marks the update overdue. An **Audit logged** date belongs to the individual finding or warning. It appears in traveler results and copied or shared reports.
 
 Each destination card in **Search Multiple** and a reopened **Saved Search** has a clearly labeled **Show visa requirements** disclosure, which changes to **Hide visa requirements** after expansion. A separate **Travel-Prep ↗** link is always visible on the card, even while VisaBrowser requirements are collapsed; it opens that exact country in a new tab. Longer collections of destinations remain behind a counted Show/Hide control.
 
@@ -94,7 +94,7 @@ Because storage is local to the current browser/profile, clearing website data o
 
 While online, select **Save offline** near the VisaBrowser version to download the full set of passport rules for this device. Wait until the status reads **Saved offline**. When a newer pack is published, **Offline data update available** lets you replace it.
 
-When **VisaBrowser update available** appears, choose **Update VisaBrowser** to reload with the new app version. You can save or discard an open comparison first. If you are upgrading from v0.4.7, close all VisaBrowser tabs and any installed app window, then reopen while online to load v0.4.8.
+When **VisaBrowser update available** appears, choose the bright emerald **Update VisaBrowser** button to reload with the new app version. You can save or discard an open comparison first. If you still use v0.4.7, close all VisaBrowser tabs and any installed app window, then reopen while online to load the current version.
 
 An interrupted offline update preserves the previous complete pack. Always check the displayed data date and do not treat outdated or unavailable sources as travel clearance. Links to Travel-Prep or external sites require a connection.
 

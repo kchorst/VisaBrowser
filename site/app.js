@@ -15,6 +15,9 @@ const tabs = [...document.querySelectorAll('[data-route]')];
 const disclaimerText = 'VisaBrowser provides general entry guidance, not a guarantee of admission. Confirm current requirements with the destination country’s immigration or consular authorities before departure. Check passport validity and blank pages, visas and supporting documents, vaccinations and health rules, prior-country visits, permitted stay, transit conditions and fees. Entry is always at the discretion of immigration authorities.';
 const disclaimer = () => el('details', { class: 'panel travel-disclaimer' }, el('summary', {}, '⚠ Important Travel Requirements & Disclaimer'), el('p', {}, disclaimerText));
 const checkedDate = () => new Date().toLocaleDateString();
+const auditDateLabel = date => 'Audit logged ' + new Intl.DateTimeFormat('en-US', {
+  month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
+}).format(new Date(date));
 function compactResult(result) {
   // Never persist full passport rule tables in each saved search.
   return { ...result, rows: result.rows.map(row => ({
@@ -34,7 +37,8 @@ function reportText(placeId, summary, when = checkedDate()) {
       ...(row.flags ?? []),
       ...Object.entries(touristEntryTerms(placeId, row) ?? {}).map(([label, value]) => label + ' · ' + value),
       ...[...healthNotices(placeId, row.passenger.passport), ...touristDetails(placeId, row)]
-        .map(({ heading, text, url, more = [] }) => [heading, text, url, ...more].join(' · '))].filter(Boolean).join(' · ')),
+        .map(({ heading, text, url, more = [], auditDate }) =>
+          [heading, auditDate ? auditDateLabel(auditDate) : '', text, url, ...more].filter(Boolean).join(' · '))].filter(Boolean).join(' · ')),
     'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
     'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
     'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
@@ -804,9 +808,10 @@ function healthDetails(row, placeId) {
 }
 
 function travelDetails(row, placeId) {
-  return touristDetails(placeId, row).map(({ heading, text, url, more = [] }) =>
+  return touristDetails(placeId, row).map(({ heading, text, url, more = [], auditDate }) =>
     el('div', { class: 'stack' },
-      el('p', {}, el('strong', {}, heading), '. ', text),
+      el('p', {}, el('strong', {}, heading),
+        auditDate ? [' · ', el('time', { datetime: auditDate }, auditDateLabel(auditDate))] : null, '. ', text),
       el('p', {}, link('Source guidance ↗', url),
         more.map((source, index) => [' · ', link(`Related source ${index + 1} ↗`, source)]))));
 }
@@ -1161,7 +1166,7 @@ async function readCatalog() {
     const expectedDate = nextUpdate.toISOString().slice(0, 10);
     const label = new Date().toISOString().slice(0, 10) > expectedDate
       ? 'Scheduled update overdue' : 'Next scheduled update';
-    document.querySelector('#visa-data-date').textContent = `Visa data · ${datasetDate}`;
+    document.querySelector('#visa-data-date').textContent = `Visa dataset · ${datasetDate}`;
     document.querySelector('#visa-next-update').textContent = `${label} · ${expectedDate}`;
   }
   destinations = catalog.destinations.filter(code => places[code]).map(code => [code, places[code]]).sort(alpha);

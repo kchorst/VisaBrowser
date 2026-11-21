@@ -1,8 +1,14 @@
-# VisaBrowser v0.4.10
+# VisaBrowser v0.4.11
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
 VisaBrowser is a mobile-first browser app for comparing tourist entry requirements for one traveler or a group with different passports. **The hosted browser link is the primary product**; no download, account, or installation is required. A secondary, optional Windows local-server package is available for people who prefer to run a copy on their own machine.
+
+## What's new in v0.4.11
+
+- **Update VisaBrowser** uses bright emerald so the app update is easy to spot.
+- **Visa dataset** dates the underlying snapshot. **Audit logged** dates individual findings and warnings in results and shared reports.
+- If every source fails to refresh, the published dataset keeps its previous date. The deployment checks that the site serves the expected dataset.
 
 ## Quick start
 
@@ -35,7 +41,7 @@ For screens, examples and limitations, see the [User Guide](USER_GUIDE.md) and t
 
 VisaBrowser uses Wikipedia-derived visa tables plus carefully reviewed exception rules. A **Pending verification** result indicates that missing, stale, conditional or conflicting information needs checking. Country-specific conditions remain visible even when the general travel disclaimer is collapsed.
 
-Use **Save offline** in the app to download a full local visa-data pack for use without a connection. Choose **Offline data update available** to update that pack. Choose **Update VisaBrowser** when an app update is ready. The data date appears in the header. Offline or stale data is **not a substitute for confirmation with immigration authorities**.
+Use **Save offline** in the app to download a full local visa-data pack for use without a connection. Choose **Offline data update available** to update that pack. Choose the bright emerald **Update VisaBrowser** button when an app update is ready. The header shows the dataset date and next scheduled Tuesday refresh. Offline or stale data is **not a substitute for confirmation with immigration authorities**.
 
 ## Optional Windows local-server package
 
