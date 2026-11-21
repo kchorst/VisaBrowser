@@ -508,6 +508,27 @@ def tourist_document_notices(browser, base):
         page.close()
 
 
+def p2_findings_in_result_and_copy(browser, base):
+    context = browser.new_context(viewport={'width': 390, 'height': 844},
+                                  is_mobile=True, has_touch=True,
+                                  permissions=['clipboard-read', 'clipboard-write'])
+    try:
+        page = context.new_page()
+        page.goto(base)
+        add_traveler(page, 'Czech traveler', 'CZ')
+        page.goto(base + '#country=TH')
+        expect(page.get_by_text('Stay limit · Up to 30 days', exact=True)).to_be_visible()
+        expect(page.get_by_text('Audit logged Nov 21, 2026')).to_be_visible()
+        expect(page.get_by_text('60 days', exact=True)).to_have_count(0)
+        page.get_by_role('button', name='Copy', exact=True).click()
+        report = page.evaluate('navigator.clipboard.readText()')
+        assert 'Audit logged Nov 21, 2026' in report
+        assert 'Stay: Up to 30 days' in report
+        assert 'thaiembassy.org' in report
+    finally:
+        context.close()
+
+
 def app_update(browser, base, site):
     page = browser.new_page(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
     version_file = site / 'version.js'
@@ -563,6 +584,7 @@ def run():
                 production(browser, base)
                 ghana_health_notice(browser, base)
                 tourist_document_notices(browser, base)
+                p2_findings_in_result_and_copy(browser, base)
                 app_update(browser, base, site)
             finally:
                 browser.close()

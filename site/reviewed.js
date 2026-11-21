@@ -1,3 +1,4 @@
+import { reviewedP2Rule } from './p2-reviewed.js';
 // Destination authorities for the reviewed cases. Keep conditions tied to the
 // specific route they describe, rather than copying them onto the baseline rule.
 const official = {
@@ -438,6 +439,8 @@ function mutualVisa(passenger, destination, base) {
 
 export function reviewedRule(passenger, destination, base, data) {
   const nationality = passenger.passport;
+  const p2 = reviewedP2Rule(passenger, destination, base);
+  if (p2) return p2;
   if (destination === 'GB') {
     if (nationality === 'BNO') return rule('free', official.ukBno, {
       stay: 'Up to six months per visit',
