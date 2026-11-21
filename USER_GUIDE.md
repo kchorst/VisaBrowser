@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.11 — User Guide
+# VisaBrowser v0.4.12 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -71,6 +71,8 @@ A requirement can depend on where you are coming from, how long you were there, 
 At the bottom of every results screen, **Important Travel Requirements & Disclaimer** is collapsed by default. Expand it for the full reminder about passport validity, blank pages, visas and documents, health/vaccines, travel history, allowed stays, fees, transit and immigration discretion. Critical country-specific conditions remain visible above it.
 
 For destination preparation, choose **Open in Travel-Prep**. The link opens Travel-Prep in a separate tab for that specific country where supported.
+
+Dated **Confirm entry details** notes identify the route, supporting document, fee, or other condition to check for a particular passport. Use the linked authority for the question shown. The same notes appear in copied country and itinerary reports.
 
 ## 4. Copy or share a result
 

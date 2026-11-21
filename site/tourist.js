@@ -1,4 +1,5 @@
 import { auditFindings } from './tourist-audit.js';
+import { p2Notice } from './p2-audit.js';
 
 const onward = 'Proof of onward travel';
 const transit = 'Connections and boarding';
@@ -110,7 +111,8 @@ export function touristEntryTerms(destination, row) {
 
 export function touristDetails(destination, row) {
   if (row.home) return [];
-  const notices = [...(touristNotices[destination] ?? [])];
+  const residentArrival = destination === 'NZ' && row.options.includes('residentArrival');
+  const notices = (touristNotices[destination] ?? []).filter(item => !residentArrival || item.heading !== onward);
   if (row.entry && !touristEntryTerms(destination, row)) notices.push(notice('Visa validity and entries',
     'Check the issued visa for the number of entries, validity dates and permitted stay. A side trip can use another entry. Check before re-entering on a single-entry visa.',
     row.official ?? 'https://www.gov.uk/government/publications/foreign-embassies-in-the-uk'));
@@ -133,5 +135,7 @@ export function touristDetails(destination, row) {
   }
   const audit = auditFindings[destination]?.[row.passenger.passport];
   if (audit) notices.push(audit);
+  const p2 = p2Notice(destination, row.passenger.passport);
+  if (p2) notices.push(p2);
   return notices;
 }
