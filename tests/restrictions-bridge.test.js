@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {selectBorderRestrictions} from '../site/restrictions-bridge.js';
+import {selectBorderRestrictions,selectVerifiedBorderRestrictions} from '../site/restrictions-bridge.js';
+import {createHash} from 'node:crypto';
 
 const item = (overrides={})=>({
   destination:'RW',id:'rule-1',title:'Prohibited item',rule:'Do not bring a restricted item',
@@ -41,4 +42,18 @@ test('territory cannot inherit parent-country restriction',()=>{
 });
 test('duplicate restriction identifiers cannot generate duplicate alerts',()=>{
  assert.equal(run(pack([item(),item()])).length,1);
+});
+
+test('cryptographic release snapshot gate rejects content tampering and stale pins',async()=>{
+  const canonical={
+    schemaVersion:1,publicationStatus:'approved',approvalId:'SYNTHETIC-TEST',
+    approvedAt:'2026-11-22',destinations:['RW'],records:[item()]
+  };
+  const digest=createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
+  const snapshot={...canonical,datasetVersion:'sha256-'+digest,integrity:{algorithm:'SHA-256',hex:digest}};
+  const approvedVersion=snapshot.datasetVersion;
+  assert.deepEqual((await selectVerifiedBorderRestrictions(snapshot,'RW',approvedVersion)).map(x=>x.id),['rule-1']);
+  const altered={...snapshot,records:[{...item(),rule:'Tampered rule'}]};
+  assert.deepEqual(await selectVerifiedBorderRestrictions(altered,'RW',approvedVersion),[]);
+  assert.deepEqual(await selectVerifiedBorderRestrictions(snapshot,'RW','sha256-'+'0'.repeat(64)),[]);
 });
