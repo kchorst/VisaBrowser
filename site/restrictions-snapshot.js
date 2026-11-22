@@ -60,9 +60,20 @@ export async function loadRestrictionsSnapshot({
   return { state: 'unavailable', dataset: null };
 }
 
-// Intended for datasets returned by loadRestrictionsSnapshot.
-export function getSnapshotBorderNotices(snapshot, destination, context) {
+// Use this result when rendering an empty state. An empty list alone carries no coverage information.
+export function getSnapshotBorderNoticeResult(snapshot, destination, context) {
   const version = verifiedSnapshots.get(snapshot);
-  if (!version || !snapshot.dataset.destinations.includes(destination)) return [];
-  return selectBorderRestrictions(snapshot.dataset, destination, version, context);
+  if (!version) return { status: 'unavailable', source: null, notices: [] };
+
+  const { dataset, state: source } = snapshot;
+  if (!dataset.destinations.includes(destination)) {
+    return { status: 'destination_not_covered', source, notices: [] };
+  }
+
+  const notices = selectBorderRestrictions(dataset, destination, version, context);
+  return { status: notices.length ? 'notices' : 'no_matching_notices', source, notices };
+}
+
+export function getSnapshotBorderNotices(snapshot, destination, context) {
+  return getSnapshotBorderNoticeResult(snapshot, destination, context).notices;
 }

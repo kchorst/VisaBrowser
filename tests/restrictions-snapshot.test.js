@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { loadRestrictionsSnapshot, getSnapshotBorderNotices } from '../site/restrictions-snapshot.js';
+import { loadRestrictionsSnapshot, getSnapshotBorderNotices, getSnapshotBorderNoticeResult } from '../site/restrictions-snapshot.js';
 
 const fixture = JSON.parse(readFileSync(
   new URL('./fixtures/approved-restrictions-snapshot.json', import.meta.url), 'utf8',
@@ -86,4 +86,23 @@ test('selectors use only verified loader results and verified records are immuta
   assert.throws(() => { notice.sources[0].url = 'https://example.invalid/changed'; }, TypeError);
   assert.throws(() => { loaded.dataset.records = []; }, TypeError);
   assert.equal(getSnapshotBorderNotices(loaded, 'TEST-TERRITORY')[0].rule, notice.rule);
+});
+
+test('results distinguish unavailable data, missing territory and no matching notices', async () => {
+  const cache = memoryCache();
+  const options = { url, approvedVersion, cache };
+  await loadRestrictionsSnapshot({ ...options, fetchSnapshot: async () => Response.json(fixture) });
+  const cached = await loadRestrictionsSnapshot({ ...options, fetchSnapshot: offline });
+  const unavailable = await loadRestrictionsSnapshot({ ...options, approvedVersion: null });
+  for (const [snapshot, destination, status, source] of [
+    [unavailable, 'TEST-TERRITORY', 'unavailable', null],
+    [cached, 'UNKNOWN', 'destination_not_covered', 'offline'],
+    [cached, 'TEST-MAINLAND', 'no_matching_notices', 'offline'],
+  ]) {
+    assert.deepEqual(getSnapshotBorderNoticeResult(snapshot, destination), { status, source, notices: [] });
+  }
+  const result = getSnapshotBorderNoticeResult(cached, 'TEST-TERRITORY');
+  assert.equal(result.status, 'notices');
+  assert.equal(result.source, 'offline');
+  assert.equal(result.notices.length, 1);
 });
