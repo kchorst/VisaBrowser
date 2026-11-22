@@ -59,6 +59,16 @@ test('storage failure preserves a verified network result', async () => {
   assert.equal(result.state, 'online');
 });
 
+test('invalid endpoints fail closed without touching the network or cache', async () => {
+  const unexpectedAccess = () => assert.fail('Invalid endpoint was requested');
+  for (const endpoint of [undefined, '', 'http://[', 'file:///restrictions.json', 'https://a:b@example.invalid']) {
+    assert.deepEqual(await loadRestrictionsSnapshot({
+      url: endpoint, approvedVersion, fetchSnapshot: unexpectedAccess,
+      cache: { match: unexpectedAccess, put: unexpectedAccess },
+    }), { state: 'unavailable', dataset: null });
+  }
+});
+
 test('passport- and arrival-specific notices require both matches', async () => {
   const snapshot = await loadRestrictionsSnapshot({
     url, approvedVersion, fetchSnapshot: async () => Response.json(fixture),

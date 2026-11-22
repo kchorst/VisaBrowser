@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {selectBorderRestrictions,selectVerifiedBorderRestrictions} from '../site/restrictions-bridge.js';
+import {selectBorderRestrictions,selectVerifiedBorderRestrictions,verifyApprovedRestrictions} from '../site/restrictions-bridge.js';
 import {createHash} from 'node:crypto';
 
 const item = (overrides={})=>({
@@ -13,6 +13,16 @@ const pack=(records,overrides={})=>({
   schemaVersion:1,datasetVersion:'release-2026-11-22',publicationStatus:'approved',records,...overrides
 });
 const run=(p,d='RW',version='release-2026-11-22')=>selectBorderRestrictions(p,d,version);
+
+function pinnedSnapshot(overrides = {}) {
+  const canonical = {
+    schemaVersion: 1, publicationStatus: 'approved', audience: 'visa-browser',
+    approvalId: 'SYNTHETIC-TEST', approvedAt: '2026-11-22', destinations: ['RW'],
+    records: [item()], ...overrides,
+  };
+  const hex = createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
+  return { ...canonical, datasetVersion: 'sha256-' + hex, integrity: { algorithm: 'SHA-256', hex } };
+}
 
 test('fail closed with no or mismatched approved immutable release',()=>{
  assert.deepEqual(run(null),[]);
@@ -45,12 +55,7 @@ test('duplicate restriction identifiers cannot generate duplicate alerts',()=>{
 });
 
 test('cryptographic release snapshot gate rejects content tampering and stale pins',async()=>{
-  const canonical={
-    schemaVersion:1,publicationStatus:'approved',approvalId:'SYNTHETIC-TEST',
-    approvedAt:'2026-11-22',destinations:['RW'],records:[item()]
-  };
-  const digest=createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
-  const snapshot={...canonical,datasetVersion:'sha256-'+digest,integrity:{algorithm:'SHA-256',hex:digest}};
+  const snapshot = pinnedSnapshot();
   const approvedVersion=snapshot.datasetVersion;
   assert.deepEqual((await selectVerifiedBorderRestrictions(snapshot,'RW',approvedVersion)).map(x=>x.id),['rule-1']);
   const altered={...snapshot,records:[{...item(),rule:'Tampered rule'}]};
@@ -59,14 +64,22 @@ test('cryptographic release snapshot gate rejects content tampering and stale pi
 });
 
 test('a matching content pin still requires the approval to cover the source check', async () => {
-  const canonical = {
-    schemaVersion: 1, publicationStatus: 'approved', approvalId: 'SYNTHETIC-TEST',
-    approvedAt: '2026-11-22', destinations: ['RW'], records: [item({ checkedAt: '2026-11-23' })],
-  };
-  const hex = createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
-  const datasetVersion = 'sha256-' + hex;
-  const snapshot = { ...canonical, datasetVersion, integrity: { algorithm: 'SHA-256', hex } };
-  assert.deepEqual(await selectVerifiedBorderRestrictions(snapshot, 'RW', datasetVersion), []);
+  const snapshot = pinnedSnapshot({ records: [item({ checkedAt: '2026-11-23' })] });
+  assert.equal(await verifyApprovedRestrictions(snapshot, snapshot.datasetVersion), false);
+});
+
+test('the integrity gate rejects validly pinned snapshots outside the VisaBrowser border contract', async () => {
+  for (const snapshot of [
+    pinnedSnapshot({ audience: 'travel-prep' }),
+    pinnedSnapshot({ audience: undefined }),
+    pinnedSnapshot({ records: [item(), item({ id: 'local', visabrowser_alert: false })] }),
+    pinnedSnapshot({ records: [item({ noticeKind: 'carrier_policy' })] }),
+    pinnedSnapshot({ records: [item({ destination: 'TEST-TERRITORY' })] }),
+    pinnedSnapshot({ records: [item(), item()] }),
+    pinnedSnapshot({ destinations: ['RW', 'RW'] }),
+  ]) {
+    assert.equal(await verifyApprovedRestrictions(snapshot, snapshot.datasetVersion), false);
+  }
 });
 
 test('date windows include legal endpoints and suppress notices on the review deadline', () => {

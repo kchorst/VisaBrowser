@@ -30,10 +30,20 @@ export async function loadRestrictionsSnapshot({
   fetchSnapshot = globalThis.fetch,
   cache,
 }) {
+  const unavailable = { state: 'unavailable', dataset: null };
   if (typeof approvedVersion !== 'string' || !/^sha256-[a-f0-9]{64}$/.test(approvedVersion)) {
-    return { state: 'unavailable', dataset: null };
+    return unavailable;
   }
-  const cacheKey = new URL(url, globalThis.location?.href);
+  let cacheKey;
+  try {
+    if (typeof url !== 'string' || !url.trim()) return unavailable;
+    cacheKey = new URL(url, globalThis.location?.href);
+    if (!['http:', 'https:'].includes(cacheKey.protocol) ||
+        cacheKey.username || cacheKey.password) return unavailable;
+  } catch {
+    return unavailable;
+  }
+  cacheKey.hash = '';
   cacheKey.searchParams.set('restrictions-version', approvedVersion);
 
   try {
@@ -57,7 +67,7 @@ export async function loadRestrictionsSnapshot({
   } catch {
     // Cache access can fail in private browsing or when storage is unavailable.
   }
-  return { state: 'unavailable', dataset: null };
+  return unavailable;
 }
 
 // Use this result when rendering an empty state. An empty list alone carries no coverage information.
