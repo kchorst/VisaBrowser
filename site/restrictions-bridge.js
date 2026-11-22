@@ -3,6 +3,7 @@
 import { isCurrentRestriction, isIsoDate, matchesApplicability } from './restrictions-applicability.js';
 
 const ALLOWED_STATUS = new Set(['verified', 'conditional']);
+const BORDER_KINDS = new Set(['legal_requirement', 'official_advisory']);
 const BORDER = new Set(['entry', 'transit', 'customs', 'departure']);
 
 function safeSource(source) {
@@ -30,6 +31,7 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
     return r.destination === destination &&
       r.publicationStatus === 'approved' &&
       r.visabrowser_alert === true &&
+      BORDER_KINDS.has(r.noticeKind) &&
       matchesApplicability(r.applicability, context) &&
       ALLOWED_STATUS.has(r.status) &&
       typeof r.title === 'string' && r.title.trim() &&

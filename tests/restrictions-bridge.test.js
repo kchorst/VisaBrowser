@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 
 const item = (overrides={})=>({
   destination:'RW',id:'rule-1',title:'Prohibited item',rule:'Do not bring a restricted item',
-  jurisdiction:'Rwanda',scope:'national',checkedAt:'2026-11-22',status:'verified',
+  jurisdiction:'Rwanda',scope:'national',checkedAt:'2026-11-22',status:'verified',noticeKind:'legal_requirement',
   publicationStatus:'approved',visabrowser_alert:true,relevance:['customs'],
   sources:[{authority:'Government',url:'https://example.gov/rule'}],...overrides
 });
@@ -71,4 +71,16 @@ test('date windows include legal endpoints and suppress notices on the review de
   assert.deepEqual(ids('2026-11-25'), ['legal-window']);
   assert.deepEqual(ids('2026-11-26'), []);
   assert.deepEqual(ids('2026-02-30'), []);
+});
+
+test('border notices preserve the advisory distinction and exclude airline policy', () => {
+  const output = run(pack([
+    item(),
+    item({ id: 'advisory', noticeKind: 'official_advisory' }),
+    item({ id: 'carrier', noticeKind: 'carrier_policy' }),
+    item({ id: 'guidance', noticeKind: 'official_guidance' }),
+    item({ id: 'untyped', noticeKind: undefined }),
+  ]));
+  assert.deepEqual(output.map(({ noticeKind }) => noticeKind),
+    ['legal_requirement', 'official_advisory']);
 });
