@@ -5,6 +5,9 @@ on:
     paths:
       - 'site/restrictions-bridge.js'
       - 'tests/restrictions-bridge.test.js'
+      - 'site/restrictions-snapshot.js'
+      - 'tests/restrictions-snapshot.test.js'
+      - 'tests/fixtures/approved-restrictions-snapshot.json'
       - '.github/workflows/restrictions-bridge-draft.yml'
   workflow_dispatch:
 
@@ -20,6 +23,6 @@ jobs:
         with:
           node-version: '22'
       - name: Regression-test border-only filter
-        run: node --test tests/restrictions-bridge.test.js
+        run: node --test tests/restrictions-bridge.test.js tests/restrictions-snapshot.test.js
       - name: Full JS regression suite
         run: npm test

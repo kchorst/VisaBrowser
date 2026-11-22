@@ -45,16 +45,19 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
 // Production integration must call this asynchronous integrity gate, NOT the
 // raw synchronous filter above. An attacker cannot make altered records match
 // a previously pinned, independently approved content digest.
-export async function selectVerifiedBorderRestrictions(dataset, destination, approvedVersion) {
+export async function verifyApprovedRestrictions(dataset, approvedVersion) {
   if (!dataset || typeof approvedVersion !== 'string' ||
       !/^sha256-[a-f0-9]{64}$/.test(approvedVersion) ||
       dataset.datasetVersion !== approvedVersion ||
+      dataset.schemaVersion !== 1 ||
       dataset.publicationStatus !== 'approved' ||
+      typeof dataset.approvalId !== 'string' || !dataset.approvalId.trim() ||
+      !isIsoDate(dataset.approvedAt) ||
       dataset.integrity?.algorithm !== 'SHA-256' ||
       dataset.integrity?.hex !== approvedVersion.slice(7) ||
       !Array.isArray(dataset.destinations) || !Array.isArray(dataset.records))
-    return [];
-  if (typeof globalThis.crypto?.subtle?.digest !== 'function') return [];
+    return false;
+  if (typeof globalThis.crypto?.subtle?.digest !== 'function') return false;
   try {
     // The canonical key order must match Travel-Prep's build-approved-restrictions.mjs.
     const canonical = {
@@ -68,7 +71,12 @@ export async function selectVerifiedBorderRestrictions(dataset, destination, app
     const bytes = new TextEncoder().encode(JSON.stringify(canonical));
     const digest = await globalThis.crypto.subtle.digest('SHA-256',bytes);
     const actual = Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
-    if (actual !== dataset.integrity.hex) return [];
-    return selectBorderRestrictions(dataset,destination,approvedVersion);
-  } catch { return []; }
+    return actual === dataset.integrity.hex;
+  } catch { return false; }
+}
+
+export async function selectVerifiedBorderRestrictions(dataset, destination, approvedVersion) {
+  if (!await verifyApprovedRestrictions(dataset, approvedVersion) ||
+      !dataset.destinations.includes(destination)) return [];
+  return selectBorderRestrictions(dataset, destination, approvedVersion);
 }
