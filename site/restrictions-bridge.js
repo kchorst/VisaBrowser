@@ -41,3 +41,34 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
       Array.isArray(r.sources) && r.sources.length > 0 && r.sources.every(safeSource);
   });
 }
+
+// Production integration must call this asynchronous integrity gate, NOT the
+// raw synchronous filter above. An attacker cannot make altered records match
+// a previously pinned, independently approved content digest.
+export async function selectVerifiedBorderRestrictions(dataset, destination, approvedVersion) {
+  if (!dataset || typeof approvedVersion !== 'string' ||
+      !/^sha256-[a-f0-9]{64}$/.test(approvedVersion) ||
+      dataset.datasetVersion !== approvedVersion ||
+      dataset.publicationStatus !== 'approved' ||
+      dataset.integrity?.algorithm !== 'SHA-256' ||
+      dataset.integrity?.hex !== approvedVersion.slice(7) ||
+      !Array.isArray(dataset.destinations) || !Array.isArray(dataset.records))
+    return [];
+  if (typeof globalThis.crypto?.subtle?.digest !== 'function') return [];
+  try {
+    // The canonical key order must match Travel-Prep's build-approved-restrictions.mjs.
+    const canonical = {
+      schemaVersion:dataset.schemaVersion,
+      publicationStatus:dataset.publicationStatus,
+      approvalId:dataset.approvalId,
+      approvedAt:dataset.approvedAt,
+      destinations:dataset.destinations,
+      records:dataset.records
+    };
+    const bytes = new TextEncoder().encode(JSON.stringify(canonical));
+    const digest = await globalThis.crypto.subtle.digest('SHA-256',bytes);
+    const actual = Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+    if (actual !== dataset.integrity.hex) return [];
+    return selectBorderRestrictions(dataset,destination,approvedVersion);
+  } catch { return []; }
+}
