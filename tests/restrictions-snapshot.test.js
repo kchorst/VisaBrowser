@@ -58,3 +58,18 @@ test('storage failure preserves a verified network result', async () => {
   });
   assert.equal(result.state, 'online');
 });
+
+test('passport- and arrival-specific notices require both matches', async () => {
+  const snapshot = await loadRestrictionsSnapshot({
+    url, approvedVersion, fetchSnapshot: async () => Response.json(fixture),
+  });
+  const ids = (context) =>
+    getSnapshotBorderNotices(snapshot, 'TEST-TERRITORY', context).map(({ id }) => id);
+  const unscoped = ['synthetic-territory-customs'];
+  assert.deepEqual(ids(), unscoped);
+  assert.deepEqual(ids({ passportCode: 'GB' }), unscoped);
+  assert.deepEqual(ids({ passportCode: 'US', arrivalMode: 'air' }), unscoped);
+  assert.deepEqual(ids({ passportCode: 'GB', arrivalMode: 'land' }), unscoped);
+  assert.deepEqual(ids({ passportCode: 'GB', arrivalMode: 'air' }),
+    [...unscoped, 'synthetic-territory-scoped']);
+});

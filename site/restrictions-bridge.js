@@ -1,5 +1,7 @@
 // Nonproduction: fail-closed adapter for an independently approved Travel-Prep snapshot.
 // This module is NOT imported by app.js. It does not alter visa/ETA classification.
+import { matchesApplicability } from './restrictions-applicability.js';
+
 const ALLOWED_STATUS = new Set(['verified', 'conditional']);
 const BORDER = new Set(['entry', 'transit', 'customs', 'departure']);
 
@@ -15,7 +17,7 @@ function safeSource(source) {
   } catch { return false; }
 }
 
-export function selectBorderRestrictions(dataset, destination, approvedVersion = null) {
+export function selectBorderRestrictions(dataset, destination, approvedVersion = null, context) {
   // Never publish a research register, unapproved snapshot, or arbitrarily newer dataset.
   if (!dataset || dataset.schemaVersion !== 1 || dataset.publicationStatus !== 'approved' ||
       !Array.isArray(dataset.records) || typeof dataset.datasetVersion !== 'string' ||
@@ -31,6 +33,7 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
     return r.destination === destination &&
       r.publicationStatus === 'approved' &&
       r.visabrowser_alert === true &&
+      matchesApplicability(r.applicability, context) &&
       ALLOWED_STATUS.has(r.status) &&
       typeof r.title === 'string' && r.title.trim() &&
       typeof r.rule === 'string' && r.rule.trim() &&
@@ -75,8 +78,8 @@ export async function verifyApprovedRestrictions(dataset, approvedVersion) {
   } catch { return false; }
 }
 
-export async function selectVerifiedBorderRestrictions(dataset, destination, approvedVersion) {
+export async function selectVerifiedBorderRestrictions(dataset, destination, approvedVersion, context) {
   if (!await verifyApprovedRestrictions(dataset, approvedVersion) ||
       !dataset.destinations.includes(destination)) return [];
-  return selectBorderRestrictions(dataset, destination, approvedVersion);
+  return selectBorderRestrictions(dataset, destination, approvedVersion, context);
 }

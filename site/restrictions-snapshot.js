@@ -47,8 +47,8 @@ export async function loadRestrictionsSnapshot({
 }
 
 // Intended for datasets returned by loadRestrictionsSnapshot.
-export function getSnapshotBorderNotices(snapshot, destination) {
+export function getSnapshotBorderNotices(snapshot, destination, context) {
   const dataset = snapshot.dataset;
   if (!dataset?.destinations.includes(destination)) return [];
-  return selectBorderRestrictions(dataset, destination, dataset.datasetVersion);
+  return selectBorderRestrictions(dataset, destination, dataset.datasetVersion, context);
 }

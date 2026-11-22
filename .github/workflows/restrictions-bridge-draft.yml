@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'site/restrictions-bridge.js'
+      - 'site/restrictions-applicability.js'
       - 'tests/restrictions-bridge.test.js'
       - 'site/restrictions-snapshot.js'
       - 'tests/restrictions-snapshot.test.js'
