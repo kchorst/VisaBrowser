@@ -73,3 +73,17 @@ test('passport- and arrival-specific notices require both matches', async () => 
   assert.deepEqual(ids({ passportCode: 'GB', arrivalMode: 'air' }),
     [...unscoped, 'synthetic-territory-scoped']);
 });
+
+test('selectors use only verified loader results and verified records are immutable', async () => {
+  const options = { url, approvedVersion, fetchSnapshot: async () => Response.json(fixture) };
+  const loaded = await loadRestrictionsSnapshot(options);
+  assert.equal(loaded.state, 'online');
+  assert.deepEqual(getSnapshotBorderNotices({ state: 'online', dataset: fixture }, 'TEST-TERRITORY'), []);
+  assert.deepEqual(getSnapshotBorderNotices({ ...loaded }, 'TEST-TERRITORY'), []);
+  assert.deepEqual(getSnapshotBorderNotices(null, 'TEST-TERRITORY'), []);
+  const [notice] = getSnapshotBorderNotices(loaded, 'TEST-TERRITORY');
+  assert.throws(() => { notice.rule = 'Unapproved edit'; }, TypeError);
+  assert.throws(() => { notice.sources[0].url = 'https://example.invalid/changed'; }, TypeError);
+  assert.throws(() => { loaded.dataset.records = []; }, TypeError);
+  assert.equal(getSnapshotBorderNotices(loaded, 'TEST-TERRITORY')[0].rule, notice.rule);
+});

@@ -4,6 +4,20 @@ import {
   verifyApprovedRestrictions,
 } from './restrictions-bridge.js';
 
+const verifiedSnapshots = new WeakMap();
+
+function freezeJson(value) {
+  if (value === null || typeof value !== 'object') return value;
+  for (const child of Object.values(value)) freezeJson(child);
+  return Object.freeze(value);
+}
+
+function verifiedSnapshot(state, dataset, version) {
+  const snapshot = Object.freeze({ state, dataset: freezeJson(dataset) });
+  verifiedSnapshots.set(snapshot, version);
+  return snapshot;
+}
+
 async function readApproved(response, version) {
   if (!response?.ok) return null;
   const dataset = await response.json();
@@ -31,7 +45,7 @@ export async function loadRestrictionsSnapshot({
       } catch {
         // Restricted browser storage must not block use of a verified network response.
       }
-      return { state: 'online', dataset };
+      return verifiedSnapshot('online', dataset, approvedVersion);
     }
   } catch {
     // An unavailable endpoint can still have a verified copy for the current pin.
@@ -39,7 +53,7 @@ export async function loadRestrictionsSnapshot({
 
   try {
     const dataset = await readApproved(await cache?.match(cacheKey.href), approvedVersion);
-    if (dataset) return { state: 'offline', dataset };
+    if (dataset) return verifiedSnapshot('offline', dataset, approvedVersion);
   } catch {
     // Cache access can fail in private browsing or when storage is unavailable.
   }
@@ -48,7 +62,7 @@ export async function loadRestrictionsSnapshot({
 
 // Intended for datasets returned by loadRestrictionsSnapshot.
 export function getSnapshotBorderNotices(snapshot, destination, context) {
-  const dataset = snapshot.dataset;
-  if (!dataset?.destinations.includes(destination)) return [];
-  return selectBorderRestrictions(dataset, destination, dataset.datasetVersion, context);
+  const version = verifiedSnapshots.get(snapshot);
+  if (!version || !snapshot.dataset.destinations.includes(destination)) return [];
+  return selectBorderRestrictions(snapshot.dataset, destination, version, context);
 }

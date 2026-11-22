@@ -4,6 +4,7 @@ const modes = new Set(['air', 'land', 'sea']);
 const selectors = new Map([
   ['passportCodes', isPassportCode],
   ['arrivalModes', (value) => modes.has(value)],
+  ['departureModes', (value) => modes.has(value)],
 ]);
 
 export function isValidApplicability(value) {
@@ -17,9 +18,10 @@ export function isValidApplicability(value) {
 export function matchesApplicability(value, context) {
   if (value === undefined) return true;
   if (!isValidApplicability(value)) return false;
-  const { passportCodes, arrivalModes } = value;
+  const { passportCodes, arrivalModes, departureModes } = value;
   return (!passportCodes || passportCodes.includes(context?.passportCode)) &&
-    (!arrivalModes || arrivalModes.includes(context?.arrivalMode));
+    (!arrivalModes || arrivalModes.includes(context?.arrivalMode)) &&
+    (!departureModes || departureModes.includes(context?.departureMode));
 }
 export function isIsoDate(value) {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) &&

@@ -84,3 +84,11 @@ test('border notices preserve the advisory distinction and exclude airline polic
   assert.deepEqual(output.map(({ noticeKind }) => noticeKind),
     ['legal_requirement', 'official_advisory']);
 });
+
+test('departure-mode restrictions use the outbound leg only', () => {
+  const dataset = pack([item({ relevance: ['departure'], applicability: { departureModes: ['air'] } })]);
+  const notices = (context) => selectBorderRestrictions(dataset, 'RW', dataset.datasetVersion, context);
+  assert.deepEqual(notices({ arrivalMode: 'air' }), []);
+  assert.deepEqual(notices({ arrivalMode: 'air', departureMode: 'sea' }), []);
+  assert.equal(notices({ arrivalMode: 'sea', departureMode: 'air' }).length, 1);
+});
