@@ -1,0 +1,25 @@
+name: Draft restrictions bridge tests
+
+on:
+  pull_request:
+    paths:
+      - 'site/restrictions-bridge.js'
+      - 'tests/restrictions-bridge.test.js'
+      - '.github/workflows/restrictions-bridge-draft.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-draft-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regression-test border-only filter
+        run: node --test tests/restrictions-bridge.test.js
+      - name: Full JS regression suite
+        run: npm test
