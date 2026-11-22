@@ -23,7 +23,7 @@ export async function loadRestrictionsSnapshot({
   cacheKey.searchParams.set('restrictions-version', approvedVersion);
 
   try {
-    const response = await fetchSnapshot(cacheKey.href);
+    const response = await fetchSnapshot(cacheKey.href, { cache: 'no-store' });
     const dataset = await readApproved(response.clone(), approvedVersion);
     if (dataset) {
       try {

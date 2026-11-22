@@ -61,7 +61,8 @@ def run():
                 expected = {"territory": ["synthetic-territory-customs"], "mainland": []}
                 assert page.evaluate("readRestrictions()") == {"state": "online", **expected}
                 context.set_offline(True)
-                assert page.evaluate("readRestrictions()") == {"state": "offline", **expected}
+                cached = page.evaluate("readRestrictions()")
+                assert cached == {"state": "offline", **expected}, cached
                 assert page.evaluate(
                     "readRestrictions('sha256-' + '0'.repeat(64))"
                 ) == {"state": "unavailable", "territory": [], "mainland": []}
