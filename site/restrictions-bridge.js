@@ -13,7 +13,7 @@ export function selectBorderRestrictions(dataset, destination) {
     typeof r.rule === 'string' && r.rule.trim() &&
     typeof r.scope === 'string' && r.scope.trim() &&
     typeof r.checkedAt === 'string' &&
-    /^\\d{4}-\\d{2}-\\d{2}$/.test(r.checkedAt) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(r.checkedAt) &&
     Number.isFinite(Date.parse(r.checkedAt)) &&
     Array.isArray(r.relevance) && r.relevance.some((v) => BORDER.has(v)) &&
     Array.isArray(r.sources) && r.sources.length > 0 &&
