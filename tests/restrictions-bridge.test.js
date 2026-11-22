@@ -57,3 +57,18 @@ test('cryptographic release snapshot gate rejects content tampering and stale pi
   assert.deepEqual(await selectVerifiedBorderRestrictions(altered,'RW',approvedVersion),[]);
   assert.deepEqual(await selectVerifiedBorderRestrictions(snapshot,'RW','sha256-'+'0'.repeat(64)),[]);
 });
+
+test('date windows include legal endpoints and suppress notices on the review deadline', () => {
+  const dataset = pack([
+    item({ id: 'legal-window', effectiveFrom: '2026-11-24', effectiveUntil: '2026-11-25' }),
+    item({ id: 'review-due', effectiveFrom: '2026-11-24', reviewBy: '2026-11-25' }),
+    item({ id: 'invalid-window', effectiveFrom: '2026-02-30' }),
+  ]);
+  const ids = (asOf) => selectBorderRestrictions(dataset, 'RW', dataset.datasetVersion, { asOf })
+    .map(({ id }) => id);
+  assert.deepEqual(ids('2026-11-23'), []);
+  assert.deepEqual(ids('2026-11-24'), ['legal-window', 'review-due']);
+  assert.deepEqual(ids('2026-11-25'), ['legal-window']);
+  assert.deepEqual(ids('2026-11-26'), []);
+  assert.deepEqual(ids('2026-02-30'), []);
+});

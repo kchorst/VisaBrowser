@@ -21,3 +21,21 @@ export function matchesApplicability(value, context) {
   return (!passportCodes || passportCodes.includes(context?.passportCode)) &&
     (!arrivalModes || arrivalModes.includes(context?.arrivalMode));
 }
+export function isIsoDate(value) {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;
+}
+
+export function hasValidDates({ checkedAt, effectiveFrom, effectiveUntil, reviewBy }) {
+  return [effectiveFrom, effectiveUntil, reviewBy].every(date => date === undefined || isIsoDate(date)) &&
+    (effectiveFrom === undefined || effectiveUntil === undefined || effectiveFrom <= effectiveUntil) &&
+    (reviewBy === undefined || (isIsoDate(checkedAt) && checkedAt < reviewBy));
+}
+
+export function isCurrentRestriction(record, asOf) {
+  if (!isIsoDate(asOf) || !hasValidDates(record)) return false;
+  const { effectiveFrom, effectiveUntil, reviewBy } = record;
+  return (effectiveFrom === undefined || asOf >= effectiveFrom) &&
+    (effectiveUntil === undefined || asOf <= effectiveUntil) &&
+    (reviewBy === undefined || asOf < reviewBy);
+}

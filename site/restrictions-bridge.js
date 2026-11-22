@@ -1,13 +1,9 @@
 // Nonproduction: fail-closed adapter for an independently approved Travel-Prep snapshot.
 // This module is NOT imported by app.js. It does not alter visa/ETA classification.
-import { matchesApplicability } from './restrictions-applicability.js';
+import { isCurrentRestriction, isIsoDate, matchesApplicability } from './restrictions-applicability.js';
 
 const ALLOWED_STATUS = new Set(['verified', 'conditional']);
 const BORDER = new Set(['entry', 'transit', 'customs', 'departure']);
-
-const isIsoDate = (value) =>
-  typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
-  !Number.isNaN(Date.parse(value)) && new Date(value).toISOString().startsWith(value);
 
 function safeSource(source) {
   if (!source || typeof source.authority !== 'string' || !source.authority.trim()) return false;
@@ -26,6 +22,7 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
       dataset.datasetVersion !== approvedVersion) return [];
   if (typeof destination !== 'string' || !destination.trim()) return [];
 
+  const asOf = context?.asOf ?? new Date().toISOString().slice(0, 10);
   const seen = new Set();
   return dataset.records.filter((r) => {
     if (!r || typeof r.id !== 'string' || !r.id.trim() || seen.has(r.id)) return false;
@@ -40,6 +37,7 @@ export function selectBorderRestrictions(dataset, destination, approvedVersion =
       typeof r.jurisdiction === 'string' && r.jurisdiction.trim() &&
       typeof r.scope === 'string' && r.scope.trim() &&
       isIsoDate(r.checkedAt) &&
+      isCurrentRestriction(r, asOf) &&
       Array.isArray(r.relevance) && r.relevance.some(v => BORDER.has(v)) &&
       Array.isArray(r.sources) && r.sources.length > 0 && r.sources.every(safeSource);
   });
