@@ -61,6 +61,8 @@ export async function verifyApprovedRestrictions(dataset, approvedVersion) {
       !Array.isArray(dataset.destinations) || !Array.isArray(dataset.records))
     return false;
   if (typeof globalThis.crypto?.subtle?.digest !== 'function') return false;
+  if (dataset.records.some(record => !isIsoDate(record?.checkedAt) ||
+      record.checkedAt > dataset.approvedAt)) return false;
   try {
     // The canonical key order must match Travel-Prep's build-approved-restrictions.mjs.
     const canonical = {

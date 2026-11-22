@@ -10,6 +10,7 @@ The preliminary inventory has 275 destination identifiers, including 26 non-ISO 
 - Pin an immutable Travel-Prep release-data hash and schema version.
 - Only pass records with `status=verified` or `conditional`, `visabrowser_alert=true`, and at least one relevance flag of `entry`, `transit`, `customs`, or `departure`.
 - Require checked date, legal scope and official source; label route-dependent and airline-specific restrictions.
+- Require every source check date to be on or before the snapshot approval date, including when reading an offline copy. Later checks require a newly approved snapshot. A scheduled rule can still take effect after approval.
 - Show brief VisaBrowser warnings that do not affect visa category ranking or "No Issues" classifications unless independently reviewed in VisaBrowser's entry rules.
 - Do not render draft, unverified, conflicting, or incomplete research records.
 - Do not insert country rules until Phase 1 conclusions and Phase 2 UI review are approved.

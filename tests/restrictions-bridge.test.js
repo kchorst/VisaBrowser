@@ -58,6 +58,17 @@ test('cryptographic release snapshot gate rejects content tampering and stale pi
   assert.deepEqual(await selectVerifiedBorderRestrictions(snapshot,'RW','sha256-'+'0'.repeat(64)),[]);
 });
 
+test('a matching content pin still requires the approval to cover the source check', async () => {
+  const canonical = {
+    schemaVersion: 1, publicationStatus: 'approved', approvalId: 'SYNTHETIC-TEST',
+    approvedAt: '2026-11-22', destinations: ['RW'], records: [item({ checkedAt: '2026-11-23' })],
+  };
+  const hex = createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
+  const datasetVersion = 'sha256-' + hex;
+  const snapshot = { ...canonical, datasetVersion, integrity: { algorithm: 'SHA-256', hex } };
+  assert.deepEqual(await selectVerifiedBorderRestrictions(snapshot, 'RW', datasetVersion), []);
+});
+
 test('date windows include legal endpoints and suppress notices on the review deadline', () => {
   const dataset = pack([
     item({ id: 'legal-window', effectiveFrom: '2026-11-24', effectiveUntil: '2026-11-25' }),
