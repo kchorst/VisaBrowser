@@ -1,26 +1,44 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { selectBorderRestrictions } from '../site/restrictions-bridge.js';
+import {selectBorderRestrictions} from '../site/restrictions-bridge.js';
 
-function item(overrides={}) {
-  return { destination:'RW', id:'test', status:'verified', visabrowser_alert:true,
-    rule:'Restricted import', scope:'national', checkedAt:'2026-11-22',
-    relevance:['customs'], sources:[{authority:'Official',url:'https://example.gov'}], ...overrides };
-}
-test('no source or wrong schema returns no warnings', () => {
-  assert.deepEqual(selectBorderRestrictions(null,'RW'),[]);
-  assert.deepEqual(selectBorderRestrictions({schemaVersion:9,records:[item()]},'RW'),[]);
+const item = (overrides={})=>({
+  destination:'RW',id:'rule-1',title:'Prohibited item',rule:'Do not bring a restricted item',
+  jurisdiction:'Rwanda',scope:'national',checkedAt:'2026-11-22',status:'verified',
+  publicationStatus:'approved',visabrowser_alert:true,relevance:['customs'],
+  sources:[{authority:'Government',url:'https://example.gov/rule'}],...overrides
 });
-test('border-only scoped data passes', () => {
-  const data={schemaVersion:1,records:[item(),item({destination:'GB'}),item({relevance:['driving']})]};
-  assert.equal(selectBorderRestrictions(data,'RW').length,1);
+const pack=(records,overrides={})=>({
+  schemaVersion:1,datasetVersion:'release-2026-11-22',publicationStatus:'approved',records,...overrides
 });
-test('unverified, unsafe and unsourced claims are excluded', () => {
-  const records=[item({status:'unverified'}),item({status:'conflicting'}),
-    item({sources:[]}),item({sources:[{authority:'x',url:'http://insecure.example'}]}),
-    item({checkedAt:null}),item({visabrowser_alert:false})];
-  assert.deepEqual(selectBorderRestrictions({schemaVersion:1,records},'RW'),[]);
+const run=(p,d='RW',version='release-2026-11-22')=>selectBorderRestrictions(p,d,version);
+
+test('fail closed with no or mismatched approved immutable release',()=>{
+ assert.deepEqual(run(null),[]);
+ assert.deepEqual(run(pack([item()],{publicationStatus:'research_only'})),[]);
+ assert.deepEqual(run(pack([item()],{schemaVersion:2})),[]);
+ assert.deepEqual(run(pack([item()]),'RW','different-version'),[]);
+ assert.deepEqual(selectBorderRestrictions(pack([item()]),'RW'),[]);
 });
-test('territory codes require exact match; no parent-country inheritance',()=>{
-  assert.deepEqual(selectBorderRestrictions({schemaVersion:1,records:[item({destination:'X-GAL'})]},'EC'),[]);
+test('only border-specific high-confidence records for exact destination appear',()=>{
+ const result=run(pack([
+  item(),item({id:'driving',relevance:['driving']}),
+  item({id:'other-place',destination:'GB'}),
+  item({id:'not-reviewed',status:'unverified'}),
+  item({id:'incomplete',publicationStatus:'research_only'})]));
+ assert.deepEqual(result.map(x=>x.id),['rule-1']);
+});
+test('unsourced, unscoped and dangerous URL claims stay hidden',()=>{
+ const candidates=[
+  item({id:'no-source',sources:[]}),item({id:'not-https',sources:[{authority:'x',url:'http://example.com'}]}),
+  item({id:'credentials',sources:[{authority:'x',url:'https://a:b@example.com/'}]}),
+  item({id:'no-date',checkedAt:null}),item({id:'bad-date',checkedAt:'2026-02-30'}),
+  item({id:'no-scope',scope:''}),item({id:'no-title',title:''})];
+ assert.deepEqual(run(pack(candidates)),[]);
+});
+test('territory cannot inherit parent-country restriction',()=>{
+ assert.deepEqual(run(pack([item({destination:'X-GAL'})]),'EC'),[]);
+});
+test('duplicate restriction identifiers cannot generate duplicate alerts',()=>{
+ assert.equal(run(pack([item(),item()])).length,1);
 });
