@@ -1,8 +1,12 @@
-# VisaBrowser v0.4.13
+# VisaBrowser v0.4.14
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
 VisaBrowser is a mobile-first browser app for comparing tourist entry requirements for one traveler or a group with different passports. **The hosted browser link is the primary product**; no download, account, or installation is required. A secondary, optional Windows local-server package is available for people who prefer to run a copy on their own machine.
+
+## What's new in v0.4.14
+
+Destination results and itinerary cards now include **Preliminary passport and visa checks** from the worldwide first scan, with source links, dates and scan status. These checks are not personalized, confirmed rules or a complete list. Research prompts are labeled, and conflicting guidance is not presented as a settled rule. Fifty destinations remain partial scans. Other preparation alerts are in [Travel-Prep](https://kchorst.github.io/Travel-Prep/).
 
 ## What's new in v0.4.13
 
@@ -25,7 +29,7 @@ VisaBrowser shows dated P2 findings and authority referrals for 5,871 passportâ€
 1. Open **[VisaBrowser](https://kchorst.github.io/VisaBrowser/)** in the browser on your phone, tablet or PC.
 2. On the first screen, enter the **first traveler's name or initials and passport country** directly in the visible form. Optionally expand **Existing visas or residence permits**. Save the first traveler; then add another traveler below the traveler list or choose **Continue**.
 3. On the dashboard choose **View Country**, **Browse Countries**, **Check Group Req**, or **Search Multiple**. Mixed-passport groups see **Check Group Req** first.
-4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. Open the collapsed disclaimer at the bottom of each result.
+4. Review each person's result. A cautious **NO ISSUES** flag means no known visa or authorization obstacle was found in the available rules, **not** that entry or passport compliance is guaranteed. It is withheld for destinations covered by the incomplete first scan, even if no alert has been recorded. Open the collapsed disclaimer at the bottom of each result.
 
 **Itinerary country cards** have a visible Show/Hide visa requirements hint and a separate always-visible Travel-Prep link for each destination, including saved searches. The title links Home; new screens start at the top, while returning to a filtered Browse/Group country list restores your previous position. The two Congos are labeled **Congo (Democratic Republic of the Congo)** and **Congo (Republic of the Congo)**, with their former names retained as search aliases.
 

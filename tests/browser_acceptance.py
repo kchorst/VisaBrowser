@@ -399,6 +399,14 @@ def real_country_journeys(browser, base):
     assert 'Sam' in report and 'country=JP' in report
     assert 'passport validity and blank pages' in report.lower()
 
+    # An incomplete first scan with no recorded entry alerts is not issue-free.
+    page.goto(base + '#country=AM')
+    page.get_by_role('dialog').get_by_role('button', name='Discard').click()
+    expect(page.get_by_role('heading', name='Armenia')).to_be_visible()
+    expect(page.get_by_text(re.compile(r'^NO ISSUES\b'))).to_have_count(0)
+    page.get_by_text('Preliminary passport and visa checks (0)').click()
+    expect(page.get_by_text('No passport or visa alert recorded in this scan', exact=False)).to_be_visible()
+
     # Mixed U.S./Canadian passports. Group mode is the primary dashboard path.
     page.goto(base + '#home')
     page.get_by_role('dialog').get_by_role('button', name='Discard').click()

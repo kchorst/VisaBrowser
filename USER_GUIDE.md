@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.13 — User Guide
+# VisaBrowser v0.4.14 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -29,6 +29,8 @@ For mixed-passport groups, **Check Group Req** appears first. Otherwise **View C
 
 On a supported country result or expanded itinerary card, select **Border and baggage rules**. Each note shows the applicable route, jurisdiction or carrier, with a source link and date checked. The notes cover selected issues and do not change your passport-specific visa result. Choose **Travel-Prep** for conditions during your visit.
 
+Open **Preliminary passport and visa checks** for first-scan leads and source links. These are not personalized or confirmed rules. A research prompt does not establish that a requirement exists, and a missing alert does not mean there are no issues. Check the source for your passport, route and current exceptions.
+
 ### Expand itinerary cards and open Travel-Prep
 
 The top of the app links to Travel-Prep. **Visa dataset** shows when the current snapshot was generated, alongside the next scheduled Tuesday refresh. If that date passes before a fresh dataset arrives, the app marks the update overdue. An **Audit logged** date belongs to the individual finding or warning. It appears in traveler results and copied or shared reports.
@@ -55,7 +57,7 @@ Clicking the VisaBrowser masthead navigates Home. If a country result or multi-c
 
 Each country's result lists the requirements found for each selected traveler. Conditions, visa or authorization actions, known stay limits, fees when provided, and warnings appear inline. The mixed-group summary is expandable. Some outcomes depend on answers about a previously held visa, permit or special eligibility.
 
-**NO ISSUES** is deliberately conservative: the available rules found no known visa or authorization obstacle for **every** selected traveler. It does *not* verify passport expiry, blank pages, health, transit requirements, entry eligibility, or grant admission.
+**NO ISSUES** is deliberately conservative: the available rules found no known visa or authorization obstacle for **every** selected traveler. It is withheld for destinations covered by the incomplete first scan, even if no alert has been recorded. It does *not* verify passport expiry, blank pages, health, transit requirements, entry eligibility, or grant admission.
 
 | Category | Interpretation |
 | --- | --- |

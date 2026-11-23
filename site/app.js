@@ -5,6 +5,7 @@ import { actions, compare, groupDetail, issueLabel, noAdvanceVisa, rank, require
 import { offlineStatus, onlineManifest, saveOffline } from './offline.js';
 import { version } from './version.js';
 import { travelRestrictions } from './travel-restrictions.js';
+import { firstScanEntryAlerts } from './first-scan-alerts.js';
 
 const main = document.querySelector('main');
 const reminder = null;
@@ -32,6 +33,7 @@ function compactResult(result) {
 
 function reportText(placeId, summary, when = checkedDate()) {
   const destination = places[placeId] ?? placeId;
+  const firstScanNotes = firstScanEntryAlerts.notes[placeId] ?? [];
   return ['VisaBrowser · ' + destination, 'Checked: ' + when,
     ...summary.rows.map(row => [row.passenger.name + ' (' + (places[row.passenger.passport] ?? row.passenger.passport) + ')',
       statuses(row), row.condition, row.reason, row.stay ? 'Stay: ' + row.stay : '',
@@ -40,6 +42,10 @@ function reportText(placeId, summary, when = checkedDate()) {
       ...[...healthNotices(placeId, row.passenger.passport), ...touristDetails(placeId, row)]
         .map(({ heading, text, url, more = [], auditDate }) =>
           [heading, auditDate ? auditDateLabel(auditDate) : '', text, url, ...more].filter(Boolean).join(' · '))].filter(Boolean).join(' · ')),
+    ...(firstScanNotes.length ? ['Preliminary passport and visa checks (not personalized or confirmed):',
+      ...firstScanNotes.map(note => [note.format === 'generic_research_prompt' ? 'Research prompt only' : 'Preliminary check',
+        note.category, note.text, note.scope, note.url,
+        note.checked ? `Source checked ${note.checked}` : 'Source check date not recorded'].join(' · '))] : []),
     'Travel-Prep: ' + travelPrep + '#country=' + encodeURIComponent(placeId),
     'VisaBrowser: https://kchorst.github.io/VisaBrowser/', '',
     'Important Travel Requirements & Disclaimer', disclaimerText].join('\n');
@@ -58,6 +64,7 @@ async function copyOrShare(text, nativeShare = false) {
 // A positive badge is intentionally narrower than a "Visa-Free" category.
 // Never infer passport validity, admission, or a waiver from third-country papers.
 const noIssues = (result, placeId) => result.rows.length > 0 && !result.pending &&
+  !firstScanEntryAlerts.destinations[placeId] &&
   result.rows.every(row => row.options.length === 1 && row.options[0] === 'free' &&
     !row.condition && !row.reason && !row.issue && !row.flags?.length &&
     !healthNotices(placeId, row.passenger.passport).some(notice => notice.heading === 'Required health documents') &&
@@ -902,6 +909,25 @@ function borderPreparation(placeId) {
         el('p', {}, link(authority, url), ` · Checked ${checked}`)))));
 }
 
+function preliminaryEntryNotes(placeId) {
+  const destination = firstScanEntryAlerts.destinations[placeId];
+  if (!destination) return null;
+  const notes = firstScanEntryAlerts.notes[placeId] ?? [];
+  const status = destination.scanStatus.includes('partial') ? 'Partial first scan' : 'First scan; research remains incomplete';
+  return el('details', { class: 'panel detail-notes' },
+    el('summary', {}, `Preliminary passport and visa checks (${notes.length})`),
+    muted(`${status}. These checks are not personalized, confirmed rules or a complete list. Check the source for your passport, route and exceptions.`),
+    muted('UK government entry advice may be specific to British citizens. A research prompt does not establish that a restriction exists.'),
+    muted(`${destination.openChecks} research checks have no finding yet; this does not mean there are no issues.`),
+    notes.length ? el('ul', {}, notes.map(note => {
+      const label = note.format === 'generic_research_prompt' ? 'Research prompt only' :
+        note.status === 'conflicting_authority_guidance' ? 'Conflicting guidance' : 'Preliminary check';
+      return el('li', {}, el('strong', {}, note.category), el('p', {}, note.text),
+        muted(`${label} · ${note.scope}`),
+        el('p', {}, link(note.authority, note.url), note.checked ? ` · Checked ${note.checked}` : ' · Check date not recorded'));
+    })) : muted('No passport or visa alert recorded in this scan; check the existing comparison and official sources.'));
+}
+
 function destinationDetails(placeId, saved, data) {
   if (!saved && !state.passengers.length) return firstTravelerScreen(placeId);
   const people = saved?.passengers ?? activePassengers();
@@ -976,12 +1002,14 @@ function destinationDetails(placeId, saved, data) {
       el('summary', {}, 'Group Summary · ', summary.pending ? 'Needs Review' : noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? 'NO ISSUES' : summary.issues ? issueLabel(summary.issues) : 'Check conditions'),
       el('div', { class: 'chips' },
         summary.group ? chip(summary.group, 'warn') : null,
-        chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
+        chip(summary.issues ? issueLabel(summary.issues) : '0 visa issues in comparison', summary.issues ? 'bad' : ''),
+        firstScanEntryAlerts.notes[placeId]?.length ? chip('Preliminary checks available', 'warn') : null,
         summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null),
       muted(groupDetail(summary))) :
     people.length ? panel(el('div', { class: 'chips' },
       noIssues(summary, placeId) && !(saved && savedNeedsRefresh(saved)) ? chip('NO ISSUES — verify passport and entry conditions', 'good') : null,
-      chip(issueLabel(summary.issues), summary.issues ? 'bad' : ''),
+      chip(summary.issues ? issueLabel(summary.issues) : '0 visa issues in comparison', summary.issues ? 'bad' : ''),
+      firstScanEntryAlerts.notes[placeId]?.length ? chip('Preliminary checks available', 'warn') : null,
       summary.pending ? chip(`${summary.pending} pending verification`, 'warn') : null)) : invite(placeId);
   return [title(places[placeId]), refreshNotice(people, data),
     saved ? muted(`Original saved snapshot · Checked ${saved.checkedAt?.slice(0, 10) ?? 'date unavailable'}${savedNeedsRefresh(saved) ? ' · Needs Refresh' : ''}`) : null,
@@ -992,7 +1020,7 @@ function destinationDetails(placeId, saved, data) {
     people.length > 1 ? countedList('Traveler requirements',
       summary.rows.map(row => passengerResult(row, placeId, saved, data))) :
       summary.rows.map(row => passengerResult(row, placeId, saved, data)),
-    borderPreparation(placeId), notes, edits, disclaimer())];
+    borderPreparation(placeId), preliminaryEntryNotes(placeId), notes, edits, disclaimer())];
 }
 
 function countryResultCard(id, index, summary, contents) {
@@ -1003,7 +1031,7 @@ function countryResultCard(id, index, summary, contents) {
       el('span', { class: 'country-result-name' }, `${index + 1}. ${places[id]}`),
       el('span', { class: 'country-result-status' }, status),
       el('span', { class: 'country-result-toggle' }, 'Show visa requirements')),
-    el('div', { class: 'stack country-result-body' }, contents, borderPreparation(id)));
+    el('div', { class: 'stack country-result-body' }, contents, borderPreparation(id), preliminaryEntryNotes(id)));
   details.addEventListener('toggle', () => {
     details.querySelector('.country-result-toggle').textContent =
       details.open ? 'Hide visa requirements' : 'Show visa requirements';
