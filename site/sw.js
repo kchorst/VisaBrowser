@@ -4,7 +4,7 @@ import { readOffline } from './offline.js';
 const prefix = 'visabrowser-shell:' + encodeURIComponent(self.registration.scope);
 const shell = prefix + ':' + version + ':tourist-checklist';
 const assets = ['./', './index.html', './app.js', './rules.js', './reviewed.js', './health.js', './tourist.js', './tourist-audit.js', './p2-audit.js', './p2-scope.js', './p2-reviewed.js', './offline.js', './version.js',
-  './styles.css', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+  './travel-restrictions.js', './styles.css', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(shell).then(cache => cache.addAll(

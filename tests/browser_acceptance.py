@@ -438,6 +438,11 @@ def real_country_journeys(browser, base):
     page.get_by_role('button', name='Save Search').click()
     expect(page.get_by_role('heading', name='Europe Trip 2027')).to_be_visible()
     expect(page.locator('.country-result')).to_have_count(3)
+    cards = page.locator('.country-result')
+    cards.first.locator('summary').first.click()
+    cards.first.get_by_text('Border and baggage rules', exact=True).click()
+    expect(cards.first.get_by_text('Cash declarations at the EU border', exact=True)).to_be_visible()
+    expect(cards.nth(2).get_by_text('Border and baggage rules', exact=True)).to_have_count(0)
 
     # Reopen a saved itinerary; changing a traveler's permit flags Needs Refresh.
     page.goto(base + '#saved')
@@ -461,6 +466,8 @@ def real_country_journeys(browser, base):
     expect(page.get_by_role('link', name='Official UK ETA eligibility and application').first).to_have_attribute(
         'href', 'https://www.gov.uk/eta')
     expect(page.get_by_text('Application / entry fee · £20 (UK ETA application)', exact=True).first).to_be_visible()
+    page.get_by_text('Border and baggage rules', exact=True).click()
+    expect(page.get_by_text('UK power-bank guidance', exact=True)).to_be_visible()
     page.get_by_role('link', name='VisaBrowser — go to Home').click()
     expect(page.get_by_role('dialog', name='Save these requirements before leaving?')).to_be_visible()
     page.get_by_role('dialog').get_by_role('button', name='Discard').click()

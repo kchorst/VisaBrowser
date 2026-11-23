@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.12 — User Guide
+# VisaBrowser v0.4.13 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -24,6 +24,10 @@ There are four ways to browse requirements:
 - **Search Multiple** — enter or paste multiple countries separated by commas (for example, *Mozambique, Brazil, Cape Verde, Portugal, China*) or select an individual country from the autocomplete list. Recognized destinations become ordered chips automatically; unknown entries stay in the text field for correction. Use **Up**, **Down**, or **Remove** to arrange the trip. Choose **Search Requirements** to compare all destinations. The results appear below as collapsed country summaries. Tap a result section to expand each traveler's details.
 
 For mixed-passport groups, **Check Group Req** appears first. Otherwise **View Country** appears first. **Edit travelers** on the dashboard returns to the traveler list.
+
+### Check border and baggage rules
+
+On a supported country result or expanded itinerary card, select **Border and baggage rules**. Each note shows the applicable route, jurisdiction or carrier, with a source link and date checked. The notes cover selected issues and do not change your passport-specific visa result. Choose **Travel-Prep** for conditions during your visit.
 
 ### Expand itinerary cards and open Travel-Prep
 

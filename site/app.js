@@ -4,6 +4,7 @@ import { actions, compare, groupDetail, issueLabel, noAdvanceVisa, rank, require
   resultSnapshot, sixMonthsFrom, sourceDelayed, statuses } from './rules.js';
 import { offlineStatus, onlineManifest, saveOffline } from './offline.js';
 import { version } from './version.js';
+import { travelRestrictions } from './travel-restrictions.js';
 
 const main = document.querySelector('main');
 const reminder = null;
@@ -889,6 +890,18 @@ function destinationTravelNotes(placeId) {
   return null;
 }
 
+function borderPreparation(placeId) {
+  const notes = travelRestrictions[placeId];
+  if (!notes?.length) return null;
+  return el('details', { class: 'panel detail-notes' },
+    el('summary', {}, 'Border and baggage rules'),
+    muted('Check how these selected rules apply to your route and what you are carrying.'),
+    el('ul', {}, notes.map(({ title, text, scope, type, authority, url, checked }) =>
+      el('li', {}, el('strong', {}, title), el('p', {}, text),
+        muted(`${type} · ${scope}`),
+        el('p', {}, link(authority, url), ` · Checked ${checked}`)))));
+}
+
 function destinationDetails(placeId, saved, data) {
   if (!saved && !state.passengers.length) return firstTravelerScreen(placeId);
   const people = saved?.passengers ?? activePassengers();
@@ -979,7 +992,7 @@ function destinationDetails(placeId, saved, data) {
     people.length > 1 ? countedList('Traveler requirements',
       summary.rows.map(row => passengerResult(row, placeId, saved, data))) :
       summary.rows.map(row => passengerResult(row, placeId, saved, data)),
-    notes, edits, disclaimer())];
+    borderPreparation(placeId), notes, edits, disclaimer())];
 }
 
 function countryResultCard(id, index, summary, contents) {
@@ -990,7 +1003,7 @@ function countryResultCard(id, index, summary, contents) {
       el('span', { class: 'country-result-name' }, `${index + 1}. ${places[id]}`),
       el('span', { class: 'country-result-status' }, status),
       el('span', { class: 'country-result-toggle' }, 'Show visa requirements')),
-    el('div', { class: 'stack country-result-body' }, contents));
+    el('div', { class: 'stack country-result-body' }, contents, borderPreparation(id)));
   details.addEventListener('toggle', () => {
     details.querySelector('.country-result-toggle').textContent =
       details.open ? 'Hide visa requirements' : 'Show visa requirements';
