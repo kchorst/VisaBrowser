@@ -1,8 +1,14 @@
-# VisaBrowser v0.4.14
+# VisaBrowser v0.4.15
 
 **[Launch VisaBrowser on your phone or computer](https://kchorst.github.io/VisaBrowser/)**
 
 VisaBrowser is a mobile-first browser app for comparing tourist entry requirements for one traveler or a group with different passports. **The hosted browser link is the primary product**; no download, account, or installation is required. A secondary, optional Windows local-server package is available for people who prefer to run a copy on their own machine.
+
+## What's new in v0.4.15
+
+Open **Border and baggage rules** on destination results and itinerary cards for 13 new sourced notes covering Canada, Malaysia, the Netherlands, Poland and Saudi Arabia. The visa eligibility dataset is unchanged.
+
+See the [release notes](docs/Release-Notes-v0.4.15.md).
 
 ## What's new in v0.4.14
 
