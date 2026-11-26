@@ -1,4 +1,4 @@
-# VisaBrowser v0.4.16 — User Guide
+# VisaBrowser v0.4.17 — User Guide
 
 In v0.4.7, the UK result reflects the visitor visa and ETA exemption for British National (Overseas) passports. For the reviewed Kenyan results, the stay line shows the eTA exemption window and reminds travelers to confirm the permitted stay on arrival.
 
@@ -33,7 +33,7 @@ Open **Preliminary passport and visa checks** for first-scan leads and source li
 
 ### Expand itinerary cards and open Travel-Prep
 
-The top of the app links to Travel-Prep. **Visa dataset** shows when the current snapshot was generated, alongside the next scheduled Tuesday refresh. If that date passes before a fresh dataset arrives, the app marks the update overdue. An **Audit logged** date belongs to the individual finding or warning. It appears in traveler results and copied or shared reports.
+The top of the app links to Travel-Prep. **Visa dataset** shows when the current snapshot was generated. An **Audit logged** date belongs to the individual finding or warning. It appears in traveler results and copied or shared reports.
 
 Each destination card in **Search Multiple** and a reopened **Saved Search** has a clearly labeled **Show visa requirements** disclosure, which changes to **Hide visa requirements** after expansion. A separate **Travel-Prep ↗** link is always visible on the card, even while VisaBrowser requirements are collapsed; it opens that exact country in a new tab. Longer collections of destinations remain behind a counted Show/Hide control.
 

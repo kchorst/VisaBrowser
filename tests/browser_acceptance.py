@@ -76,9 +76,9 @@ def fixture(browser, base):
     page.clock.set_fixed_time(datetime.fromisoformat(STAMP))
     page.goto(base)
 
-    # The data dates and travel shortcuts stay visible in the mobile header.
+    # The dataset date and travel shortcuts stay visible in the mobile header.
     expect(page.locator('#visa-data-date')).to_have_text('Visa dataset · 2026-11-17')
-    expect(page.locator('#visa-next-update')).to_have_text('Next scheduled update · 2026-11-24')
+    expect(page.locator('#visa-next-update')).to_have_count(0)
     tools = page.get_by_role('navigation', name='Travel tools')
     expect(tools.get_by_role('link', name='Travel-Prep')).to_have_attribute(
         'href', 'https://kchorst.github.io/Travel-Prep/')
@@ -86,7 +86,8 @@ def fixture(browser, base):
     expect(tools.get_by_role('link', name='TravelAgent')).to_have_count(0)
     page.clock.set_fixed_time(datetime.fromisoformat('2026-11-25T12:00:00+00:00'))
     page.reload()
-    expect(page.locator('#visa-next-update')).to_have_text('Scheduled update overdue · 2026-11-24')
+    expect(page.locator('#visa-data-date')).to_have_text('Visa dataset · 2026-11-17')
+    expect(page.locator('#visa-next-update')).to_have_count(0)
     page.clock.set_fixed_time(datetime.fromisoformat(STAMP))
 
     # First-time setup and the four focus actions.

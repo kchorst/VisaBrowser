@@ -1199,16 +1199,7 @@ async function readCatalog() {
   document.querySelector('#visa-data-dates').hidden = !hasDate;
   if (hasDate) {
     const datasetDate = generated.toISOString().slice(0, 10);
-    // The published dataset refresh is scheduled for Tuesdays (UTC).
-    const nextUpdate = new Date(datasetDate);
-    const tuesday = 2;
-    const daysToTuesday = (tuesday - nextUpdate.getUTCDay() + 7) % 7 || 7;
-    nextUpdate.setUTCDate(nextUpdate.getUTCDate() + daysToTuesday);
-    const expectedDate = nextUpdate.toISOString().slice(0, 10);
-    const label = new Date().toISOString().slice(0, 10) > expectedDate
-      ? 'Scheduled update overdue' : 'Next scheduled update';
     document.querySelector('#visa-data-date').textContent = `Visa dataset · ${datasetDate}`;
-    document.querySelector('#visa-next-update').textContent = `${label} · ${expectedDate}`;
   }
   destinations = catalog.destinations.filter(code => places[code]).map(code => [code, places[code]]).sort(alpha);
   passports = Object.entries(places).filter(([code]) => catalog.passports.includes(code)).sort(alpha);
@@ -1343,6 +1334,7 @@ if ('serviceWorker' in navigator && 'caches' in window) {
     const checkForUpdate = () => {
       if (!document.hidden && navigator.onLine) registration.update().catch(() => {});
     };
+    checkForUpdate();
     document.addEventListener('visibilitychange', checkForUpdate);
     window.addEventListener('online', checkForUpdate);
     window.setInterval(checkForUpdate, 30 * 60 * 1000);
