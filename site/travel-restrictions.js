@@ -645,5 +645,158 @@ export const travelRestrictions = {
       "url": "https://www.gesetze-im-internet.de/stgb/__86.html",
       "checked": "2026-11-22"
     }
+  ],
+  "SA": [
+    {
+      "id": "s2-20261126-sa-plant-quarantine-baggage",
+      "phase": "before_go",
+      "title": "Plants and produce in passenger baggage",
+      "text": "Saudi Arabia inspects accompanied plant products for personal consumption even when they are exempt from a phytosanitary certificate. The passenger allowances include up to 10 kg of fruit and vegetables excluding potatoes, and up to 30 kg of dates. Propagation seedlings must have a phytosanitary certificate, use a soil substitute and be of a permitted type. Permitted seeds must be packaged and sealed at origin, up to five packets of no more than 5 g each.",
+      "scope": "National inbound accompanied baggage; agricultural and veterinary quarantine guide, Chapter 5, Article 18. Decision 25083389 effective upon publication on 14 November 2025.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi Ministry of Environment, Water and Agriculture (official Umm Al-Qura gazette, issue 5122, via ILO NATLEX)",
+      "url": "https://natlex.ilo.org/dyn/natlex2/natlex2/files/download/119026/%D8%A7%D9%84%D8%B9%D8%AF%D8%AF%205122.pdf%D8%A7%D9%84%D8%B9%D8%AF%D8%AF%205122.pdf",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-sa-pet-entry-permit",
+      "phase": "before_go",
+      "title": "Entry permits for cats and dogs",
+      "text": "Visitors can apply to the Saudi Ministry of Environment, Water and Agriculture for entry permits for cats and dogs through the National Platform. Request clearance before traveling and check current breed eligibility, veterinary documentation and entry arrangements.",
+      "scope": "National visitor pet entry; National Platform expressly includes visitors, cats and dogs.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi National Platform / Ministry of Environment, Water and Agriculture",
+      "url": "https://my.gov.sa/en/services/319217",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-sa-wildlife-product-import",
+      "phase": "before_go",
+      "title": "Importing protected wildlife products",
+      "text": "Saudi wildlife regulations list importing, exporting, re-exporting or transiting with covered wildlife specimens, products or derivatives without a licence as violations. Confirm the species and licences before traveling with wildlife-derived souvenirs.",
+      "scope": "National border; Executive Regulation on the Protection of Wildlife, Wildlife Products and Derivatives, table 1, for specimens on convention and designated national lists.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi Ministry of Environment, Water and Agriculture / National Center for Wildlife (Umm Al-Qura official gazette)",
+      "url": "https://www.uqn.gov.sa/details?p=25433",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-sa-media-customs",
+      "phase": "before_go",
+      "title": "Books and publications at customs",
+      "text": "Saudi customs lists books and publications that violate Ministry of Media regulations among travelers' prohibited goods. Confirm questionable titles or materials with Saudi customs before packing them.",
+      "scope": "National passenger customs ports; books and publications covered by media regulations.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi Zakat, Tax and Customs Authority",
+      "url": "https://zatca.gov.sa/en/RulesRegulations/Taxes/Pages/customs-individual/Prohibited-goods.aspx",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-sa-tobacco-customs",
+      "phase": "before_go",
+      "title": "Cigarette duty and approval thresholds",
+      "text": "Saudi customs exempts up to 200 regular cigarettes from customs duties and taxes. For quantities above 200 and below 2,400, its guidance requires Saudi Food and Drug Authority approval and applies duties and taxes to the whole quantity. Check separate customs rules for vapes and refills.",
+      "scope": "National inbound accompanied regular cigarettes; traveler guidance updated 26 August 2026.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi Zakat, Tax and Customs Authority",
+      "url": "https://zatca.gov.sa/en/RulesRegulations/Taxes/Pages/customs-individual/Travel-pages/Quantity-Tobaacco.aspx",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-sa-antiquity-reexport-approval",
+      "phase": "before_go",
+      "title": "Taking a registered antiquity back out",
+      "text": "If you brought an antiquity or heritage item into Saudi Arabia, Article 40 requires a customs declaration and registration within three weeks after entry. Approval from the heritage authority is needed to take that item back out.",
+      "scope": "National re-export of previously imported antiquities or heritage items; Law of Antiquities, Museums and Urban Heritage, Article 40.",
+      "type": "Official rule or guidance",
+      "authority": "Saudi Bureau of Experts at the Council of Ministers",
+      "url": "https://laws.boe.gov.sa/Files/Download/?attId=72fb80f1-ae9e-49e6-9b9d-adbb01088bad",
+      "checked": "2026-11-26"
+    }
+  ],
+  "CA": [
+    {
+      "id": "s2-20261126-ca-quarantine-disclosure",
+      "phase": "before_go",
+      "title": "Health disclosures at the border",
+      "text": "Quarantine Act section 15 requires travellers to answer relevant screening or quarantine officer questions, provide reasonably required information or records in their possession, and comply with reasonable disease-control measures ordered by those officers. Disclose reasonable suspicion of a disease listed in the Act, vector infestation, or qualifying recent close proximity.",
+      "scope": "Canada federal quarantine screening, including at ports of entry. The disclosure duty applies to the statutory circumstances.",
+      "type": "Official rule or guidance",
+      "authority": "Department of Justice Canada, Quarantine Act section 15",
+      "url": "https://laws-lois.justice.gc.ca/eng/acts/q-1.1/section-15.html",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-ca-immigration-medical-exam",
+      "phase": "before_go",
+      "title": "Medical exams for some immigration applications",
+      "text": "Immigration medical examinations generally are not required for visits of six months or less, with exceptions for certain jobs. For stays over six months, an examination can be required based on documented residence or travel history in designated places, protected public-health occupations, or a parent and grandparent super visa.",
+      "scope": "Canada immigration applications for temporary residents including visitors, students and workers.",
+      "type": "Official rule or guidance",
+      "authority": "Immigration, Refugees and Citizenship Canada",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/medical-police/medical-exams/requirements-temporary-residents.html",
+      "checked": "2026-11-26"
+    }
+  ],
+  "MY": [
+    {
+      "id": "s2-20261126-my-customs-vaping-alcohol",
+      "phase": "before_go",
+      "title": "Vaping, tobacco and alcohol allowances",
+      "text": "Royal Malaysian Customs excludes cigarettes, tobacco products, electronic cigarettes and their liquid or gel preparations from the general passenger duty-free allowance for both air and non-air arrivals. Its passenger guide separately lists a combined one-litre duty and tax exemption for wine, spirits, beer or malt liquor, subject to the exemption conditions. Ask Customs about duty and applicable product rules before carrying these items.",
+      "scope": "Passenger imports into Malaysia by air and non-air routes, customs duty and tax treatment.",
+      "type": "Official rule or guidance",
+      "authority": "Royal Malaysian Customs Department",
+      "url": "https://www.customs.gov.my/en/individu/pengembara/travelers-guide?highlight=WzQsMV0%3D",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-my-symbolic-cloth-import",
+      "phase": "before_go",
+      "title": "Textiles printed with Quranic verses",
+      "text": "The First Schedule of Malaysia’s 2023 Customs (Prohibition of Imports) Order includes cloth and animal skin printed with Quranic verses among goods prohibited from import, regardless of origin. Check with Royal Malaysian Customs before packing garments or textiles that fall under that description.",
+      "scope": "Malaysia customs imports of cloth or animal skin bearing printed or reproduced Quranic verses, First Schedule item 3.",
+      "type": "Official rule or guidance",
+      "authority": "Malaysia federal gazette, published by Royal Malaysian Customs Department",
+      "url": "https://www.customs.gov.my/ms/pg/Perintah%20Kastam/PU%28A%29%20117-%20Perintah%20Kastam%20%28Larangan%20Mengenai%20Import%29%202023.pdf",
+      "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261126-my-media-import",
+      "phase": "before_go",
+      "title": "Obscene material at customs",
+      "text": "The First Schedule of Malaysia’s 2023 Customs (Prohibition of Imports) Order prohibits import of material classified as indecent or obscene, including covered books, photographs, films and other media. If unsure how an item is classified, check with Royal Malaysian Customs before carrying it.",
+      "scope": "Malaysia customs imports from all origins under First Schedule item 5.",
+      "type": "Official rule or guidance",
+      "authority": "Malaysia federal gazette, published by Royal Malaysian Customs Department",
+      "url": "https://www.customs.gov.my/ms/pg/Perintah%20Kastam/PU%28A%29%20117-%20Perintah%20Kastam%20%28Larangan%20Mengenai%20Import%29%202023.pdf",
+      "checked": "2026-11-26"
+    }
+  ],
+  "PL": [
+    {
+      "id": "s2-20261126-pl-distribution-material",
+      "phase": "before_go",
+      "title": "Restricted material brought in for distribution",
+      "text": "Before bringing material into Poland for distribution, check whether it is covered by Criminal Code Article 256. The law prohibits specified acts including importing or transporting covered propaganda or hate-incitement material for distribution, with exceptions for artistic, educational, collecting and scientific activities.",
+      "scope": "Poland; conduct involving an intent to distribute specified material under Article 256(2).",
+      "type": "Official rule or guidance",
+      "authority": "Polish Criminal Code, Article 256(1)–(3)",
+      "url": "https://eli.gov.pl/api/acts/DU/2026/1342/text/U/D20261342Lj.pdf",
+      "checked": "2026-11-26"
+    }
+  ],
+  "NL": [
+    {
+      "id": "s2-20261126-nl-antique-books",
+      "phase": "before_go",
+      "title": "Declaring qualifying old books and documents",
+      "text": "If arriving in the Netherlands from outside the EU with an old book or document that qualifies as a cultural good, declare it to Dutch Customs. Dutch Customs lists old books and documents as examples and says that in some cases an import licence or importer declaration is required.",
+      "scope": "European Netherlands; travelers bringing qualifying cultural goods from outside the European Union.",
+      "type": "Official rule or guidance",
+      "authority": "Dutch Customs",
+      "url": "https://www.douane.nl/en/themes/travel-and-holiday/restricted-prohibited-to-import-or-export/culture-goods-arts-antiques/",
+      "checked": "2026-11-26"
+    }
   ]
 };
