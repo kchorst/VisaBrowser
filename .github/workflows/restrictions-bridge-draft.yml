@@ -1,0 +1,39 @@
+name: Draft restrictions bridge tests
+
+on:
+  pull_request:
+    paths:
+      - 'site/restrictions-bridge.js'
+      - 'site/restrictions-applicability.js'
+      - 'tests/restrictions-bridge.test.js'
+      - 'site/restrictions-snapshot.js'
+      - 'tests/restrictions-snapshot.test.js'
+      - 'tests/restrictions_snapshot_browser.py'
+      - 'tests/fixtures/approved-restrictions-snapshot.json'
+      - '.github/workflows/restrictions-bridge-draft.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-draft-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regression-test border-only filter
+        run: node --test tests/restrictions-bridge.test.js tests/restrictions-snapshot.test.js
+      - name: Full JS regression suite
+        run: npm test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install the browser test runtime
+        run: |
+          python -m pip install playwright==1.62.0
+          python -m playwright install --with-deps chromium
+      - name: Verify the draft snapshot in mobile Chromium online and offline
+        run: python tests/restrictions_snapshot_browser.py
