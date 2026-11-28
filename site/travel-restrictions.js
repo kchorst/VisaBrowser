@@ -934,6 +934,17 @@ export const travelRestrictions = {
       "authority": "USDA Animal and Plant Health Inspection Service",
       "url": "https://www.aphis.usda.gov/pet-travel/us-to-another-country-export/pet-travel-us-vietnam",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-vn-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "Before crossing the border with wildlife-derived souvenirs or specimens, check permit requirements under Circular 85/2025/TT-BNNMT. Its personal and household effects provision refers to species-specific CITES limits.",
+      "scope": "Viet Nam, national wildlife trade documentation from January 1, 2026, arts. 27–28.",
+      "type": "Official guidance",
+      "authority": "Viet Nam Ministry of Agriculture and Environment, Circular 85/2025/TT-BNNMT",
+      "url": "https://congbaocdn.chinhphu.vn/180507251028987904/2026/1/28/85signed-1769571088271367033618.pdf",
+      "checked": "2026-11-27"
     }
   ],
   "ID": [
@@ -1037,6 +1048,28 @@ export const travelRestrictions = {
       "authority": "India Press Information Bureau for Ministry of Environment",
       "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1843398",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-in-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "Indian passenger customs guidance lists wildlife products among prohibited goods and endangered animals and plants among restricted goods. Check whether a specific specimen or souvenir is eligible before carrying it across the border.",
+      "scope": "Indian passenger baggage and import/export screening.",
+      "type": "Official guidance",
+      "authority": "India Central Board of Indirect Taxes and Customs",
+      "url": "https://www.cbic.gov.in/resources/htdocs-cbec/Customs_Clearance_of_Passengers_at_a_Glance_2.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-in-before_go-media",
+      "phase": "before_go",
+      "title": "Books, religious media and publications",
+      "text": "Indian passenger customs guidance lists pornographic material and maps or literature showing India’s external boundaries incorrectly among prohibited goods.",
+      "scope": "Indian passenger baggage guidance.",
+      "type": "Official guidance",
+      "authority": "India Central Board of Indirect Taxes and Customs",
+      "url": "https://www.cbic.gov.in/resources/htdocs-cbec/Customs_Clearance_of_Passengers_at_a_Glance_2.pdf",
+      "checked": "2026-11-27"
     }
   ],
   "KR": [
@@ -1072,6 +1105,17 @@ export const travelRestrictions = {
       "authority": "Korea Customs Service, Customs Procedures and Declarable Goods for Departure",
       "url": "https://customs.go.kr/kcs_english/cm/cntnts/cntntsView.do?cntntsId=2720&mi=8032",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-kr-before_go-drone_import",
+      "phase": "before_go",
+      "title": "Drone import, customs declaration, temporary admission and permits",
+      "text": "South Korea’s radio regulator classified the controller-equipped Wi-Fi/5G drone in an official import inquiry as equipment normally subject to radio conformity assessment. A radio-law decree lists a one-unit personal-use exemption, excluding equipment sold within one year. Check how the exemption applies to your aircraft and controller before travel.",
+      "scope": "South Korea. Radio equipment assessment only. Regulator classification applies to the described Wi-Fi/5G consumer drone. Personal-use exemption is conditional.",
+      "type": "Official guidance",
+      "authority": "South Korea Radio Waves Act Enforcement Decree, Article 77-7 and Schedule 6-2, item 1(j), and National Radio Research Agency drone inquiry, 4 August 2025",
+      "url": "https://www.law.go.kr/LSW/flDownload.do?bylClsCd=110201&flSeq=170579543&gubun=",
+      "checked": "2026-11-27"
     }
   ],
   "PH": [
@@ -1095,6 +1139,17 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Bureau of Customs, CMO 17-2023, §§ 6.7, 7 and 9",
       "url": "https://customs.gov.ph/wp-content/uploads/2023/12/2023CMO-17-2023.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-ph-before_go-drone_import",
+      "phase": "before_go",
+      "title": "Drone import, customs declaration, temporary admission and permits",
+      "text": "Philippine Customs lists an NTC import permit for radiocommunications equipment that requires type acceptance or approval. NTC's type-acceptance register includes specific DJI drones and controllers. Check the exact aircraft and controller models with NTC and Customs before packing them.",
+      "scope": "Type-controlled drone radio equipment covered by Philippine Customs Memorandum Circular 94-2025. The circular describes regulated imports generally. Personal tourist baggage and temporary re-export treatment may be different.",
+      "type": "Official guidance",
+      "authority": "Philippine Bureau of Customs and National Telecommunications Commission",
+      "url": "https://customs.gov.ph/wp-content/uploads/2025/05/2025CMC-94-2025.pdf",
       "checked": "2026-11-27"
     }
   ],
@@ -1177,6 +1232,39 @@ export const travelRestrictions = {
       "authority": "Sri Lanka Customs, Passenger Services Directorate, Restrictions on Export as Personal Baggage",
       "url": "https://www.customs.gov.lk/about-us/directorates-and-divisions/passenger-services-directorate/",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-lk-before_go-power_bank_air",
+      "phase": "before_go",
+      "title": "Power banks and lithium batteries: flight route, carrier, safety and markings",
+      "text": "Sri Lanka's 20 October 2026 dangerous-goods standard applies the current ICAO Technical Instructions to covered air carriage. The active ICAO passenger provisions limit travellers to two power banks per person, require cabin baggage and prohibit recharging power banks on board. Confirm the operating airline's requirements before packing.",
+      "scope": "Sri Lankan regulator baseline for covered operators, including the passenger exception in ICAO Doc 9284 Part 8. Separate State variations and more restrictive operating-carrier conditions may apply.",
+      "type": "Official guidance",
+      "authority": "Civil Aviation Authority of Sri Lanka, IS-009, sections 2.2, 2.4.3, 2.5 and 12, read with ICAO Doc 9284 Addendum No. 1",
+      "url": "https://caa.lk/images/pdf/2026_October/IS_009_Compliance_to_Annex_6__18_with_DGCAs_Signature.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-lk-before_go-pets",
+      "phase": "before_go",
+      "title": "Pets and animal importation",
+      "text": "Obtain an import permit from the Department of Animal Production and Health before bringing a pet into Sri Lanka. Use the animal-specific conditions for dogs and cats.",
+      "scope": "Sri Lankan animal import controls under section 21 of the Animal Diseases Act.",
+      "type": "Official guidance",
+      "authority": "Sri Lanka Department of Animal Production and Health",
+      "url": "https://daph.gov.lk/services/imp1",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-lk-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "Bring a full foreign driving licence, passport and visa. Submit a translation if the licence is not in English. Airport guidance lists at least one year remaining on the foreign licence and a five-month maximum for the temporary local licence.",
+      "scope": "Temporary driving licence conversion at Bandaranaike International Airport",
+      "type": "Official guidance",
+      "authority": "Airport and Aviation Services Sri Lanka, Department of Motor Traffic service",
+      "url": "https://www.airport.lk/services/Driving",
+      "checked": "2026-11-27"
     }
   ],
   "AR": [
@@ -1212,6 +1300,28 @@ export const travelRestrictions = {
       "authority": "Agencia de Recaudación y Control Aduanero",
       "url": "https://www.arca.gob.ar/viajeros/ayuda/regimen-equipaje.asp",
       "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261127-c58-ar-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "The customs guide lists one cell phone and one notebook or tablet under the duty-free personal baggage exemption.",
+      "scope": "Accompanied traveler baggage",
+      "type": "Official guidance",
+      "authority": "Argentine Customs",
+      "url": "https://www.argentina.gob.ar/sites/default/files/afip-infografiaregimenequipaje.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ar-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Clothes and other personal belongings without commercial purpose qualify for the published personal baggage exemption.",
+      "scope": "Accompanied traveler baggage",
+      "type": "Official guidance",
+      "authority": "Argentine Customs",
+      "url": "https://www.argentina.gob.ar/sites/default/files/afip-infografiaregimenequipaje.pdf",
+      "checked": "2026-11-27"
     }
   ],
   "BR": [
@@ -1257,6 +1367,39 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "IBAMA, government licensing service",
       "url": "https://www.gov.br/pt-br/servicos/obter-licenca-para-exportacao-de-fauna-silvestre-suas-partes-produtos-e-subprodutos",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-br-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "Brazilian customs lists one used mobile phone and one used still camera as examples of personal effects when consistent with the trip. Laptops, tablets and dedicated video cameras are outside that specific personal-effects class.",
+      "scope": "Inbound baggage classification.",
+      "type": "Official guidance",
+      "authority": "Brazil Federal Revenue Service",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/viagens-internacionais/guia-do-viajante/entrada-no-brasil/bens-do-viajante",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-br-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Personal clothing qualifies as personal-use baggage when its nature and amount are consistent with the trip. Customs can ask for evidence of compatibility.",
+      "scope": "Inbound traveler baggage.",
+      "type": "Official guidance",
+      "authority": "Brazil Federal Revenue Service",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/viagens-internacionais/guia-do-viajante/entrada-no-brasil/bens-do-viajante",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-br-before_go-media",
+      "phase": "before_go",
+      "title": "Books, religious media and publications",
+      "text": "Books, pamphlets and periodicals in accompanied baggage qualify for the exemption from import duties and taxes. Material carried for commercial purposes is outside the baggage classification.",
+      "scope": "Accompanied baggage tax exemption.",
+      "type": "Official guidance",
+      "authority": "Brazil Federal Revenue Service",
+      "url": "https://www.gov.br/receitafederal/pt-br/assuntos/aduana-e-comercio-exterior/viagens-internacionais/guia-do-viajante/travellers-guide/arriving-in-brazill/exemptions-quotas-quantity-limits-and-duty-free",
       "checked": "2026-11-27"
     }
   ],
@@ -1337,6 +1480,28 @@ export const travelRestrictions = {
       "authority": "Colombian Agricultural Institute, Dog and Cat Entry",
       "url": "https://www.ica.gov.co/importacion-y-exportacion/requisitos-para-importar-mascotas/ingreso-de-perros-y-gatos-a-colombia",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-co-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Clothing reasonably required for the trip can qualify as personal effects, separate from clothing brought as a commercial shipment. Customs assesses the circumstances of the journey.",
+      "scope": "Inbound travelers’ personal effects.",
+      "type": "Official guidance",
+      "authority": "Colombian National Tax and Customs Directorate",
+      "url": "https://www.dian.gov.co/tramitesservicios/tramites-y-servicios/Paginas/tramites-aduaneros.aspx",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-co-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "DIAN describes a separate paid allowance for eligible electrical household or professional articles after a qualifying minimum five calendar days abroad. The general allowance limits these classes to three of each type and imposes an overall value limit.",
+      "scope": "Qualified traveler baggage under the paid allowance.",
+      "type": "Official guidance",
+      "authority": "Colombian National Tax and Customs Directorate",
+      "url": "https://www.dian.gov.co/tramitesservicios/tramites-y-servicios/Paginas/tramites-aduaneros.aspx",
+      "checked": "2026-11-27"
     }
   ],
   "CR": [
@@ -1372,6 +1537,28 @@ export const travelRestrictions = {
       "authority": "Sistema Costarricense de Información Jurídica, regulation implementing Law 8204 article 35",
       "url": "https://www.pgrweb.go.cr/DOCS/NORMAS/1/VIGENTE/D/2020-2029/2020-2024/2023/18660/15E71C.HTML",
       "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261127-c58-cr-before_go-plastics",
+      "phase": "before_go",
+      "title": "Plastic bags, disposable products and packaging",
+      "text": "Retailers generally cannot sell or give away plastic carry bags, subject to defined reusable-bag exceptions. The law also restricts sale and free distribution of single-use plastic straws.",
+      "scope": "Point-of-sale plastic restrictions, national",
+      "type": "Official guidance",
+      "authority": "Costa Rican Legislative Assembly, Law 9786",
+      "url": "https://www.binasss.sa.cr/opac-ms/media/digitales/Ley%20para%20combatir%20la%20contaminaci%C3%B3n%20por%20pl%C3%A1stico%20y%20proteger%20el%20ambiente.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-cr-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "Reserve admission online in advance and complete registration at the park’s administrative office before entering. Check current entry and office hours.",
+      "scope": "Chirripó National Park",
+      "type": "Official guidance",
+      "authority": "Costa Rica National System of Conservation Areas",
+      "url": "https://www.sinac.go.cr/ES/ac/aclap/pnch/Paginas/default.aspx",
+      "checked": "2026-11-27"
     }
   ],
   "PE": [
@@ -1428,6 +1615,39 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "SERFOR service catalog",
       "url": "https://cdn.www.gob.pe/uploads/document/file/2717209/Carta%20de%20servicios%20del%20SERFOR.pdf.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pe-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "Peruvian customs lists one laptop, one tablet and two still cameras among the separately enumerated passenger exemptions. It lists two mobile phones with a lower allowance for younger passengers.",
+      "scope": "Inbound personal baggage, subject to SUNAT passenger age and unit limits.",
+      "type": "Official guidance",
+      "authority": "Peru National Superintendency of Customs and Tax Administration",
+      "url": "https://bienvenidoalperu.sunat.gob.pe/es.bienes-o-articulos-libres-de-impuesto.html",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pe-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "SUNAT exempts clothing and personal adornments from baggage tax and declaration when they are visibly for the passenger’s own use.",
+      "scope": "Inbound personally used passenger items.",
+      "type": "Official guidance",
+      "authority": "Peru National Superintendency of Customs and Tax Administration",
+      "url": "https://bienvenidoalperu.sunat.gob.pe/es.bienes-o-articulos-libres-de-impuesto.html",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pe-before_go-media",
+      "phase": "before_go",
+      "title": "Books, religious media and publications",
+      "text": "Printed books, magazines and documents for the passenger’s personal use qualify for the published tax and baggage-declaration exemption.",
+      "scope": "Inbound physical reading material for personal use.",
+      "type": "Official guidance",
+      "authority": "Peru National Superintendency of Customs and Tax Administration",
+      "url": "https://bienvenidoalperu.sunat.gob.pe/es.bienes-o-articulos-libres-de-impuesto.html",
       "checked": "2026-11-27"
     }
   ],
@@ -1507,6 +1727,17 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Egyptian Customs Authority, traveler and tourism rules",
       "url": "https://www.customs.gov.eg/Legislations/TravelAndTourism?travelAndTourismId=1",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-eg-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "U.S. trade guidance identifies ivory as prohibited for import, export and sale in Egypt. It also warns travelers that taking seashells and coral out of the country is illegal.",
+      "scope": "Egypt, listed wildlife items and souvenirs.",
+      "type": "Official guidance",
+      "authority": "U.S. International Trade Administration",
+      "url": "https://www.trade.gov/country-commercial-guides/egypt-temporary-entry",
       "checked": "2026-11-27"
     }
   ],
@@ -1644,6 +1875,28 @@ export const travelRestrictions = {
       "authority": "Moroccan Customs and Indirect Taxes Administration, circular I.3.2",
       "url": "https://www.finances.gov.ma/Publication/adii/2025/circulaire_96034.pdf",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-ma-before_go-arrival_forms",
+      "phase": "before_go",
+      "title": "Entry declarations, onward travel, proof of funds",
+      "text": "Moroccan border officers may check a foreign traveler’s means of support, purpose of travel and arrangements for return. Be prepared to show supporting evidence if asked.",
+      "scope": "Discretionary supporting-evidence check under Article 4 of Law 02-03 for foreign travelers at Moroccan border posts.",
+      "type": "Official guidance",
+      "authority": "Morocco General Secretariat of Government, Law 02-03, Articles 3–4",
+      "url": "https://www.sgg.gov.ma/Portals/0/profession_reglementee/Dahir_immigration_fr.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ma-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "Check whether a wildlife specimen or souvenir needs an import, export or re-export permit or certificate. Morocco’s protected-species law makes those documents specific to the named holder.",
+      "scope": "Specimens covered by Morocco’s protected-species and trade law.",
+      "type": "Official guidance",
+      "authority": "Morocco Ministry of Maritime Fisheries, Law 29-05",
+      "url": "https://www.mpm.gov.ma/wps/wcm/connect/e6d816f1-cf12-4476-828e-96387522e211/loi%2Bfran%C3%A7ais%2Bf%C3%A9vrier%2B2023.pdf?MOD=AJPERES",
+      "checked": "2026-11-27"
     }
   ],
   "QA": [
@@ -1733,6 +1986,28 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Qatar Ministry of Environment and Climate Change via Hukoomi",
       "url": "https://hukoomi.gov.qa/en/categories/environment-and-agriculture/import-cites-animal-permission",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-qa-before_go-media",
+      "phase": "before_go",
+      "title": "Books, religious media and publications",
+      "text": "Qatar Customs lists sexually explicit or otherwise indecent books, magazines and films among prohibited goods in its personal import guidance.",
+      "scope": "Personal import classification.",
+      "type": "Official guidance",
+      "authority": "Qatar General Authority of Customs",
+      "url": "https://customs.gov.qa/English/PassengersIndividualsPortal/Pages/IndividualsImporting.aspx",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-qa-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "Exporting movable antiquities generally requires authorization from Qatar Museums under the antiquities law.",
+      "scope": "Export of movable antiquities, including potentially regulated purchases or finds.",
+      "type": "Official guidance",
+      "authority": "Qatar Legal Portal, Antiquities Law No. 2 of 1980 as amended",
+      "url": "https://www.almeezan.qa/LawView.aspx?LawID=3976&language=en&opt=",
       "checked": "2026-11-27"
     }
   ],
@@ -1870,6 +2145,17 @@ export const travelRestrictions = {
       "authority": "South African Department of Forestry, Fisheries and the Environment",
       "url": "https://www.dffe.gov.za/legislations/internationalagreementsobligations_sapartytocites",
       "checked": "2026-11-26"
+    },
+    {
+      "id": "s2-20261127-c58-za-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Personal clothing for individual use can qualify for duty- and VAT-free entry within the applicable traveler allowances.",
+      "scope": "South African passenger customs",
+      "type": "Official guidance",
+      "authority": "South African Government",
+      "url": "https://www.gov.za/faq/travel-tourism/what-goods-may-i-bring-south-africa",
+      "checked": "2026-11-27"
     }
   ],
   "NO": [
@@ -1926,6 +2212,39 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Norwegian Directorate of Fisheries, Export quota",
       "url": "https://www.fiskeridir.no/english/sea-angling-in-norway/export-quota",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-no-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "Nonresident tourists may temporarily bring personal computers and mobile phones for use during the trip and take them out again. Norwegian Customs specifies no value limit for qualifying temporary luggage.",
+      "scope": "Temporary baggage of nonresident tourists.",
+      "type": "Official guidance",
+      "authority": "Norwegian Customs",
+      "url": "https://www.toll.no/en/travelling-to-and-from-norway/goods-for-tourists",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-no-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Personal clothes brought temporarily by nonresident tourists and taken out again qualify under Norway’s temporary tourist luggage rules. Goods brought for gifts or consumption are subject to the separate value limit.",
+      "scope": "Temporary baggage of nonresident tourists.",
+      "type": "Official guidance",
+      "authority": "Norwegian Customs",
+      "url": "https://www.toll.no/en/travelling-to-and-from-norway/goods-for-tourists",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-no-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "Obtain the landowner’s permission to fish in inland waters. Under-16s generally fish free from January 1 to August 20, with exceptions for waters containing salmon, sea trout or sea char.",
+      "scope": "Mainland inland recreational fishing.",
+      "type": "Official guidance",
+      "authority": "Norwegian Environment Agency",
+      "url": "https://www.miljodirektoratet.no/sharepoint/downloaditem?id=01FM3LD2TQBAFXJMWTXBEKVWY6JQYEUDYU",
       "checked": "2026-11-27"
     }
   ],
@@ -1994,6 +2313,17 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Kenya National Museums and Heritage Act, National Museums of Kenya",
       "url": "https://www.museums.or.ke/wp-content/uploads/2020/04/NationalMuseumsandHeritageAct6of2006.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ke-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "KRA lists personal wearing apparel in its passenger baggage guidance. Pack quantities consistent with personal use and check the distinction between previously owned clothing and new purchases.",
+      "scope": "Inbound customs treatment of personal clothing.",
+      "type": "Official guidance",
+      "authority": "Kenya Revenue Authority",
+      "url": "https://www.kra.go.ke/helping-tax-payers/facts-about-kra/category/5",
       "checked": "2026-11-27"
     }
   ],
@@ -2074,6 +2404,39 @@ export const travelRestrictions = {
       "authority": "Iceland Revenue and Customs, Export licences, Birds section",
       "url": "https://www.skatturinn.is/atvinnurekstur/tollamal/utflutningur/utflutningsleyfi/",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-is-before_go-clothing",
+      "phase": "before_go",
+      "title": "Camouflage, uniforms and symbolic attire",
+      "text": "Travelers residing abroad may bring personal clothing duty-free when the items and quantities are appropriate for the purpose, duration and circumstances of the trip.",
+      "scope": "Inbound personal travel gear for nonresidents.",
+      "type": "Official guidance",
+      "authority": "Iceland Revenue and Customs",
+      "url": "https://www.skatturinn.is/english/individuals/customs-matters/travelling-to-iceland/duty-free-imports/",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-is-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "Carry and present any CITES documents required for cross-border movement of protected species or products made from them. Covered items can include parts used in cosmetics, musical instruments and medicines.",
+      "scope": "CITES permits and certificates for covered specimens.",
+      "type": "Official guidance",
+      "authority": "Nature Conservation Agency of Iceland",
+      "url": "https://www.nattura.is/stofnunin/leyfisveitingar-vegna-lifrikismala",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-is-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "Tourist access to Surtsey is prohibited unless Iceland’s environment authority grants permission.",
+      "scope": "Surtsey only.",
+      "type": "Official guidance",
+      "authority": "Iceland Environment Agency",
+      "url": "https://umhverfisstofnun.is/english/visiting-iceland/protected-areas/south/surtsey/protection",
+      "checked": "2026-11-27"
     }
   ],
   "SG": [
@@ -2122,6 +2485,28 @@ export const travelRestrictions = {
       "authority": "Andorra Tourism, Documentation for entry",
       "url": "https://visitandorra.com/en/visitor-information/passports-visas-and-customs/",
       "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ad-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare goods that may be prohibited or dutiable at the Andorran border. Tobacco, liquor and luxury goods can incur duty when returning to France or Spain.",
+      "scope": "Andorra customs declaration and separate onward entry rules for France and Spain.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/andorra/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ad-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "UK photocard licence holders may drive in Andorra according to UK government advice. A paper licence may need replacement or the appropriate international permit.",
+      "scope": "UK-issued licences only.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/andorra/safety-and-security",
+      "checked": "2026-11-27"
     }
   ],
   "AL": [
@@ -2169,6 +2554,17 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "European Commission, Taxation and Customs Union, Territorial Scope, Other countries/territories",
       "url": "https://taxation-customs.ec.europa.eu/taxation/vat/vat-directive/how-does-vat-work/territorial-scope_en?prefLang=fr",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-mc-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "UK advice says UK licence holders should carry both their driving licence and a 1968 International Driving Permit while driving in Monaco.",
+      "scope": "UK-issued licences.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/monaco/safety-and-security",
       "checked": "2026-11-27"
     }
   ],
@@ -3193,6 +3589,1176 @@ export const travelRestrictions = {
       "type": "Official guidance",
       "authority": "Tuvalu Biosecurity Act 2017, Sections 26, 28 and passenger declaration provisions, hosted by FAOLEX",
       "url": "https://faolex.fao.org/docs/pdf/tuv202480.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "AQ": [
+    {
+      "id": "s2-20261127-c54-aq-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "A British expedition to Antarctica, or travel by a British vessel or aircraft, requires Antarctic permit arrangements through the UK Foreign, Commonwealth & Development Office. On an organised tour, confirm that the operator has arranged the applicable permit before leaving.",
+      "scope": "British expeditions and British vessels or aircraft. The applicable authority depends on the expedition and itinerary.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office, Visiting Antarctica",
+      "url": "https://www.gov.uk/guidance/visits-to-antarctica-how-to-apply-for-a-permit",
+      "checked": "2026-11-27"
+    }
+  ],
+  "WF": [
+    {
+      "id": "s2-20261127-c54-wf-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare imported goods that require a customs declaration on arrival, including relevant duty-free purchases. Customs provides baggage allowances by category and limits for goods eligible for relief.",
+      "scope": "Wallis and Futuna entry, territorial customs.",
+      "type": "Official guidance",
+      "authority": "French State and Territory services in Wallis and Futuna, Customs formalities",
+      "url": "https://www.wallis-et-futuna.gouv.fr/Demarches/Formalites-douanieres",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-wf-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Wallis and Futuna applies veterinary and plant-health controls to food, plant products and live animals in arriving baggage. Check SIVAP item-specific restrictions and obtain authorisation where required.",
+      "scope": "Wallis and Futuna arrivals. Baggage tolerances vary by product and origin.",
+      "type": "Official guidance",
+      "authority": "Wallis and Futuna SIVAP, passenger import tolerances and permits",
+      "url": "https://www.wallis-et-futuna.gouv.fr/Demarches/Formalites-SIVAP-Service-de-l-Inspection-Veterinaire-Alimentaire-et-Phytosanitaire/IMPORT",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-wf-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "For covered routes, declare qualifying cash or monetary instruments worth at least €10,000 or equivalent to customs. Territorial customs guidance lists an exception for passengers travelling from or to specified French territories, including mainland France, New Caledonia and French Polynesia.",
+      "scope": "Wallis and Futuna customs, subject to route-based exclusions listed by the territorial authority.",
+      "type": "Official guidance",
+      "authority": "French State and Territory services in Wallis and Futuna, Customs formalities",
+      "url": "https://www.wallis-et-futuna.gouv.fr/Demarches/Formalites-douanieres",
+      "checked": "2026-11-27"
+    }
+  ],
+  "KM": [
+    {
+      "id": "s2-20261127-c54-km-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare goods that require authorisation or are subject to tax or restrictions. Goods over the traveller allowance or brought for commercial purposes can require a declaration and tax payment.",
+      "scope": "Arriving in or departing from the Union of the Comoros.",
+      "type": "Official guidance",
+      "authority": "Union of the Comoros General Directorate of Customs, Services aux voyageurs",
+      "url": "https://douane.gov.km/douane-comorienne/pages/voyageurs.php",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-km-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Comoros Customs lists some plants, animals and products derived from them as subject to specific border controls. Check permissions before packing them.",
+      "scope": "Union of the Comoros customs border; product-specific rules apply.",
+      "type": "Official guidance",
+      "authority": "Union of the Comoros General Directorate of Customs, Produits biologiques",
+      "url": "https://douane.gov.km/douane-comorienne/pages/voyageurs.php",
+      "checked": "2026-11-27"
+    }
+  ],
+  "LY": [
+    {
+      "id": "s2-20261127-c54-ly-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK consular guidance calls for declaring cash over US$10,000 equivalent when entering or leaving Libya. It also reports that taking Libyan dinar out of the country is prohibited.",
+      "scope": "Libyan entry and departure, as reported by UK FCDO.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Taking money into or out of Libya",
+      "url": "https://www.gov.uk/foreign-travel-advice/libya/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "SO": [
+    {
+      "id": "s2-20261127-c54-so-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "UK consular guidance says taking khat out of Somalia is an offence and identifies checks at Hargeisa and Mogadishu airports.",
+      "scope": "Outbound baggage at Somalia and Somaliland airports; UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Customs rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/somalia/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-so-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash or travellers cheques worth US$10,000 or more when crossing the Somaliland border, according to UK consular guidance.",
+      "scope": "Somaliland specifically; federal Somalia thresholds require separate confirmation.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Taking money into and out of Somalia",
+      "url": "https://www.gov.uk/foreign-travel-advice/somalia/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "ST": [
+    {
+      "id": "s2-20261127-c54-st-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK consular guidance says a yellow fever vaccination certificate is required when arriving from a country listed as a transmission risk.",
+      "scope": "Arrivals into São Tomé and Príncipe from a listed transmission-risk country; UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Vaccine requirements",
+      "url": "https://www.gov.uk/foreign-travel-advice/sao-tome-and-principe/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-st-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "UK consular guidance says to declare items that may be prohibited or subject to tax or duty when entering or leaving São Tomé and Príncipe.",
+      "scope": "São Tomé and Príncipe border crossings; UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Customs rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/sao-tome-and-principe/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "TD": [
+    {
+      "id": "s2-20261127-c54-td-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "UK consular guidance says to declare goods that may be prohibited or liable for tax or duty when entering or leaving Chad.",
+      "scope": "Chad customs border; UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Customs rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/chad/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "KP": [
+    {
+      "id": "s2-20261127-c54-kp-before_go-electronics",
+      "phase": "before_go",
+      "title": "Drones, satellite phones, radio and GPS",
+      "text": "UK consular guidance reports that travelers must register foreign mobile phones at the border and leave GPS equipment with customs for collection when departing North Korea.",
+      "scope": "North Korean border controls as reported by the UK FCDO for British citizen travelers.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, North Korea customs rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/north-korea/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-kp-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK consular guidance reports that North Korean won cannot be brought in or taken out and that travelers must declare foreign currency at customs.",
+      "scope": "Inbound and outbound customs, based on UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, North Korea currency rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/north-korea/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "PS": [
+    {
+      "id": "s2-20261127-c54-ps-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "The U.S. State Department reports that travelers may not carry cash into Gaza.",
+      "scope": "Entry into Gaza only, U.S. consular guidance.",
+      "type": "Official guidance",
+      "authority": "U.S. Department of State, Gaza currency on entry and exit",
+      "url": "https://travel.state.gov/en/international-travel/travel-advisories/gaza.html",
+      "checked": "2026-11-27"
+    }
+  ],
+  "TJ": [
+    {
+      "id": "s2-20261127-c54-tj-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "Travel to the Gorno-Badakhshan Autonomous Region requires separate authorization alongside the applicable Tajik entry documents. A separate permit is also required for areas within 20 km of the Afghan border in Khatlon, including Panj and Kumsangir.",
+      "scope": "Gorno-Badakhshan and specified Khatlon border areas, UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Tajikistan regional travel permits",
+      "url": "https://www.gov.uk/foreign-travel-advice/tajikistan/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c54-tj-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK consular guidance lists undeclared allowances of up to US$10,000 equivalent on entry and up to US$3,000 equivalent on exit. For sums above US$10,000, it also reports a need to document the source of funds.",
+      "scope": "Foreign travelers entering or leaving Tajikistan, as reported by UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Tajikistan customs and declarations",
+      "url": "https://www.gov.uk/foreign-travel-advice/tajikistan/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "TM": [
+    {
+      "id": "s2-20261127-c54-tm-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "Turkmenistan Customs lists a special permit for exporting handmade carpets and carpet products.",
+      "scope": "Turkmenistan customs, handmade carpet goods.",
+      "type": "Official guidance",
+      "authority": "State Customs Service of Turkmenistan, passenger customs regulations",
+      "url": "https://customs.gov.tm/en/customs-info/for-individuals",
+      "checked": "2026-11-27"
+    }
+  ],
+  "YE": [
+    {
+      "id": "s2-20261127-c54-ye-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK consular guidance reports that amounts over US$3,000 in foreign currency must be declared on arrival. Foreign currency taken out cannot exceed what was brought in. Bringing Yemeni currency in or taking it out is prohibited.",
+      "scope": "Yemeni border currency controls, as reported by UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK FCDO, Yemen currency rules",
+      "url": "https://www.gov.uk/foreign-travel-advice/yemen/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "AG": [
+    {
+      "id": "s2-20261127-c55-ag-before_go-arrival_forms",
+      "phase": "before_go",
+      "title": "Entry declarations, onward travel, proof of funds",
+      "text": "Air passengers arriving at V.C. Bird International Airport can file their immigration and customs declaration online within 72 hours before their scheduled flight.",
+      "scope": "Air arrivals at V.C. Bird International Airport; online channel and submission window.",
+      "type": "Official guidance",
+      "authority": "V.C. Bird International Airport",
+      "url": "https://vcbia.com/customs-and-immigration/",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-ag-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry a yellow fever vaccination certificate if arriving from a country listed as a transmission risk, according to UK consular guidance.",
+      "scope": "Arrival from a listed risk country; destination rule reported by UK FCDO.",
+      "type": "Official guidance",
+      "authority": "UK FCDO travel advice for Antigua and Barbuda",
+      "url": "https://www.gov.uk/foreign-travel-advice/antigua-and-barbuda/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-ag-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare items obtained outside Antigua and Barbuda carried in baggage or on your person, and check separate rules for restricted goods.",
+      "scope": "All persons entering Antigua and Barbuda; overseas purchases and other acquisitions.",
+      "type": "Official guidance",
+      "authority": "Antigua and Barbuda Customs and Excise Division",
+      "url": "https://customs.gov.ag/index.php/page/customs-departments",
+      "checked": "2026-11-27"
+    }
+  ],
+  "AW": [
+    {
+      "id": "s2-20261127-c55-aw-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Aruba requests an international yellow fever vaccination certificate from arrivals coming from listed countries, subject to its published route and traveler exceptions.",
+      "scope": "Aruba; selected source countries and route-dependent exceptions.",
+      "type": "Official guidance",
+      "authority": "Aruba Tourism Authority, local public-health guidance",
+      "url": "https://www.aruba.com/us/plan-your-visit/getting-to-aruba/do-i-need-a-yellow-fever-vaccine",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-aw-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Aruba Customs lists a personal-use import-tax allowance of up to 900 Aruban florins for goods bought abroad and advises keeping receipts.",
+      "scope": "Accompanied purchases for personal use; Customs lists separate restrictions for alcohol, tobacco and controlled goods.",
+      "type": "Official guidance",
+      "authority": "Government of Aruba, Customs Department",
+      "url": "https://www.gobierno.aw/en/travel-with-peace-of-mind-information-on-customs-procedures",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-aw-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Aruba Customs directs plant imports to the Department of Agriculture, Livestock and Fisheries for the required declaration and supporting paperwork, including applicable health certificates.",
+      "scope": "Plant imports into Aruba. Requirements can vary by item and origin.",
+      "type": "Official guidance",
+      "authority": "Aruba Customs Department",
+      "url": "https://www.douane.aw/en/important-information-regarding-import-permit-of-certain-goods/",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BQ": [
+    {
+      "id": "s2-20261127-c55-bq-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Customs lists a general ABB tax exemption up to US$500 per person for personal-use goods obtained outside the island of arrival, reduced to US$150 for travelers under 15. An indivisible item above the limit receives no exemption.",
+      "scope": "Bonaire, Saba and Sint Eustatius. Commercial goods and special excise categories are outside the general allowance.",
+      "type": "Official guidance",
+      "authority": "Tax and Customs Administration of the Caribbean Netherlands",
+      "url": "https://www.belastingdienst-cn.nl/onderwerpen/douanezaken-particulieren/reizigersbagage/reizigersvrijstelling",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-bq-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry a yellow fever vaccination certificate if arriving from a country listed as a transmission risk, according to UK consular guidance.",
+      "scope": "Bonaire, Sint Eustatius and Saba; conditional on country of origin.",
+      "type": "Official guidance",
+      "authority": "UK FCDO travel advice for Bonaire, Sint Eustatius and Saba",
+      "url": "https://www.gov.uk/foreign-travel-advice/bonaire-st-eustatius-saba/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c55-bq-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Bonaire requires prior permission to import meat and meat products. Its Veterinary Department limits eligible sources and asks importers to report the shipment at least two days in advance.",
+      "scope": "Bonaire only. This is official meat-import guidance; applicability to an individual passenger’s food must be checked locally.",
+      "type": "Official guidance",
+      "authority": "Public Entity Bonaire, Veterinary Department",
+      "url": "https://bonairegov.com/en/products-and-services/nature-and-environment/importing-meat-or-meat-products",
+      "checked": "2026-11-27"
+    }
+  ],
+  "GF": [
+    {
+      "id": "s2-20261127-c55-gf-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "French law requires yellow fever vaccination for people older than one year who reside or stay in French Guiana, subject to medical contraindication.",
+      "scope": "French Guiana only; residents and visitors over one year old.",
+      "type": "Official guidance",
+      "authority": "French Public Health Code, Article L3111-6",
+      "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000033834208/2026-06-04",
+      "checked": "2026-11-27"
+    }
+  ],
+  "GP": [
+    {
+      "id": "s2-20261127-c55-gp-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "French Customs lists fresh fruit, flowers and plants among items barred from private travelers’ luggage when importing them into Guadeloupe.",
+      "scope": "Guadeloupe; plant material in travelers’ baggage. The customs guide links each island to its own prefectural order.",
+      "type": "Official guidance",
+      "authority": "French Customs travel guide, local prefectural order",
+      "url": "https://www.douane.gouv.fr/sites/default/files/uploads/files/Documentations-Brochures/Langues-etrangeres/Trouble-free-travel-with-french-customs.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MQ": [
+    {
+      "id": "s2-20261127-c55-mq-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "French Customs lists fresh fruit, flowers and plants among items barred from private travelers’ luggage when importing them into Martinique.",
+      "scope": "Martinique; plant material in travelers’ baggage. The customs guide links each island to its own prefectural order.",
+      "type": "Official guidance",
+      "authority": "French Customs travel guide, local prefectural order",
+      "url": "https://www.douane.gouv.fr/sites/default/files/uploads/files/Documentations-Brochures/Langues-etrangeres/Trouble-free-travel-with-french-customs.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "AO": [
+    {
+      "id": "s2-20261127-c56-ao-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash or travellers cheques worth US$5,000 or more if nonresident, or US$10,000 or more if resident. Keep the certified declaration.",
+      "scope": "Travellers arriving in Angola carrying cash or travellers cheques.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/angola/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BW": [
+    {
+      "id": "s2-20261127-c56-bw-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Present yellow fever vaccination evidence if arriving from a country listed as a transmission risk.",
+      "scope": "Botswana entry after travel from a country listed as a yellow fever transmission risk.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/botswana/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-bw-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash equivalent to P10,000 or more in foreign or local currency.",
+      "scope": "Cash carried at Botswana customs crossings.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/botswana/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BY": [
+    {
+      "id": "s2-20261127-c56-by-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash or travellers cheques valued above US$10,000 and obtain a customs stamp. Keep the stamped arrival form for departure and prepare the required departure declaration.",
+      "scope": "Currency declarations at the Belarus border; UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/belarus/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "CM": [
+    {
+      "id": "s2-20261127-c56-cm-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK consular guidance says that proof of yellow fever vaccination is required for entry.",
+      "scope": "Cameroon entry; requirement reported by UK FCDO.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/cameroon/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "DZ": [
+    {
+      "id": "s2-20261127-c56-dz-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry yellow fever vaccination evidence if arriving from a country listed as a transmission risk.",
+      "scope": "Entry to Algeria following travel from a listed risk country.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/algeria/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-dz-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "Nonresident travelers exporting unspent amounts they brought into Algeria must show their entry currency declaration endorsed by an authorized bank or exchange office. The endorsement records exchange transactions made during the stay.",
+      "scope": "Nonresident outbound travelers with unused imported amounts. The order sets documentation procedures.",
+      "type": "Official guidance",
+      "authority": "Algerian Ministry of Finance, order of 12 May 2026, article 4",
+      "url": "https://douane.gov.dz/IMG/pdf/jo51_declaration_devises_fr.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "GA": [
+    {
+      "id": "s2-20261127-c56-ga-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK consular guidance says travellers must present yellow fever vaccination evidence for entry.",
+      "scope": "Gabon entry; requirement reported by UK FCDO.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/gabon/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "GD": [
+    {
+      "id": "s2-20261127-c56-gd-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry yellow fever vaccination evidence if arriving from a country listed as a transmission risk.",
+      "scope": "Grenada entry following travel from a listed risk country.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/grenada/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "IL": [
+    {
+      "id": "s2-20261127-c56-il-before_go-cites",
+      "phase": "before_go",
+      "title": "Protected wildlife products and souvenirs",
+      "text": "Importing, exporting or re-exporting CITES-listed wildlife or species protected by Israeli law requires authorization from the Israel Nature and Parks Authority.",
+      "scope": "Israeli wildlife controls for covered species, specimens and products.",
+      "type": "Official guidance",
+      "authority": "Israel Nature and Parks Authority",
+      "url": "https://en.parks.org.il/%D7%99%D7%91%D7%95%D7%90-%D7%95%D7%99%D7%A6%D7%95%D7%90-%D7%97%D7%99%D7%95%D7%AA-%D7%91%D7%A8-%D7%95%D7%A2%D7%A8%D7%9B%D7%99-%D7%98%D7%91%D7%A2-%D7%9E%D7%95%D7%92%D7%A0%D7%99%D7%9D/",
+      "checked": "2026-11-27"
+    }
+  ],
+  "KI": [
+    {
+      "id": "s2-20261127-c56-ki-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Kiribati inspects incoming passengers and baggage for plant and animal biosecurity risks. Its biosecurity agency issues import permits for plants, animals and their products, second-hand goods, sand and gravel.",
+      "scope": "Kiribati border biosecurity, including passenger baggage.",
+      "type": "Official guidance",
+      "authority": "Kiribati Biosecurity and Plant Health",
+      "url": "https://www.melad.gov.ki/index.php?Itemid=380&id=43&option=com_quix&view=page",
+      "checked": "2026-11-27"
+    }
+  ],
+  "KN": [
+    {
+      "id": "s2-20261127-c56-kn-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry yellow fever vaccination evidence if arriving from a country listed as a transmission risk.",
+      "scope": "Saint Kitts and Nevis entry following travel from a listed risk country.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/st-kitts-and-nevis/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "LS": [
+    {
+      "id": "s2-20261127-c56-ls-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash and travellers cheques worth LSL 25,000 or more in any currency.",
+      "scope": "Travellers with currency or travellers cheques crossing the Lesotho border.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/lesotho/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-ls-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "UK advice says UK photocard licences can be used for up to three months. A paper licence may require a photocard update or the appropriate international permit.",
+      "scope": "UK-issued licences for visitor driving in Lesotho.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/lesotho/safety-and-security",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MH": [
+    {
+      "id": "s2-20261127-c56-mh-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare potentially prohibited or dutiable goods. The UK visitor advisory lists limited duty-free allowances for alcohol and tobacco for travelers aged 18 and older.",
+      "scope": "Inbound passenger baggage. UK advisory scopes its general entry guidance to full British citizen passports.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/marshall-islands/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-mh-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Travelers bringing birds, plants or fruit need certification from the Quarantine Division.",
+      "scope": "Inbound quarantine for the listed items, as described by UK government guidance.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/marshall-islands/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-mh-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "UK government guidance reports that exporting coral or turtle shell is illegal.",
+      "scope": "Export from the Marshall Islands.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/marshall-islands/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-mh-before_go-power_bank_air",
+      "phase": "before_go",
+      "title": "Power banks and lithium batteries: flight route, carrier, safety and markings",
+      "text": "On Marshall Islands itineraries operated by Nauru Airlines, permitted power banks must be kept in the cabin and may not be used or charged in flight. Check the airline’s banned models and recall policy.",
+      "scope": "Nauru Airlines-operated flights only.",
+      "type": "Carrier guidance",
+      "authority": "Nauru Airlines",
+      "url": "https://www.nauruair.com/travel-info/dangerous-goods",
+      "checked": "2026-11-27"
+    }
+  ],
+  "NR": [
+    {
+      "id": "s2-20261127-c56-nr-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare goods that may be prohibited or subject to tax or duty.",
+      "scope": "Passenger goods at the Nauru border, per UK government guidance.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/nauru/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-nr-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Bring regulated plants, animals and related materials only under the applicable quarantine permit and its conditions. Regulations list exceptions, including certain shelf-stable sealed foods.",
+      "scope": "Nauru Plant and Animal Quarantine Regulations, regulation 19.",
+      "type": "Official guidance",
+      "authority": "Nauru Department of Justice & Border Control",
+      "url": "https://justice.gov.nr/wp-content/uploads/2023/12/Agricultural-Quarantine-Act-1999-Service-22.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-nr-before_go-pets",
+      "phase": "before_go",
+      "title": "Pets and animal importation",
+      "text": "A dog must come from Australia under the 2021 import regulations and needs advance permission from the Director of Quarantine. The regulations also list vaccination, desexing and breed restrictions.",
+      "scope": "Nauru national rules for dog import under regulations 3, 6, 10 and 11.",
+      "type": "Official guidance",
+      "authority": "Government of Nauru",
+      "url": "https://www.nauru.gov.nr/media/151324/gazette_160-21__1_.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c56-nr-before_go-power_bank_air",
+      "phase": "before_go",
+      "title": "Power banks and lithium batteries: flight route, carrier, safety and markings",
+      "text": "Nauru Airlines requires permitted power banks in the cabin and prohibits their use or charging in flight. Check the airline’s banned models and recall policy before packing.",
+      "scope": "Nauru Airlines flights. Carrier baggage policy.",
+      "type": "Carrier guidance",
+      "authority": "Nauru Airlines",
+      "url": "https://www.nauruair.com/travel-info/dangerous-goods",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MM": [
+    {
+      "id": "s2-20261127-c57-mm-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare foreign currency and covered instruments above US$10,000 equivalent when entering or leaving Myanmar. The published regulations also restrict how much a foreign visitor can take back out to what the visitor brought in.",
+      "scope": "Myanmar Foreign Exchange Management Regulations, clauses 60–61.",
+      "type": "Official guidance",
+      "authority": "Myanmar official Services Trade Portal",
+      "url": "https://servicetrade.gov.mm/regulation-detail/14/download-pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-mm-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Declare valuables including gold, gems and jewellery to customs on arrival. UK guidance warns against importing gold or bullion for trading.",
+      "scope": "Customs entry into Myanmar, with the gold trading restriction distinct from the valuables declaration.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/myanmar/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-mm-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Carry proof of yellow fever vaccination if arriving from a country listed as a transmission risk.",
+      "scope": "Myanmar entry for relevant origins.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/myanmar/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MN": [
+    {
+      "id": "s2-20261127-c57-mn-before_go-area_permits",
+      "phase": "before_go",
+      "title": "Regional and protected area authorizations",
+      "text": "Obtain permission from the State Frontier Guard Authority before traveling into Mongolian border areas. Some zones can extend up to 100 km inland.",
+      "scope": "Designated Mongolian border areas, distinct from authorized border-crossing eligibility.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/mongolia/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MW": [
+    {
+      "id": "s2-20261127-c57-mw-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "Complete the Traveller Health Check to obtain a QR health pass or reference to present on arrival. Travelers without a pass can be screened by an officer at the port of entry.",
+      "scope": "Health screening at Malawi airports and land borders.",
+      "type": "Official guidance",
+      "authority": "Malawi Ministry of Health",
+      "url": "https://poe.health.gov.mw/welcome/",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-mw-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "The Malawi Revenue Authority publishes Form 47 for declaring goods obtained abroad and brought into Malawi. The form calls for traveler or family-head details and the descriptions and values of goods.",
+      "scope": "Inbound passenger goods declarations in Malawi.",
+      "type": "Official guidance",
+      "authority": "Malawi Revenue Authority",
+      "url": "https://www.mra.mw/assets/upload/downloads/CUSTOMS_DECLARACTION_FORM-_FORM_47.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MZ": [
+    {
+      "id": "s2-20261127-c57-mz-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cash of 10,000 Mozambican meticais or more, or foreign cash or travelers' cheques worth US$5,000 or more, on entry.",
+      "scope": "Inbound declarations into Mozambique, according to UK consular guidance.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/mozambique/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "NC": [
+    {
+      "id": "s2-20261127-c57-nc-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare cross-border cash at an equivalent of €10,000 or more, shown by French Customs as CFP 1,193,300.",
+      "scope": "Foreign cross-border movement to or from New Caledonia.",
+      "type": "Official guidance",
+      "authority": "France Directorate-General of Customs and Indirect Taxes",
+      "url": "https://www.douane.gouv.fr/fiche/vous-voyagez-en-nouvelle-caledonie",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-nc-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Plant and animal products face sanitary import controls. Certain factory-canned goods bearing a sanitary mark are exempt from the certificate up to 2 kg per traveler, but must still be presented for inspection on arrival.",
+      "scope": "Passenger imports into New Caledonia. The exemption is limited to the products specified by customs.",
+      "type": "Official guidance",
+      "authority": "France Directorate-General of Customs and Indirect Taxes",
+      "url": "https://www.douane.gouv.fr/fiche/vous-voyagez-en-nouvelle-caledonie",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-nc-before_go-pets",
+      "phase": "before_go",
+      "title": "Pets and animal importation",
+      "text": "Obtain specific veterinary permission before importing live animals into New Caledonia.",
+      "scope": "Territorial live-animal imports.",
+      "type": "Official guidance",
+      "authority": "France Directorate-General of Customs and Indirect Taxes",
+      "url": "https://www.douane.gouv.fr/fiche/vous-voyagez-en-nouvelle-caledonie",
+      "checked": "2026-11-27"
+    }
+  ],
+  "NI": [
+    {
+      "id": "s2-20261127-c57-ni-before_go-vaping",
+      "phase": "before_go",
+      "title": "Vaping devices, tobacco and alcohol",
+      "text": "Nicaragua bans bringing in or taking out e-cigarettes and similar devices regardless of nicotine content. Customs can confiscate them, and the UK advisory also reports a ban on their use.",
+      "scope": "Electronic smoking devices at the Nicaraguan border and during a visit.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/nicaragua/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-ni-before_go-drone_import",
+      "phase": "before_go",
+      "title": "Drone import, customs declaration, temporary admission and permits",
+      "text": "Do not bring a drone without express authorization under Law 1230. The law gives the Presidency authorization power through the implementing authority.",
+      "scope": "National entry controls for unmanned devices, including aerial drones.",
+      "type": "Official guidance",
+      "authority": "National Assembly of Nicaragua, official gazette, Law 1230",
+      "url": "https://digesto.asamblea.gob.ni/consultas/util/pdf.php?rdd=UuTmItSkMxU%3D&type=rdd",
+      "checked": "2026-11-27"
+    }
+  ],
+  "PF": [
+    {
+      "id": "s2-20261127-c57-pf-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Declare animal and plant products at the arrival biosecurity counter. The passenger notice lists products containing pineapple, honey, shrimp and fast food among goods prohibited in baggage. Packaged products may be subject to inspection, origin and labelling requirements.",
+      "scope": "Inbound baggage on passenger flights to French Polynesia.",
+      "type": "Official guidance",
+      "authority": "French Polynesia Direction de la Biosécurité",
+      "url": "https://www.service-public.pf/biosecurite/wp-content/uploads/sites/43/2024/06/Com-arrivee-passagers-VA_25062024.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pf-before_go-pets",
+      "phase": "before_go",
+      "title": "Pets and animal importation",
+      "text": "Dogs and cats can qualify for import subject to health conditions. The agency also describes special treatment for rabbits from New Caledonia and identifies birds such as parrots and parakeets as prohibited.",
+      "scope": "French Polynesia pet imports by species and country of origin.",
+      "type": "Official guidance",
+      "authority": "French Polynesia Direction de la Biosécurité",
+      "url": "https://www.service-public.pf/biosecurite/accueil/particuliers/autres-animaux-exotiques/",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pf-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "The French Polynesia biosecurity agency describes obtaining an official veterinarian’s export health certificate for pets and coordinating carrier requirements.",
+      "scope": "Departure from French Polynesia with pets, with route and destination-specific conditions.",
+      "type": "Official guidance",
+      "authority": "French Polynesia Direction de la Biosécurité",
+      "url": "https://www.service-public.pf/biosecurite/accueil/particuliers/exporter-des-produits-dorigine-vegetale-ou-animale-a-letranger/exporter-son-animal-de-compagnie-en-dehors-de-la-pf/",
+      "checked": "2026-11-27"
+    }
+  ],
+  "PG": [
+    {
+      "id": "s2-20261127-c57-pg-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK travel guidance says travelers coming from a yellow-fever transmission risk country must show a vaccination certificate.",
+      "scope": "Route-based entry health condition in UK travel advice.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/papua-new-guinea/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-pg-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Many fruits, vegetables and animal products are prohibited under local quarantine controls. Declare goods that may be prohibited or dutiable.",
+      "scope": "Passenger baggage at the Papua New Guinea border.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/papua-new-guinea/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "SV": [
+    {
+      "id": "s2-20261127-c57-sv-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK travel advice says a yellow fever vaccination certificate is required for travelers arriving from a transmission-risk country.",
+      "scope": "Route-based health entry requirement for El Salvador.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/el-salvador/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-sv-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK travel advice says to declare cash or travelers cheques valued at US$10,000 or more.",
+      "scope": "Passenger cash or travelers cheque declarations for El Salvador.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/el-salvador/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "SZ": [
+    {
+      "id": "s2-20261127-c57-sz-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK travel advice reports that passengers arriving from a yellow-fever transmission risk country must have proof of vaccination.",
+      "scope": "Route-based entry health condition in Eswatini.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/eswatini/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c57-sz-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "UK travel advice directs travelers to declare prohibited or potentially dutiable goods.",
+      "scope": "Eswatini passenger border declarations.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/eswatini/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "ZM": [
+    {
+      "id": "s2-20261127-c57-zm-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK travel advice says a yellow fever vaccination certificate is required when arriving from a transmission-risk country.",
+      "scope": "Route-based entry health condition in Zambia.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/zambia/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "AZ": [
+    {
+      "id": "s2-20261127-c58-az-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "UK licence holders should carry their UK licence and a 1968 International Driving Permit. UK advice calls for an Azerbaijani licence after one month and proof of insurance.",
+      "scope": "UK-issued licences and visitor driving in Azerbaijan.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/azerbaijan/safety-and-security",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BO": [
+    {
+      "id": "s2-20261127-c58-bo-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK advice says a yellow fever vaccination certificate is required when coming from a listed transmission-risk country.",
+      "scope": "Bolivia border health requirements conditional on itinerary.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/bolivia/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-bo-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Use Bolivian customs Form 250 when required to declare baggage items or currency. The 2025 regulation provides for digital completion and accepts a preprinted form in defined contingencies.",
+      "scope": "Bolivian customs at entry and departure under the 2025 traveler and currency-control regulation.",
+      "type": "Official guidance",
+      "authority": "Aduana Nacional (Bolivia), 2025 traveler regulation",
+      "url": "https://www.aduana.gob.bo/sites/default/files/ReglamentoVigente/RD-01-044-25%20%20%3D%20%2027_06_2025%20REGLAMENTO%20DEL%20R%C3%89GIMEN%20DE%20VIAJEROS%20Y%20CONTROL%20DE%20DIVISAS%20V3.pdf",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BS": [
+    {
+      "id": "s2-20261127-c58-bs-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK advice says passengers coming from a yellow fever transmission-risk country must show proof of vaccination.",
+      "scope": "Bahamas entry health requirement conditional on route.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/bahamas/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "BZ": [
+    {
+      "id": "s2-20261127-c58-bz-before_go-driving_docs",
+      "phase": "before_go",
+      "title": "Driving permits and vehicle documentation",
+      "text": "UK advice says a UK photocard licence can be used for up to three months, after which a Belize driving permit is required. Paper licences may need updating.",
+      "scope": "UK-issued licences only.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/belize/safety-and-security",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-bz-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "UK advice reports an exit tax for travelers departing by land or on a water crossing to Guatemala or Mexico. For air departures it is usually included in the airfare.",
+      "scope": "Departure tax, varying by exit route.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/belize/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "DM": [
+    {
+      "id": "s2-20261127-c58-dm-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Dominica Customs publishes duty-free limits for qualifying adult passengers, including up to one litre of spirits or wine and a limited quantity of tobacco.",
+      "scope": "Accompanied personal baggage for arriving travelers aged at least 18.",
+      "type": "Official guidance",
+      "authority": "Dominica Customs and Excise Division",
+      "url": "https://customs.gov.dm/customs-procedures/information-for-travellers",
+      "checked": "2026-11-27"
+    }
+  ],
+  "EC": [
+    {
+      "id": "s2-20261127-c58-ec-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK government advice directs adults or family groups carrying cash of at least US$10,000 to complete Ecuador’s online declaration and present the QR code to Customs on entry or departure.",
+      "scope": "Cross-border declaration at airports, land borders and ports.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/ecuador/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "JM": [
+    {
+      "id": "s2-20261127-c58-jm-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "UK advice says travelers with cash or travellers cheques valued at US$10,000 or more must declare it on the C5 and complete the cross-border form provided by Customs.",
+      "scope": "Inbound passenger declarations, according to UK government guidance.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/jamaica/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "MD": [
+    {
+      "id": "s2-20261127-c58-md-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Submit a written declaration when crossing with currency values totaling EUR 10,000 or more, or the equivalent, per person and trip.",
+      "scope": "Moldovan customs border, inbound and outbound.",
+      "type": "Official guidance",
+      "authority": "Moldova Customs Service",
+      "url": "https://customs.gov.md/ro/articles/atentie-de-la-10-000-euro-declararea-valorilor-valutare-in-vama-este-obligatorie-2885-ro",
+      "checked": "2026-11-27"
+    }
+  ],
+  "NP": [
+    {
+      "id": "s2-20261127-c58-np-before_go-exit_export",
+      "phase": "before_go",
+      "title": "Departure paperwork and export controls",
+      "text": "Get special certification from the Department of Archaeology before taking antiques out of Nepal.",
+      "scope": "Nepal outbound customs for antiques.",
+      "type": "Official guidance",
+      "authority": "Nepal Tourism Board",
+      "url": "https://trade.ntb.gov.np/travel-essentials/custom-formalities",
+      "checked": "2026-11-27"
+    }
+  ],
+  "PA": [
+    {
+      "id": "s2-20261127-c58-pa-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK consular guidance calls for a yellow fever vaccination certificate when arriving from a country with transmission risk.",
+      "scope": "British citizen travel advice; risk-country itinerary trigger.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/panama/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "SB": [
+    {
+      "id": "s2-20261127-c58-sb-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Declare food and covered plant or animal products on the incoming passenger card for inspection. Some labelled commercially processed foods from Australia or New Zealand may qualify without a permit after declaration and inspection.",
+      "scope": "Passenger baggage entering Solomon Islands.",
+      "type": "Official guidance",
+      "authority": "Biosecurity Solomon Islands",
+      "url": "https://www.biosecurity.gov.sb/Travellers",
+      "checked": "2026-11-27"
+    }
+  ],
+  "TC": [
+    {
+      "id": "s2-20261127-c58-tc-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Complete and sign the passenger customs declaration as a passenger or the head of the family group. Use the red lane for goods to declare.",
+      "scope": "Air arrivals with accompanied baggage.",
+      "type": "Official guidance",
+      "authority": "Turks and Caicos Islands Customs",
+      "url": "https://customs.gov.tc/pgs?pg=arrivingbyplane",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-tc-before_go-medicine",
+      "phase": "before_go",
+      "title": "Medicine, controlled substances, prescriptions",
+      "text": "Carry medicines in their original packaging with the prescription, according to UK guidance.",
+      "scope": "Passenger medicines entering the Turks and Caicos Islands.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/turks-and-caicos-islands/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "TO": [
+    {
+      "id": "s2-20261127-c58-to-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "Declare plant, animal and food products when arriving in Tonga.",
+      "scope": "Tongan inbound passenger baggage, as reported by UK consular advice.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/tonga/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "VG": [
+    {
+      "id": "s2-20261127-c58-vg-before_go-biosecurity",
+      "phase": "before_go",
+      "title": "Food, plants, animals, soil and outdoor gear",
+      "text": "UK guidance reports that importing or exporting plants, agricultural products or animals requires a permit.",
+      "scope": "BVI agricultural and animal movement.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/british-virgin-islands/entry-requirements",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-vg-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "Declare more than US$10,000 in cash or cheques when entering or leaving the British Virgin Islands, according to UK guidance.",
+      "scope": "BVI customs crossings.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/british-virgin-islands/entry-requirements",
+      "checked": "2026-11-27"
+    }
+  ],
+  "ZW": [
+    {
+      "id": "s2-20261127-c58-zw-before_go-currency",
+      "phase": "before_go",
+      "title": "Cash, valuables and currency controls",
+      "text": "The published limit for foreign currency cash carried when leaving Zimbabwe is US$2,000 or equivalent.",
+      "scope": "Personal outbound cash on the traveler or in baggage.",
+      "type": "Official guidance",
+      "authority": "Reserve Bank of Zimbabwe, Foreign Exchange Transactions Guidelines 6.2.3",
+      "url": "https://www.rbz.co.zw/documents/Regulations_Acts/2026/Foreign_Exchange_Guidelines_FXD5_version_2._March_2026.pdf",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-zw-before_go-customs",
+      "phase": "before_go",
+      "title": "Import customs, declarations and restricted goods",
+      "text": "Zimbabwe Customs distinguishes a rebate for used personal effects from a conditional partial rebate on qualifying traveler imports.",
+      "scope": "Traveler accompanied baggage rebates.",
+      "type": "Official guidance",
+      "authority": "Zimbabwe Revenue Authority",
+      "url": "https://www.zimra.co.zw/customs/customs-rebates/traveler-s-rebate",
+      "checked": "2026-11-27"
+    },
+    {
+      "id": "s2-20261127-c58-zw-before_go-health",
+      "phase": "before_go",
+      "title": "Vaccinations, disease certificates, insurance",
+      "text": "UK guidance calls for a yellow fever vaccination certificate if the traveler comes from a country with transmission risk.",
+      "scope": "British citizen consular guidance and originating itinerary.",
+      "type": "Official guidance",
+      "authority": "UK Foreign, Commonwealth & Development Office",
+      "url": "https://www.gov.uk/foreign-travel-advice/zimbabwe/entry-requirements",
       "checked": "2026-11-27"
     }
   ]
